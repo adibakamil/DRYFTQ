@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>DRYFTQ - Analytics Dashboard</title>
+  <!-- Tailwind CSS v3 with forms and container-queries -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <!-- DRYFTQ Shared System -->
+  <link rel="stylesheet" href="../shared/dryftq-common.css"/>
+  <script data-purpose="tailwind-config">
+    // Keep the page script alive if the Tailwind CDN is unreachable (offline / blocked).
+    window.tailwind = window.tailwind || {};
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              navy: '#061325',
+              sidebar: '#081729',
+              orange: '#f04e1e',
+              orangeHover: '#d94114',
+              accentGreen: '#10b981',
+              accentBlue: '#2563eb',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style data-purpose="custom-typography">
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+  <style data-purpose="chart-styles">
+    /* Precise Donut styling */
+    .donut-circle {
+      transition: stroke-dashoffset 0.4s ease, stroke-width 0.2s ease;
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+      cursor: pointer;
+    }
+    .donut-circle:hover {
+      stroke-width: 30;
+    }
+  </style>
+</head>
+<body class="bg-[#f3f5f9] text-slate-800 antialiased min-h-screen flex flex-col justify-center">
+<!-- BEGIN: Application Container -->
+<div class="flex flex-row w-full max-w-[1720px] mx-auto min-h-screen shadow-2xl bg-[#f4f6fa] overflow-hidden">
+  <!-- BEGIN: Left Sidebar Navigation -->
+  <aside class="w-[260px] lg:w-[280px] bg-[#081729] text-slate-300 flex flex-col justify-between p-5 flex-shrink-0 select-none">
+    <!-- Top Brand and Nav Links -->
+    <div class="flex flex-col space-y-6">
+      <!-- Logo and Close Icon -->
+      <div class="flex items-center justify-between pt-1 px-2">
+        <a href="/dashboard" class="text-white text-2xl font-black tracking-wider uppercase hover:text-orange-400 transition-colors">DRYFTQ</a>
+        <button aria-label="Close sidebar" class="text-slate-400 hover:text-white transition-colors" type="button">
+          <svg class="w-5 h-5 stroke-[2.5]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </button>
+      </div>
+      <!-- Navigation Links -->
+      <nav aria-label="Sidebar Menu" class="flex flex-col space-y-1.5">
+        <!-- 1. Dashboard -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 font-medium text-[15px] transition-colors" href="/dashboard">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>Dashboard</span>
+        </a>
+        <!-- 2. Analytics (ACTIVE) -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl bg-[#f04e1e] text-white font-semibold text-[15px] shadow-lg shadow-[#f04e1e]/20 transition-all" href="/analytics">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>Analytics</span>
+        </a>
+        <!-- 3. Machines -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 font-medium text-[15px] transition-colors" href="/machines">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>Machines</span>
+        </a>
+        <!-- 4. Alerts with Count Badge -->
+        <a class="flex items-center justify-between px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 font-medium text-[15px] transition-colors" href="/alerts">
+          <div class="flex items-center gap-3.5">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+              <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            </svg>
+            <span>Alerts</span>
+          </div>
+          <span id="nav-alert-badge" class="w-5 h-5 bg-[#f04e1e] text-white text-xs font-bold rounded-full flex items-center justify-center">3</span>
+        </a>
+        <!-- 5. Reports -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 font-medium text-[15px] transition-colors" href="/reports">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>Reports</span>
+        </a>
+        <!-- 6. Maintenance -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 font-medium text-[15px] transition-colors" href="/maintenance">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>Maintenance</span>
+        </a>
+        <!-- 7. Integrations -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 font-medium text-[15px] transition-colors" href="/integrations">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>Integrations</span>
+        </a>
+        <!-- 8. Team Management -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 font-medium text-[15px] transition-colors" href="/team">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>Team Management</span>
+        </a>
+        <!-- 9. Settings -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 font-medium text-[15px] transition-colors" href="/settings">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+    </div>
+    <!-- Bottom Status & Insights Section -->
+    <div class="flex flex-col space-y-6 pb-2 pt-6">
+      <!-- AI Card Notification -->
+      <div class="flex items-start gap-3 px-3 py-2 text-slate-300">
+        <div class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0 mt-0.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+          </svg>
+        </div>
+        <p class="text-[13px] leading-snug font-normal text-slate-300">
+          AI-powered insights for a smarter tomorrow.
+        </p>
+      </div>
+      <!-- System Status List -->
+      <div class="space-y-3 px-3 border-t border-slate-800/80 pt-4">
+        <div class="flex items-center gap-3 text-slate-300 text-xs font-medium">
+          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>System Status</span>
+        </div>
+        <div class="flex items-center gap-3 text-slate-300 text-xs font-medium">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 ring-4 ring-emerald-400/20"></span>
+          <span>All Systems Operational</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <!-- END: Left Sidebar Navigation -->
+
+  <!-- BEGIN: Main Dashboard Content -->
+  <main class="flex-1 flex flex-col p-6 lg:p-8 overflow-y-auto space-y-6">
+    <!-- BEGIN: Header Section -->
+    <header class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <h1 class="text-3xl font-extrabold text-[#111827] tracking-tight">Analytics</h1>
+        <p class="text-sm font-medium text-slate-500 mt-1">Deep insights for better decisions</p>
+      </div>
+      <!-- Notification & User Avatar -->
+      <div class="flex items-center gap-5">
+        <button aria-label="Notifications" onclick="Dryftq.openNotificationsDrawer()" class="p-2 text-slate-500 hover:text-slate-700 transition" type="button" title="View Notifications">
+          <svg class="w-6 h-6 stroke-[1.8]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </button>
+        <button aria-label="System Alerts" onclick="Dryftq.navigateTo('alerts')" class="relative p-2 text-slate-500 hover:text-slate-700 transition" type="button" title="Active Alerts">
+          <svg class="w-6 h-6 stroke-[1.8]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-[#f4f6fa]"></span>
+        </button>
+        <div onclick="Dryftq.navigateTo('settings')" class="flex items-center gap-3 pl-2 cursor-pointer hover:opacity-90 transition-opacity" title="Settings & Profile">
+          <img id="user-avatar-analytics" alt="User avatar" class="w-10 h-10 rounded-full object-cover ring-2 ring-white shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4NZ7vU87b-Io-jtUA6rUNmTJy6FRFfsHuCAsUDIovJ4DakTU4IybUNgBc9ltRNhS7FMqcpJuB1clKx8fStMAp7gViegeX_0uiKbf0xjPIT8VWLnGyXWWh0ec_dzOdcktF5wNidJvz2D2d45Ji3eJ8wA00aN5oZcQCZQ_AumafUEor2WPNwyRCcD3Jyskzip8yGUuq5XZYEo_MPTfxCfepqEC1RFK4vXC3UtXNZPNeLy-ECmMrKS-N"/>
+          <div class="flex flex-col">
+            <span id="user-name-analytics" class="text-sm font-bold text-slate-900 leading-tight">Aditya Kamil</span>
+            <span id="user-dept-analytics" class="text-xs text-slate-500 leading-tight">Plant Operations</span>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- END: Header Section -->
+
+    <!-- Machine Filter Context Banner (Appears if navigated with machine query) -->
+    <div id="machine-filter-banner" class="hidden items-center justify-between bg-orange-50 border border-orange-200 px-4 py-2.5 rounded-xl text-xs text-orange-950 font-medium">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-[#f04e1e]">Focused Analysis:</span>
+        <span id="machine-filter-text">Machine CNC-01 (Line 1)</span>
+      </div>
+      <button onclick="clearMachineFilter()" class="px-2.5 py-1 bg-white hover:bg-orange-100 border border-orange-200 rounded-lg text-[#f04e1e] font-bold transition-colors">
+        Show Plant-Wide
+      </button>
+    </div>
+
+    <!-- BEGIN: Filter Tabs and Date Range Picker -->
+    <section class="flex flex-wrap items-center justify-between gap-4 pt-1" data-purpose="dashboard-filters">
+      <!-- Tabs -->
+      <div class="flex items-center space-x-2" id="analytics-metric-tabs">
+        <button onclick="switchTab('Overview')" data-tab="Overview" class="px-5 py-2 text-sm font-semibold text-white bg-[#f04e1e] rounded-xl shadow-sm hover:bg-[#d94114] transition" type="button">Overview</button>
+        <button onclick="switchTab('Time')" data-tab="Time" class="px-5 py-2 text-sm font-semibold text-slate-700 bg-white border border-slate-200/90 rounded-xl hover:bg-slate-50 transition" type="button">Time</button>
+        <button onclick="switchTab('OEE')" data-tab="OEE" class="px-5 py-2 text-sm font-semibold text-slate-700 bg-white border border-slate-200/90 rounded-xl hover:bg-slate-50 transition" type="button">OEE</button>
+        <button onclick="switchTab('Quality')" data-tab="Quality" class="px-5 py-2 text-sm font-semibold text-slate-700 bg-white border border-slate-200/90 rounded-xl hover:bg-slate-50 transition" type="button">Quality</button>
+        <button onclick="switchTab('Energy')" data-tab="Energy" class="px-5 py-2 text-sm font-semibold text-slate-700 bg-white border border-slate-200/90 rounded-xl hover:bg-slate-50 transition" type="button">Energy</button>
+      </div>
+      <!-- Date Range Filter Dropdown -->
+      <div class="relative inline-block text-left" id="analytics-date-container">
+        <button id="analytics-date-btn" onclick="toggleAnalyticsDateMenu()" class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-700 bg-white border border-slate-200/90 rounded-xl hover:bg-slate-50 transition" type="button">
+          <span id="analytics-date-label">Last 7 Days</span>
+          <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+        </button>
+        <div id="analytics-date-menu" class="hidden absolute right-0 mt-1.5 w-44 bg-white rounded-xl shadow-lg border border-slate-100 py-1.5 z-40">
+          <button onclick="setAnalyticsRange('Last 24 Hours')" class="w-full text-left px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50">Last 24 Hours</button>
+          <button onclick="setAnalyticsRange('Last 7 Days')" class="w-full text-left px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50">Last 7 Days</button>
+          <button onclick="setAnalyticsRange('Last 30 Days')" class="w-full text-left px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50">Last 30 Days</button>
+          <button onclick="setAnalyticsRange('This Month')" class="w-full text-left px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50">This Month</button>
+        </div>
+      </div>
+    </section>
+    <!-- END: Filter Tabs and Date Range Picker -->
+
+    <!-- BEGIN: Key Performance Indicator (KPI) Cards -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" data-purpose="kpi-metrics-row">
+      <!-- KPI 1: OEE -->
+      <div class="bg-white border border-slate-200/80 rounded-2xl p-5 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+        <span class="text-sm font-semibold text-slate-500">OEE</span>
+        <div class="mt-2 flex items-baseline justify-start gap-3">
+          <span id="kpi-oee-val" class="text-3xl font-extrabold text-slate-900 tracking-tight">85.6%</span>
+        </div>
+        <div class="mt-2 flex items-center text-sm font-semibold text-emerald-500 gap-1">
+          <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <span id="kpi-oee-delta">3.2%</span>
+        </div>
+      </div>
+      <!-- KPI 2: Availability -->
+      <div class="bg-white border border-slate-200/80 rounded-2xl p-5 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+        <span class="text-sm font-semibold text-slate-500">Availability</span>
+        <div class="mt-2 flex items-baseline justify-start gap-3">
+          <span id="kpi-avail-val" class="text-3xl font-extrabold text-slate-900 tracking-tight">92.3%</span>
+        </div>
+        <div class="mt-2 flex items-center text-sm font-semibold text-emerald-500 gap-1">
+          <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <span id="kpi-avail-delta">1.8%</span>
+        </div>
+      </div>
+      <!-- KPI 3: Performance -->
+      <div class="bg-white border border-slate-200/80 rounded-2xl p-5 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+        <span class="text-sm font-semibold text-slate-500">Performance</span>
+        <div class="mt-2 flex items-baseline justify-start gap-3">
+          <span id="kpi-perf-val" class="text-3xl font-extrabold text-slate-900 tracking-tight">88.3%</span>
+        </div>
+        <div class="mt-2 flex items-center text-sm font-semibold text-emerald-500 gap-1">
+          <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <span id="kpi-perf-delta">2.6%</span>
+        </div>
+      </div>
+      <!-- KPI 4: Quality -->
+      <div class="bg-white border border-slate-200/80 rounded-2xl p-5 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+        <span class="text-sm font-semibold text-slate-500">Quality</span>
+        <div class="mt-2 flex items-baseline justify-start gap-3">
+          <span id="kpi-qual-val" class="text-3xl font-extrabold text-slate-900 tracking-tight">98.7%</span>
+        </div>
+        <div class="mt-2 flex items-center text-sm font-semibold text-emerald-500 gap-1">
+          <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <span id="kpi-qual-delta">0.6%</span>
+        </div>
+      </div>
+    </section>
+    <!-- END: Key Performance Indicator (KPI) Cards -->
+
+    <!-- BEGIN: Middle Charts Row (Downtime & OEE Trend) -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-5" data-purpose="charts-row-1">
+      <!-- Left: Downtime Analysis Card -->
+      <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-base font-bold text-slate-900">Downtime Analysis</h2>
+          <span id="downtime-category-tag" class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600">All Categories</span>
+        </div>
+        <div class="flex flex-col sm:flex-row items-center justify-around gap-6 h-full">
+          <!-- Inline SVG Donut Chart -->
+          <div class="relative w-48 h-48 flex items-center justify-center flex-shrink-0">
+            <svg class="w-full h-full -rotate-90" viewbox="0 0 190 190">
+              <circle cx="95" cy="95" fill="transparent" r="68" stroke="#f1f5f9" stroke-width="26"></circle>
+              <!-- 1. Equipment Failure (45%) -->
+              <circle id="donut-slice-fail" class="donut-circle" cx="95" cy="95" fill="transparent" r="68" stroke="#ef4444" stroke-dasharray="192.26 427.26" stroke-dashoffset="0" stroke-width="26" onmouseenter="highlightDonut('Equipment Failure', '1.17h (45%)')" onmouseleave="resetDonut()"></circle>
+              <!-- 2. Waiting (15%) -->
+              <circle id="donut-slice-wait" class="donut-circle" cx="95" cy="95" fill="transparent" r="68" stroke="#2563eb" stroke-dasharray="64.09 427.26" stroke-dashoffset="-192.26" stroke-width="26" onmouseenter="highlightDonut('Waiting', '0.39h (15%)')" onmouseleave="resetDonut()"></circle>
+              <!-- 3. Material Shortage (12%) -->
+              <circle id="donut-slice-mat" class="donut-circle" cx="95" cy="95" fill="transparent" r="68" stroke="#10b981" stroke-dasharray="51.27 427.26" stroke-dashoffset="-256.35" stroke-width="26" onmouseenter="highlightDonut('Material Shortage', '0.31h (12%)')" onmouseleave="resetDonut()"></circle>
+              <!-- 4. Scheduled Maintenance (10%) -->
+              <circle id="donut-slice-maint" class="donut-circle" cx="95" cy="95" fill="transparent" r="68" stroke="#06b6d4" stroke-dasharray="42.73 427.26" stroke-dashoffset="-307.62" stroke-width="26" onmouseenter="highlightDonut('Scheduled Maint', '0.26h (10%)')" onmouseleave="resetDonut()"></circle>
+              <!-- 5. Power Outage (10%) -->
+              <circle id="donut-slice-pwr" class="donut-circle" cx="95" cy="95" fill="transparent" r="68" stroke="#f59e0b" stroke-dasharray="42.73 427.26" stroke-dashoffset="-350.35" stroke-width="26" onmouseenter="highlightDonut('Power Outage', '0.26h (10%)')" onmouseleave="resetDonut()"></circle>
+              <!-- 6. Other (8%) -->
+              <circle id="donut-slice-other" class="donut-circle" cx="95" cy="95" fill="transparent" r="68" stroke="#60a5fa" stroke-dasharray="34.18 427.26" stroke-dashoffset="-393.08" stroke-width="26" onmouseenter="highlightDonut('Other Causes', '0.21h (8%)')" onmouseleave="resetDonut()"></circle>
+            </svg>
+            <!-- Donut Center Text -->
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
+              <span id="donut-center-label" class="text-xs font-semibold text-slate-400">Total</span>
+              <span id="donut-center-value" class="text-2xl font-black text-slate-900 tracking-tight">2.6h</span>
+            </div>
+          </div>
+          <!-- Legend List -->
+          <div class="w-full sm:w-auto flex-1 space-y-2.5 max-w-[240px]">
+            <div class="flex items-center justify-between text-xs cursor-pointer hover:opacity-75 transition-opacity" onmouseenter="highlightDonut('Equipment Failure', '1.17h (45%)')" onmouseleave="resetDonut()">
+              <div class="flex items-center gap-2 text-slate-700 font-medium">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#ef4444] flex-shrink-0"></span>
+                <span>Equipment Failure</span>
+              </div>
+              <span class="font-bold text-slate-900">45%</span>
+            </div>
+            <div class="flex items-center justify-between text-xs cursor-pointer hover:opacity-75 transition-opacity" onmouseenter="highlightDonut('Waiting', '0.39h (15%)')" onmouseleave="resetDonut()">
+              <div class="flex items-center gap-2 text-slate-700 font-medium">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#2563eb] flex-shrink-0"></span>
+                <span>Waiting</span>
+              </div>
+              <span class="font-bold text-slate-900">15%</span>
+            </div>
+            <div class="flex items-center justify-between text-xs cursor-pointer hover:opacity-75 transition-opacity" onmouseenter="highlightDonut('Material Shortage', '0.31h (12%)')" onmouseleave="resetDonut()">
+              <div class="flex items-center gap-2 text-slate-700 font-medium">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#10b981] flex-shrink-0"></span>
+                <span>Material Shortage</span>
+              </div>
+              <span class="font-bold text-slate-900">12%</span>
+            </div>
+            <div class="flex items-center justify-between text-xs cursor-pointer hover:opacity-75 transition-opacity" onmouseenter="highlightDonut('Scheduled Maint', '0.26h (10%)')" onmouseleave="resetDonut()">
+              <div class="flex items-center gap-2 text-slate-700 font-medium">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#06b6d4] flex-shrink-0"></span>
+                <span>Scheduled Maintenance</span>
+              </div>
+              <span class="font-bold text-slate-900">10%</span>
+            </div>
+            <div class="flex items-center justify-between text-xs cursor-pointer hover:opacity-75 transition-opacity" onmouseenter="highlightDonut('Power Outage', '0.26h (10%)')" onmouseleave="resetDonut()">
+              <div class="flex items-center gap-2 text-slate-700 font-medium">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#f59e0b] flex-shrink-0"></span>
+                <span>Power Outage</span>
+              </div>
+              <span class="font-bold text-slate-900">10%</span>
+            </div>
+            <div class="flex items-center justify-between text-xs cursor-pointer hover:opacity-75 transition-opacity" onmouseenter="highlightDonut('Other Causes', '0.21h (8%)')" onmouseleave="resetDonut()">
+              <div class="flex items-center gap-2 text-slate-700 font-medium">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#60a5fa] flex-shrink-0"></span>
+                <span>Other</span>
+              </div>
+              <span class="font-bold text-slate-900">8%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: OEE Trend Chart Card -->
+      <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm flex flex-col justify-between relative">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-base font-bold text-slate-900">OEE Trend</h2>
+          <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full">+4.2% Week-over-Week</span>
+        </div>
+        <!-- Trend Line Chart Container -->
+        <div class="relative w-full h-56 pt-2" id="oee-trend-container">
+          <svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 500 180">
+            <!-- Grid lines & labels -->
+            <text fill="#94a3b8" font-size="11" font-weight="600" x="5" y="16">100%</text>
+            <line stroke="#f1f5f9" stroke-width="1.5" x1="45" x2="495" y1="12" y2="12"></line>
+            <text fill="#94a3b8" font-size="11" font-weight="600" x="12" y="58">75%</text>
+            <line stroke="#f1f5f9" stroke-width="1.5" x1="45" x2="495" y1="54" y2="54"></line>
+            <text fill="#94a3b8" font-size="11" font-weight="600" x="12" y="100">50%</text>
+            <line stroke="#f1f5f9" stroke-width="1.5" x1="45" x2="495" y1="96" y2="96"></line>
+            <text fill="#94a3b8" font-size="11" font-weight="600" x="12" y="142">20%</text>
+            <line stroke="#f1f5f9" stroke-width="1.5" x1="45" x2="495" y1="138" y2="138"></line>
+
+            <!-- Smooth Path -->
+            <polyline id="oee-trend-polyline" fill="none" points="55,142 125,125 195,110 265,85 335,95 405,65 480,40" stroke="#1d72fe" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></polyline>
+
+            <!-- Interactive Data Point Circles with Tooltip -->
+            <g id="oee-trend-points">
+              <circle cx="55" cy="142" fill="#1d72fe" r="4.5" stroke="#ffffff" stroke-width="2.5" class="dryftq-clickable" onmouseenter="showOEETooltip(event, 'Mon: 76.5%')" onmouseleave="hideOEETooltip()"></circle>
+              <circle cx="125" cy="125" fill="#1d72fe" r="4.5" stroke="#ffffff" stroke-width="2.5" class="dryftq-clickable" onmouseenter="showOEETooltip(event, 'Tue: 79.2%')" onmouseleave="hideOEETooltip()"></circle>
+              <circle cx="195" cy="110" fill="#1d72fe" r="4.5" stroke="#ffffff" stroke-width="2.5" class="dryftq-clickable" onmouseenter="showOEETooltip(event, 'Wed: 82.0%')" onmouseleave="hideOEETooltip()"></circle>
+              <circle cx="265" cy="85" fill="#1d72fe" r="4.5" stroke="#ffffff" stroke-width="2.5" class="dryftq-clickable" onmouseenter="showOEETooltip(event, 'Thu: 85.8%')" onmouseleave="hideOEETooltip()"></circle>
+              <circle cx="335" cy="95" fill="#1d72fe" r="4.5" stroke="#ffffff" stroke-width="2.5" class="dryftq-clickable" onmouseenter="showOEETooltip(event, 'Fri: 84.1%')" onmouseleave="hideOEETooltip()"></circle>
+              <circle cx="405" cy="65" fill="#1d72fe" r="4.5" stroke="#ffffff" stroke-width="2.5" class="dryftq-clickable" onmouseenter="showOEETooltip(event, 'Sat: 88.6%')" onmouseleave="hideOEETooltip()"></circle>
+              <circle cx="480" cy="40" fill="#1d72fe" r="4.5" stroke="#ffffff" stroke-width="2.5" class="dryftq-clickable" onmouseenter="showOEETooltip(event, 'Sun: 91.4%')" onmouseleave="hideOEETooltip()"></circle>
+            </g>
+
+            <!-- X-Axis Labels -->
+            <text fill="#64748b" font-size="11" font-weight="600" text-anchor="middle" x="55" y="172">Mon</text>
+            <text fill="#64748b" font-size="11" font-weight="600" text-anchor="middle" x="125" y="172">Tue</text>
+            <text fill="#64748b" font-size="11" font-weight="600" text-anchor="middle" x="195" y="172">Wed</text>
+            <text fill="#64748b" font-size="11" font-weight="600" text-anchor="middle" x="265" y="172">Thu</text>
+            <text fill="#64748b" font-size="11" font-weight="600" text-anchor="middle" x="335" y="172">Fri</text>
+            <text fill="#64748b" font-size="11" font-weight="600" text-anchor="middle" x="405" y="172">Sat</text>
+            <text fill="#64748b" font-size="11" font-weight="600" text-anchor="middle" x="480" y="172">Sun</text>
+          </svg>
+          <div id="oee-tooltip" class="dryftq-chart-tooltip"></div>
+        </div>
+      </div>
+    </section>
+    <!-- END: Middle Charts Row -->
+
+    <!-- BEGIN: Bottom Metrics Row (Performance by Area & Energy) -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-5" data-purpose="charts-row-2">
+      <!-- Left: Performance by Area Card -->
+      <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+        <div class="flex items-center justify-between mb-5">
+          <h2 class="text-base font-bold text-slate-900">Performance by Area</h2>
+          <span class="text-xs text-slate-400">Click a line to view machines</span>
+        </div>
+        <div class="space-y-4">
+          <!-- Line 1 -->
+          <div onclick="Dryftq.navigateTo('machines', { search: 'Line 1' })" class="flex items-center gap-4 cursor-pointer hover:bg-slate-50 p-1.5 rounded-lg transition-colors" title="View Line 1 Machines">
+            <span class="w-14 text-sm font-semibold text-slate-800">Line 1</span>
+            <div class="flex-1 bg-slate-100 rounded-full h-3 overflow-hidden">
+              <div class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: 88.7%;"></div>
+            </div>
+            <span class="w-12 text-right text-xs font-bold text-slate-800">88.7%</span>
+          </div>
+          <!-- Line 2 -->
+          <div onclick="Dryftq.navigateTo('machines', { search: 'Line 2' })" class="flex items-center gap-4 cursor-pointer hover:bg-slate-50 p-1.5 rounded-lg transition-colors" title="View Line 2 Machines">
+            <span class="w-14 text-sm font-semibold text-slate-800">Line 2</span>
+            <div class="flex-1 bg-slate-100 rounded-full h-3 overflow-hidden">
+              <div class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: 76.3%;"></div>
+            </div>
+            <span class="w-12 text-right text-xs font-bold text-slate-800">76.3%</span>
+          </div>
+          <!-- Line 3 -->
+          <div onclick="Dryftq.navigateTo('machines', { search: 'Line 3' })" class="flex items-center gap-4 cursor-pointer hover:bg-slate-50 p-1.5 rounded-lg transition-colors" title="View Line 3 Machines">
+            <span class="w-14 text-sm font-semibold text-slate-800">Line 3</span>
+            <div class="flex-1 bg-slate-100 rounded-full h-3 overflow-hidden">
+              <div class="bg-amber-500 h-full rounded-full transition-all duration-500" style="width: 85.7%;"></div>
+            </div>
+            <span class="w-12 text-right text-xs font-bold text-slate-800">85.7%</span>
+          </div>
+          <!-- Line 4 -->
+          <div onclick="Dryftq.navigateTo('machines', { search: 'Line 4' })" class="flex items-center gap-4 cursor-pointer hover:bg-slate-50 p-1.5 rounded-lg transition-colors" title="View Line 4 Machines">
+            <span class="w-14 text-sm font-semibold text-slate-800">Line 4</span>
+            <div class="flex-1 bg-slate-100 rounded-full h-3 overflow-hidden">
+              <div class="bg-[#f04e1e] h-full rounded-full transition-all duration-500" style="width: 90.2%;"></div>
+            </div>
+            <span class="w-12 text-right text-xs font-bold text-slate-800">90.2%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Energy Consumption Card -->
+      <div class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between">
+            <h2 class="text-base font-bold text-slate-900">Energy Consumption</h2>
+            <button onclick="Dryftq.downloadReportCSV('Energy Report')" class="text-xs font-semibold text-[#f04e1e] hover:underline flex items-center gap-1">
+              Export CSV &darr;
+            </button>
+          </div>
+          <div class="flex items-baseline gap-2 mt-2">
+            <span class="text-3xl font-black text-slate-900 tracking-tight">12.4 kw</span>
+          </div>
+          <div class="flex items-center gap-1.5 text-xs font-bold text-emerald-500 mt-1">
+            <svg class="w-3.5 h-3.5 stroke-[2.5]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+              <path d="M19 14l-7 7m0 0l-7-7m7 7V3" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <span>4.2%</span>
+            <span class="text-slate-500 font-medium">vs last 7 days</span>
+          </div>
+        </div>
+        <!-- Bottom Sparkline Wave Chart -->
+        <div class="w-full h-16 pt-3 relative" id="energy-sparkline-container">
+          <svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 400 48">
+            <polyline fill="none" points="10,32 55,28 100,38 145,34 190,44 235,28 280,36 325,36 360,30 390,16" stroke="#1d72fe" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></polyline>
+            <circle cx="10" cy="32" fill="#1d72fe" r="3.5" stroke="#ffffff" stroke-width="2" class="dryftq-clickable" title="10.8 kW"></circle>
+            <circle cx="55" cy="28" fill="#1d72fe" r="3.5" stroke="#ffffff" stroke-width="2" class="dryftq-clickable" title="11.2 kW"></circle>
+            <circle cx="100" cy="38" fill="#1d72fe" r="3.5" stroke="#ffffff" stroke-width="2" class="dryftq-clickable" title="10.2 kW"></circle>
+            <circle cx="145" cy="34" fill="#1d72fe" r="3.5" stroke="#ffffff" stroke-width="2" class="dryftq-clickable" title="10.6 kW"></circle>
+            <circle cx="190" cy="44" fill="#1d72fe" r="3.5" stroke="#ffffff" stroke-width="2" class="dryftq-clickable" title="9.8 kW"></circle>
+            <circle cx="235" cy="28" fill="#1d72fe" r="3.5" stroke="#ffffff" stroke-width="2" class="dryftq-clickable" title="11.4 kW"></circle>
+            <circle cx="280" cy="36" fill="#1d72fe" r="3.5" stroke="#ffffff" stroke-width="2" class="dryftq-clickable" title="10.4 kW"></circle>
+            <circle cx="325" cy="36" fill="#1d72fe" r="3.5" stroke="#ffffff" stroke-width="2" class="dryftq-clickable" title="10.5 kW"></circle>
+            <circle cx="360" cy="30" fill="#1d72fe" r="3.5" stroke="#ffffff" stroke-width="2" class="dryftq-clickable" title="11.8 kW"></circle>
+            <circle cx="390" cy="16" fill="#1d72fe" r="3.5" stroke="#ffffff" stroke-width="2" class="dryftq-clickable" title="12.4 kW (Peak)"></circle>
+          </svg>
+        </div>
+      </div>
+    </section>
+    <!-- END: Bottom Metrics Row -->
+  </main>
+  <!-- END: Main Dashboard Content -->
+</div>
+<!-- END: Application Container -->
+
+<!-- Interactive Scripts -->
+<script src="../shared/dryftq-state.js"></script>
+<script>
+  let currentAnalyticsTab = 'Overview';
+  let currentRange = 'Last 7 Days';
+
+  const tabDatasets = {
+    'Overview': { oee: '85.6%', oeeD: '3.2%', avail: '92.3%', availD: '1.8%', perf: '88.3%', perfD: '2.6%', qual: '98.7%', qualD: '0.6%' },
+    'Time': { oee: '84.1%', oeeD: '1.4%', avail: '90.5%', availD: '0.9%', perf: '89.0%', perfD: '2.1%', qual: '98.2%', qualD: '0.4%' },
+    'OEE': { oee: '88.2%', oeeD: '4.8%', avail: '93.7%', availD: '2.4%', perf: '91.2%', perfD: '3.1%', qual: '99.1%', qualD: '0.8%' },
+    'Quality': { oee: '86.0%', oeeD: '2.1%', avail: '91.8%', availD: '1.2%', perf: '87.4%', perfD: '1.5%', qual: '99.4%', qualD: '1.2%' },
+    'Energy': { oee: '83.9%', oeeD: '1.0%', avail: '93.0%', availD: '1.9%', perf: '86.1%', perfD: '1.1%', qual: '98.0%', qualD: '0.3%' }
+  };
+
+  function switchTab(tabName) {
+    currentAnalyticsTab = tabName;
+    const buttons = document.querySelectorAll('#analytics-metric-tabs button');
+    buttons.forEach(btn => {
+      if (btn.getAttribute('data-tab') === tabName) {
+        btn.className = 'px-5 py-2 text-sm font-semibold text-white bg-[#f04e1e] rounded-xl shadow-sm hover:bg-[#d94114] transition';
+      } else {
+        btn.className = 'px-5 py-2 text-sm font-semibold text-slate-700 bg-white border border-slate-200/90 rounded-xl hover:bg-slate-50 transition';
+      }
+    });
+
+    const data = tabDatasets[tabName] || tabDatasets['Overview'];
+    document.getElementById('kpi-oee-val').textContent = data.oee;
+    document.getElementById('kpi-oee-delta').textContent = data.oeeD;
+    document.getElementById('kpi-avail-val').textContent = data.avail;
+    document.getElementById('kpi-avail-delta').textContent = data.availD;
+    document.getElementById('kpi-perf-val').textContent = data.perf;
+    document.getElementById('kpi-perf-delta').textContent = data.perfD;
+    document.getElementById('kpi-qual-val').textContent = data.qual;
+    document.getElementById('kpi-qual-delta').textContent = data.qualD;
+
+    Dryftq.toast(`Analytics switched to ${tabName} perspective.`, 'info', 'Perspective Updated');
+  }
+
+  function toggleAnalyticsDateMenu() {
+    const menu = document.getElementById('analytics-date-menu');
+    menu.classList.toggle('hidden');
+  }
+
+  function setAnalyticsRange(range) {
+    currentRange = range;
+    document.getElementById('analytics-date-label').textContent = range;
+    document.getElementById('analytics-date-menu').classList.add('hidden');
+    Dryftq.toast(`Time frame updated to ${range}.`, 'info', 'Date Range Filter');
+  }
+
+  function highlightDonut(category, value) {
+    document.getElementById('donut-center-label').textContent = category;
+    document.getElementById('donut-center-value').textContent = value;
+    document.getElementById('downtime-category-tag').textContent = category;
+  }
+
+  function resetDonut() {
+    document.getElementById('donut-center-label').textContent = 'Total';
+    document.getElementById('donut-center-value').textContent = '2.6h';
+    document.getElementById('downtime-category-tag').textContent = 'All Categories';
+  }
+
+  function showOEETooltip(e, text) {
+    const tooltip = document.getElementById('oee-tooltip');
+    tooltip.textContent = text;
+    const rect = e.target.getBoundingClientRect();
+    const container = document.getElementById('oee-trend-container').getBoundingClientRect();
+    tooltip.style.left = `${rect.left - container.left + 8}px`;
+    tooltip.style.top = `${rect.top - container.top - 28}px`;
+    tooltip.style.opacity = '1';
+  }
+
+  function hideOEETooltip() {
+    const tooltip = document.getElementById('oee-tooltip');
+    tooltip.style.opacity = '0';
+  }
+
+  function clearMachineFilter() {
+    document.getElementById('machine-filter-banner').classList.add('hidden');
+    document.getElementById('machine-filter-banner').classList.remove('flex');
+    window.history.replaceState({}, document.title, window.location.pathname);
+    switchTab('Overview');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    Dryftq.setupNavigation('analytics');
+
+    // Query params check (e.g. ?machine=CNC-01 or ?tab=OEE)
+    const params = Dryftq.getQueryParams();
+    if (params.machine) {
+      const banner = document.getElementById('machine-filter-banner');
+      banner.classList.remove('hidden');
+      banner.classList.add('flex');
+      document.getElementById('machine-filter-text').textContent = `Machine ${params.machine}`;
+    }
+    if (params.tab && tabDatasets[params.tab]) {
+      switchTab(params.tab);
+    }
+
+    // User profile sync
+    const state = Dryftq.getState();
+    if (state.user) {
+      const uName = document.getElementById('user-name-analytics');
+      const uDept = document.getElementById('user-dept-analytics');
+      const uAv = document.getElementById('user-avatar-analytics');
+      if (uName) uName.textContent = state.user.name;
+      if (uDept) uDept.textContent = state.user.department;
+      if (uAv && state.user.avatar) uAv.src = state.user.avatar;
+    }
+
+    // Close date menu on outside click
+    document.addEventListener('click', (e) => {
+      const container = document.getElementById('analytics-date-container');
+      if (container && !container.contains(e.target)) {
+        document.getElementById('analytics-date-menu').classList.add('hidden');
+      }
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>DRYFTQ - Reports Dashboard</title>
+  <!-- Tailwind CSS CDN with forms and container-queries -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <!-- DRYFTQ Shared System -->
+  <link rel="stylesheet" href="../shared/dryftq-common.css"/>
+  <script>
+    // Keep the page script alive if the Tailwind CDN is unreachable (offline / blocked).
+    window.tailwind = window.tailwind || {};
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'brand-orange': '#FF4D15',
+            'brand-orange-hover': '#E63E07',
+            'brand-sidebar': '#071A2E',
+            'brand-nav-hover': '#0A2540',
+            'card-bg': '#FFFFFF',
+            'navy-text': '#0A1E34',
+            'navy-muted': '#62768E',
+            'badge-orange': '#FF4D15'
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style data-purpose="custom-layout">
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .report-card-shadow {
+      box-shadow: 0 2px 6px -1px rgba(0, 20, 40, 0.04), 0 1px 3px 0 rgba(0, 20, 40, 0.02);
+      transition: all 0.2s ease-in-out;
+    }
+    .report-card-shadow:hover {
+      box-shadow: 0 8px 16px -3px rgba(0, 20, 40, 0.08), 0 3px 6px -2px rgba(0, 20, 40, 0.04);
+      transform: translateY(-2px);
+    }
+    .btn-orange-glow {
+      box-shadow: 0 4px 14px 0 rgba(255, 60, 0, 0.35);
+    }
+    .btn-orange-glow:hover {
+      box-shadow: 0 6px 18px 0 rgba(255, 60, 0, 0.45);
+    }
+  </style>
+</head>
+<body class="bg-[#F4F7FB] text-[#0A1E34] antialiased min-h-screen flex font-sans selection:bg-orange-500 selection:text-white">
+<!-- BEGIN: Sidebar -->
+<aside class="w-[21.5%] min-w-[260px] max-w-[320px] bg-brand-sidebar text-white flex flex-col justify-between border-r border-[#0A2640] flex-shrink-0 select-none" data-purpose="main-navigation-sidebar">
+  <div class="flex flex-col flex-1">
+    <!-- Logo Bar -->
+    <div class="h-[76px] px-7 flex items-center justify-between border-b border-[#0A2742]">
+      <a href="/dashboard" class="text-2xl font-black tracking-wider text-white hover:text-orange-400 transition-colors">DRYFTQ</a>
+      <button aria-label="Collapse Menu" class="text-slate-400 hover:text-white p-1 rounded transition-colors" title="Close / Collapse Sidebar">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"></path>
+        </svg>
+      </button>
+    </div>
+    <!-- Navigation Links: All 9 Modules -->
+    <nav aria-label="Main Navigation" class="py-4 px-3.5 space-y-1">
+      <!-- 1. Dashboard -->
+      <a class="flex items-center gap-3.5 px-4 py-3 rounded-lg text-slate-200 hover:bg-brand-nav-hover hover:text-white transition-colors group" href="/dashboard">
+        <svg class="w-5 h-5 text-slate-300 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+        <span class="text-[15px] font-medium tracking-wide">Dashboard</span>
+      </a>
+      <!-- 2. Analytics -->
+      <a class="flex items-center gap-3.5 px-4 py-3 rounded-lg text-slate-200 hover:bg-brand-nav-hover hover:text-white transition-colors group" href="/analytics">
+        <svg class="w-5 h-5 text-slate-300 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+        <span class="text-[15px] font-medium tracking-wide">Analytics</span>
+      </a>
+      <!-- 3. Machines -->
+      <a class="flex items-center gap-3.5 px-4 py-3 rounded-lg text-slate-200 hover:bg-brand-nav-hover hover:text-white transition-colors group" href="/machines">
+        <svg class="w-5 h-5 text-slate-300 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+        <span class="text-[15px] font-medium tracking-wide">Machines</span>
+      </a>
+      <!-- 4. Alerts with badge -->
+      <a class="flex items-center justify-between px-4 py-3 rounded-lg text-slate-200 hover:bg-brand-nav-hover hover:text-white transition-colors group" href="/alerts">
+        <div class="flex items-center gap-3.5">
+          <svg class="w-5 h-5 text-slate-300 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span class="text-[15px] font-medium tracking-wide">Alerts</span>
+        </div>
+        <span id="nav-alert-badge" class="w-[23px] h-[23px] bg-badge-orange text-white text-xs font-bold rounded-full flex items-center justify-center shadow-sm">
+          3
+        </span>
+      </a>
+      <!-- 5. Reports (Active item) -->
+      <a class="flex items-center gap-3.5 px-4 py-3 rounded-lg bg-brand-orange text-white font-semibold group shadow-md" href="/reports">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+        <span class="text-[15px] font-medium tracking-wide">Reports</span>
+      </a>
+      <!-- 6. Maintenance -->
+      <a class="flex items-center gap-3.5 px-4 py-3 rounded-lg text-slate-200 hover:bg-brand-nav-hover hover:text-white transition-colors group" href="/maintenance">
+        <svg class="w-5 h-5 text-slate-300 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+        <span class="text-[15px] font-medium tracking-wide">Maintenance</span>
+      </a>
+      <!-- 7. Integrations -->
+      <a class="flex items-center gap-3.5 px-4 py-3 rounded-lg text-slate-200 hover:bg-brand-nav-hover hover:text-white transition-colors group" href="/integrations">
+        <svg class="w-5 h-5 text-slate-300 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+        <span class="text-[15px] font-medium tracking-wide">Integrations</span>
+      </a>
+      <!-- 8. Team Management -->
+      <a class="flex items-center gap-3.5 px-4 py-3 rounded-lg text-slate-200 hover:bg-brand-nav-hover hover:text-white transition-colors group" href="/team">
+        <svg class="w-5 h-5 text-slate-300 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+        <span class="text-[15px] font-medium tracking-wide">Team Management</span>
+      </a>
+      <!-- 9. Settings -->
+      <a class="flex items-center gap-3.5 px-4 py-3 rounded-lg text-slate-200 hover:bg-brand-nav-hover hover:text-white transition-colors group" href="/settings">
+        <svg class="w-5 h-5 text-slate-300 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+        <span class="text-[15px] font-medium tracking-wide">Settings</span>
+      </a>
+    </nav>
+  </div>
+  <!-- Bottom Sidebar Section -->
+  <div class="px-5 py-5 border-t border-[#0A2742] space-y-4">
+    <div class="flex items-center gap-3 bg-[#062137]/60 p-2.5 rounded-lg border border-[#0d304f]">
+      <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 text-emerald-400">
+        <svg class="w-4 h-4 fill-current" viewbox="0 0 20 20">
+          <path clip-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" fill-rule="evenodd"></path>
+        </svg>
+      </div>
+      <div class="text-[12px] leading-tight text-slate-300">
+        <p class="font-medium">AI-powered insights for</p>
+        <p class="font-medium text-slate-400">a smarter tomorrow.</p>
+      </div>
+    </div>
+    <div class="space-y-2 pt-1 text-[13px] text-slate-300">
+      <div class="flex items-center gap-2.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-emerald-500/20"></span>
+        <span class="font-medium">System Status</span>
+      </div>
+      <div class="flex items-center gap-2.5 text-slate-400 text-[12px] pl-5">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+        <span>All Systems Operational</span>
+      </div>
+    </div>
+  </div>
+</aside>
+<!-- END: Sidebar -->
+
+<!-- BEGIN: Main Content Area -->
+<main class="flex-1 flex flex-col overflow-y-auto px-9 py-7 min-w-0" data-purpose="reports-workspace">
+  <!-- BEGIN: Workspace Header -->
+  <header class="flex items-center justify-between pb-6">
+    <div>
+      <h1 class="text-3xl font-extrabold tracking-tight text-navy-text">Reports</h1>
+      <p class="text-[14px] font-normal text-navy-muted mt-1">Generate and export verified plant operational datasets</p>
+    </div>
+    <!-- User & Notifications Header Actions -->
+    <div class="flex items-center gap-6">
+      <button aria-label="Notifications" onclick="Dryftq.openNotificationsDrawer()" class="relative p-2 text-slate-700 hover:text-navy-text transition-colors rounded-full hover:bg-white" title="Notifications">
+        <svg class="w-5 h-5 stroke-[2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </button>
+      <button aria-label="System Alerts" onclick="Dryftq.navigateTo('alerts')" class="relative p-2 text-slate-700 hover:text-navy-text transition-colors rounded-full hover:bg-white" title="Active Alerts">
+        <svg class="w-5 h-5 stroke-[2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full ring-2 ring-white"></span>
+      </button>
+      <div onclick="Dryftq.navigateTo('settings')" class="flex items-center gap-3 pl-2 cursor-pointer hover:opacity-90 transition-opacity" title="Settings & Profile">
+        <img id="user-avatar-reports" alt="User portrait" class="w-10 h-10 rounded-full object-cover ring-2 ring-white shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCREGW3O-sD9ku9z2MgIuSkEUFkD69WEcn53PTwzt7sZhVps0nwoskirNH6ZnwrHqI2-OQhyH-yEEGygMddD584HiMJRln1ZbmBAkTBD4Kw5z-VJRuHBkoQpRSXglpIgm2x8X4BnZS9sfaZOiarbY2vCJdCDsAWdOZqXRjTDfEwo04uaXPyJ1Y6q_iLUDHKV3rUPe6_4rnscHplOmqm8eC3x1Km72mRqGt-gz9j-JGPC94-uyS6aVtHcQ"/>
+        <div class="text-left leading-snug">
+          <span id="user-name-reports" class="block text-sm font-bold text-navy-text">Aditya Kamil</span>
+          <span id="user-dept-reports" class="block text-xs text-navy-muted">Plant Operations</span>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- END: Workspace Header -->
+
+  <!-- BEGIN: Tabs Filter Bar & Search -->
+  <div class="flex items-center justify-between mb-6" data-purpose="report-type-selector">
+    <div class="flex items-center gap-2">
+      <button id="tab-standard-btn" onclick="switchReportsTab('standard')" class="px-7 py-2 bg-brand-orange text-white font-semibold text-sm rounded-lg shadow-sm transition-colors">
+        Standard
+      </button>
+      <button id="tab-custom-btn" onclick="switchReportsTab('custom')" class="px-7 py-2 bg-transparent text-navy-text font-semibold text-sm rounded-lg hover:bg-white/60 transition-colors">
+        Custom
+      </button>
+    </div>
+    <div class="w-72">
+      <input id="report-search-input" oninput="filterReportsList()" placeholder="Filter reports by keyword..." class="w-full px-4 py-2 bg-white border border-slate-200/90 rounded-xl text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-orange shadow-xs"/>
+    </div>
+  </div>
+  <!-- END: Tabs Filter Bar -->
+
+  <!-- BEGIN: Reports 2x4 Grid -->
+  <section id="reports-grid" aria-label="Available Reports List" class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
+    <!-- Card 1: Production Report -->
+    <article class="bg-card-bg rounded-xl border border-slate-100/80 px-6 py-4 flex items-center justify-between report-card-shadow cursor-pointer" onclick="openReportPreview('Production Report', 'Daily Production', '2.4 MB')">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-600 shrink-0">
+          <svg class="w-6 h-6 stroke-[2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-[16px] font-bold text-navy-text">Production Report</h3>
+          <p class="text-xs text-navy-muted mt-0.5">Daily Production - 2.4 MB</p>
+        </div>
+      </div>
+      <button onclick="event.stopPropagation(); Dryftq.downloadReportCSV('Production Report')" aria-label="Download Production Report" class="p-2 text-slate-800 hover:text-brand-orange transition-colors" title="Download Production Report CSV">
+        <svg class="w-5 h-5 stroke-[2.2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </button>
+    </article>
+
+    <!-- Card 2: Energy Report -->
+    <article class="bg-card-bg rounded-xl border border-slate-100/80 px-6 py-4 flex items-center justify-between report-card-shadow cursor-pointer" onclick="openReportPreview('Energy Report', 'Energy Consumption', '1.3 MB')">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-500 shrink-0">
+          <svg class="w-6 h-6 stroke-[2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-[16px] font-bold text-navy-text">Energy Report</h3>
+          <p class="text-xs text-navy-muted mt-0.5">Energy Consumption - 1.3 MB</p>
+        </div>
+      </div>
+      <button onclick="event.stopPropagation(); Dryftq.downloadReportCSV('Energy Report')" aria-label="Download Energy Report" class="p-2 text-slate-800 hover:text-brand-orange transition-colors" title="Download Energy Report CSV">
+        <svg class="w-5 h-5 stroke-[2.2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </button>
+    </article>
+
+    <!-- Card 3: Quality Report -->
+    <article class="bg-card-bg rounded-xl border border-slate-100/80 px-6 py-4 flex items-center justify-between report-card-shadow cursor-pointer" onclick="openReportPreview('Quality Report', 'Quality Analysis', '1.5 MB')">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-red-50 border border-red-100 flex items-center justify-center text-red-500 shrink-0">
+          <svg class="w-6 h-6 stroke-[2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-[16px] font-bold text-navy-text">Quality Report</h3>
+          <p class="text-xs text-navy-muted mt-0.5">Quality Analysis - 1.5 MB</p>
+        </div>
+      </div>
+      <button onclick="event.stopPropagation(); Dryftq.downloadReportCSV('Quality Report')" aria-label="Download Quality Report" class="p-2 text-slate-800 hover:text-brand-orange transition-colors" title="Download Quality Report CSV">
+        <svg class="w-5 h-5 stroke-[2.2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </button>
+    </article>
+
+    <!-- Card 4: Date-wise Production Report -->
+    <article class="bg-card-bg rounded-xl border border-slate-100/80 px-6 py-4 flex items-center justify-between report-card-shadow cursor-pointer" onclick="openReportPreview('Date-wise Production Report', 'Date-wise Production', '3.2 MB')">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shrink-0">
+          <svg class="w-6 h-6 stroke-[2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-[16px] font-bold text-navy-text">Production Report</h3>
+          <p class="text-xs text-navy-muted mt-0.5">Date-wise Production - 3.2 MB</p>
+        </div>
+      </div>
+      <button onclick="event.stopPropagation(); Dryftq.downloadReportCSV('Production Report')" aria-label="Download Date-wise Production Report" class="p-2 text-slate-800 hover:text-brand-orange transition-colors" title="Download Date-wise Production Report CSV">
+        <svg class="w-5 h-5 stroke-[2.2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </button>
+    </article>
+
+    <!-- Card 5: Performance Report -->
+    <article class="bg-card-bg rounded-xl border border-slate-100/80 px-6 py-4 flex items-center justify-between report-card-shadow cursor-pointer" onclick="openReportPreview('Performance Report', 'OEE Analysis', '1.7 MB')">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+          <svg class="w-6 h-6 stroke-[2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-[16px] font-bold text-navy-text">Performance Report</h3>
+          <p class="text-xs text-navy-muted mt-0.5">OEE Analysis - 1.7 MB</p>
+        </div>
+      </div>
+      <button onclick="event.stopPropagation(); Dryftq.downloadReportCSV('Performance Report')" aria-label="Download Performance Report" class="p-2 text-slate-800 hover:text-brand-orange transition-colors" title="Download Performance Report CSV">
+        <svg class="w-5 h-5 stroke-[2.2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </button>
+    </article>
+
+    <!-- Card 6: Downtime Report -->
+    <article class="bg-card-bg rounded-xl border border-slate-100/80 px-6 py-4 flex items-center justify-between report-card-shadow cursor-pointer" onclick="openReportPreview('Downtime Report', 'Downtime Analysis', '1.2 MB')">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shrink-0">
+          <svg class="w-6 h-6 stroke-[2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-[16px] font-bold text-navy-text">Downtime Report</h3>
+          <p class="text-xs text-navy-muted mt-0.5">Downtime Analysis - 1.2 MB</p>
+        </div>
+      </div>
+      <button onclick="event.stopPropagation(); Dryftq.downloadReportCSV('Downtime Report')" aria-label="Download Downtime Report" class="p-2 text-slate-800 hover:text-brand-orange transition-colors" title="Download Downtime Report CSV">
+        <svg class="w-5 h-5 stroke-[2.2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </button>
+    </article>
+
+    <!-- Card 7: Maintenance Report -->
+    <article class="bg-card-bg rounded-xl border border-slate-100/80 px-6 py-4 flex items-center justify-between report-card-shadow cursor-pointer" onclick="openReportPreview('Maintenance Report', 'Asset Health', '2.0 MB')">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shrink-0">
+          <svg class="w-6 h-6 stroke-[2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-[16px] font-bold text-navy-text">Maintenance Report</h3>
+          <p class="text-xs text-navy-muted mt-0.5">Asset Health - 2.0 MB</p>
+        </div>
+      </div>
+      <button onclick="event.stopPropagation(); Dryftq.downloadReportCSV('Maintenance Report')" aria-label="Download Maintenance Report" class="p-2 text-slate-800 hover:text-brand-orange transition-colors" title="Download Maintenance Report CSV">
+        <svg class="w-5 h-5 stroke-[2.2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </button>
+    </article>
+
+    <!-- Card 8: Custom Report -->
+    <article class="bg-card-bg rounded-xl border border-slate-100/80 px-6 py-4 flex items-center justify-between report-card-shadow cursor-pointer" onclick="openCustomReportBuilder()">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shrink-0">
+          <svg class="w-6 h-6 stroke-[2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-[16px] font-bold text-navy-text">Custom Report</h3>
+          <p class="text-xs text-navy-muted mt-0.5">Build your own custom report</p>
+        </div>
+      </div>
+      <button onclick="event.stopPropagation(); openCustomReportBuilder()" aria-label="Configure Custom Report" class="p-2 text-slate-800 hover:text-brand-orange transition-colors" title="Build Custom Report">
+        <svg class="w-5 h-5 stroke-[2.2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </button>
+    </article>
+  </section>
+  <!-- END: Reports 2x4 Grid -->
+
+  <!-- BEGIN: Main Call-To-Action Button -->
+  <div class="mt-6" data-purpose="generate-action-footer">
+    <button onclick="openCustomReportBuilder()" class="w-full py-4 bg-brand-orange hover:bg-brand-orange-hover text-white font-bold text-base rounded-xl flex items-center justify-center gap-2.5 transition-all duration-200 btn-orange-glow active:scale-[0.99]">
+      <svg class="w-5 h-5 stroke-[2.5]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <span>Generate Custom Report</span>
+    </button>
+  </div>
+  <!-- END: Main Call-To-Action Button -->
+</main>
+<!-- END: Main Content Area -->
+
+<!-- Report Preview Modal -->
+<div id="report-preview-modal" class="dryftq-modal-backdrop">
+  <div class="dryftq-modal-content w-full max-w-2xl p-7 bg-white rounded-2xl shadow-2xl space-y-5">
+    <div class="flex items-start justify-between border-b border-slate-100 pb-3">
+      <div>
+        <h3 id="prev-report-title" class="text-xl font-bold text-slate-900">Production Report</h3>
+        <p id="prev-report-sub" class="text-xs text-slate-500 mt-0.5">Daily Production Metrics · Estimated Size: 2.4 MB</p>
+      </div>
+      <button onclick="closeReportPreview()" class="text-slate-400 hover:text-slate-700 p-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round"></path></svg>
+      </button>
+    </div>
+
+    <!-- Filter and Scope Bar -->
+    <div class="grid grid-cols-3 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-100 text-xs">
+      <div>
+        <label class="block text-slate-400 font-semibold mb-1">Time Horizon</label>
+        <span class="font-bold text-slate-800">Last 7 Days (Verified)</span>
+      </div>
+      <div>
+        <label class="block text-slate-400 font-semibold mb-1">Scope</label>
+        <span class="font-bold text-slate-800">Plant-Wide (Lines 1-4)</span>
+      </div>
+      <div>
+        <label class="block text-slate-400 font-semibold mb-1">Data Format</label>
+        <span class="font-bold text-slate-800">CSV Spreadsheet</span>
+      </div>
+    </div>
+
+    <!-- Sample Data Preview Table -->
+    <div>
+      <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Sample Telemetry Records (Live Preview)</h4>
+      <div class="overflow-x-auto border border-slate-200/80 rounded-xl">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-50 border-b border-slate-200/80 font-bold text-slate-600">
+            <tr>
+              <th class="py-2.5 px-3">Date</th>
+              <th class="py-2.5 px-3">Entity</th>
+              <th class="py-2.5 px-3">Primary Metric</th>
+              <th class="py-2.5 px-3">Reading</th>
+              <th class="py-2.5 px-3">Status</th>
+            </tr>
+          </thead>
+          <tbody id="prev-sample-tbody" class="divide-y divide-slate-100 text-slate-700">
+            <!-- Injected Preview Rows -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Modal Actions -->
+    <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+      <span class="text-xs text-slate-400">Includes verified timestamps and machine tags</span>
+      <div class="flex items-center gap-3">
+        <button onclick="closeReportPreview()" class="px-4 py-2 font-semibold text-slate-600 hover:bg-slate-100 rounded-lg text-xs">Cancel</button>
+        <button id="prev-download-btn" onclick="executePreviewDownload()" class="px-5 py-2.5 bg-brand-orange hover:bg-brand-orange-hover text-white font-bold text-xs rounded-xl shadow-sm transition-colors flex items-center gap-2">
+          <svg class="w-4 h-4 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span>Download Verified CSV</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Custom Report Generator Modal -->
+<div id="custom-builder-modal" class="dryftq-modal-backdrop">
+  <div class="dryftq-modal-content w-full max-w-lg p-7 bg-white rounded-2xl shadow-2xl space-y-5">
+    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+      <h3 class="text-lg font-bold text-slate-900">Custom Report Generator</h3>
+      <button onclick="closeCustomReportBuilder()" class="text-slate-400 hover:text-slate-700 p-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round"></path></svg>
+      </button>
+    </div>
+    <form onsubmit="handleGenerateCustomReport(event)" class="space-y-4 text-xs">
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Report Title *</label>
+        <input required id="custom-rep-title" value="Plant Operations Telemetry Audit" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-orange"/>
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Select Primary Data Streams *</label>
+        <div class="grid grid-cols-2 gap-2 mt-1">
+          <label class="flex items-center gap-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer">
+            <input type="checkbox" checked class="text-brand-orange rounded"/>
+            <span>OEE & Availability</span>
+          </label>
+          <label class="flex items-center gap-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer">
+            <input type="checkbox" checked class="text-brand-orange rounded"/>
+            <span>Energy Consumption (kW)</span>
+          </label>
+          <label class="flex items-center gap-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer">
+            <input type="checkbox" checked class="text-brand-orange rounded"/>
+            <span>Vibration & Temperature</span>
+          </label>
+          <label class="flex items-center gap-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer">
+            <input type="checkbox" checked class="text-brand-orange rounded"/>
+            <span>Maintenance Logs</span>
+          </label>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Date Horizon</label>
+          <select id="custom-rep-range" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800">
+            <option value="Last 7 Days">Last 7 Days</option>
+            <option value="Last 24 Hours">Last 24 Hours</option>
+            <option value="Last 30 Days">Last 30 Days</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Plant Section</label>
+          <select id="custom-rep-line" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800">
+            <option value="All Lines">All Lines (1-4)</option>
+            <option value="Line 1">Line 1 Only</option>
+            <option value="Line 2">Line 2 Only</option>
+            <option value="Line 3">Line 3 Only</option>
+          </select>
+        </div>
+      </div>
+      <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+        <button type="button" onclick="closeCustomReportBuilder()" class="px-4 py-2 font-semibold text-slate-600 hover:bg-slate-100 rounded-lg">Cancel</button>
+        <button id="custom-generate-submit-btn" type="submit" class="px-5 py-2.5 font-bold bg-brand-orange hover:bg-brand-orange-hover text-white rounded-lg shadow-sm flex items-center gap-2">
+          <span>Generate & Download CSV</span> &rarr;
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="../shared/dryftq-state.js"></script>
+<script>
+  let currentActiveReport = 'Production Report';
+
+  function switchReportsTab(tab) {
+    const btnStd = document.getElementById('tab-standard-btn');
+    const btnCust = document.getElementById('tab-custom-btn');
+    if (tab === 'standard') {
+      btnStd.className = 'px-7 py-2 bg-brand-orange text-white font-semibold text-sm rounded-lg shadow-sm transition-colors';
+      btnCust.className = 'px-7 py-2 bg-transparent text-navy-text font-semibold text-sm rounded-lg hover:bg-white/60 transition-colors';
+    } else {
+      btnCust.className = 'px-7 py-2 bg-brand-orange text-white font-semibold text-sm rounded-lg shadow-sm transition-colors';
+      btnStd.className = 'px-7 py-2 bg-transparent text-navy-text font-semibold text-sm rounded-lg hover:bg-white/60 transition-colors';
+      openCustomReportBuilder();
+    }
+  }
+
+  function filterReportsList() {
+    const q = document.getElementById('report-search-input').value.toLowerCase();
+    const articles = document.querySelectorAll('#reports-grid article');
+    articles.forEach(art => {
+      const txt = art.textContent.toLowerCase();
+      art.style.display = txt.includes(q) ? 'flex' : 'none';
+    });
+  }
+
+  function openReportPreview(title, sub, size) {
+    currentActiveReport = title;
+    document.getElementById('prev-report-title').textContent = title;
+    document.getElementById('prev-report-sub').textContent = `${sub} · Estimated Size: ${size}`;
+
+    const tbody = document.getElementById('prev-sample-tbody');
+    const today = new Date().toISOString().split('T')[0];
+
+    if (title.includes('Production')) {
+      tbody.innerHTML = `
+        <tr><td class="py-2 px-3">${today}</td><td class="py-2 px-3 font-semibold">Line 1</td><td class="py-2 px-3">Units</td><td class="py-2 px-3 font-bold text-emerald-600">1,180</td><td class="py-2 px-3">Optimal</td></tr>
+        <tr><td class="py-2 px-3">${today}</td><td class="py-2 px-3 font-semibold">Line 2</td><td class="py-2 px-3">Units</td><td class="py-2 px-3 font-bold text-amber-600">940</td><td class="py-2 px-3">Attention</td></tr>
+        <tr><td class="py-2 px-3">${today}</td><td class="py-2 px-3 font-semibold">Line 3</td><td class="py-2 px-3">Units</td><td class="py-2 px-3 font-bold text-emerald-600">852</td><td class="py-2 px-3">Optimal</td></tr>
+      `;
+    } else if (title.includes('Energy')) {
+      tbody.innerHTML = `
+        <tr><td class="py-2 px-3">${today}</td><td class="py-2 px-3 font-semibold">CNC-01</td><td class="py-2 px-3">Power</td><td class="py-2 px-3 font-bold text-blue-600">2.4 kW</td><td class="py-2 px-3">Normal</td></tr>
+        <tr><td class="py-2 px-3">${today}</td><td class="py-2 px-3 font-semibold">PRESS-02</td><td class="py-2 px-3">Power</td><td class="py-2 px-3 font-bold text-blue-600">3.1 kW</td><td class="py-2 px-3">Normal</td></tr>
+        <tr><td class="py-2 px-3">${today}</td><td class="py-2 px-3 font-semibold">BOILER-01</td><td class="py-2 px-3">Power</td><td class="py-2 px-3 font-bold text-amber-600">3.2 kW</td><td class="py-2 px-3">Elevated</td></tr>
+      `;
+    } else if (title.includes('Quality')) {
+      tbody.innerHTML = `
+        <tr><td class="py-2 px-3">${today}</td><td class="py-2 px-3 font-semibold">Line 1</td><td class="py-2 px-3">Yield Rate</td><td class="py-2 px-3 font-bold text-emerald-600">99.0%</td><td class="py-2 px-3">Passed</td></tr>
+        <tr><td class="py-2 px-3">${today}</td><td class="py-2 px-3 font-semibold">Line 2</td><td class="py-2 px-3">Yield Rate</td><td class="py-2 px-3 font-bold text-amber-600">93.3%</td><td class="py-2 px-3">Inspection</td></tr>
+      `;
+    } else {
+      tbody.innerHTML = `
+        <tr><td class="py-2 px-3">${today}</td><td class="py-2 px-3 font-semibold">Plant-Wide</td><td class="py-2 px-3">OEE</td><td class="py-2 px-3 font-bold text-emerald-600">85.6%</td><td class="py-2 px-3">Verified</td></tr>
+        <tr><td class="py-2 px-3">${today}</td><td class="py-2 px-3 font-semibold">Plant-Wide</td><td class="py-2 px-3">Availability</td><td class="py-2 px-3 font-bold text-emerald-600">92.3%</td><td class="py-2 px-3">Verified</td></tr>
+      `;
+    }
+
+    document.getElementById('report-preview-modal').classList.add('open');
+  }
+
+  function closeReportPreview() {
+    document.getElementById('report-preview-modal').classList.remove('open');
+  }
+
+  function executePreviewDownload() {
+    Dryftq.downloadReportCSV(currentActiveReport);
+    closeReportPreview();
+  }
+
+  function openCustomReportBuilder() {
+    document.getElementById('custom-builder-modal').classList.add('open');
+  }
+
+  function closeCustomReportBuilder() {
+    document.getElementById('custom-builder-modal').classList.remove('open');
+  }
+
+  function handleGenerateCustomReport(e) {
+    e.preventDefault();
+    const title = document.getElementById('custom-rep-title').value;
+    const btn = document.getElementById('custom-generate-submit-btn');
+    btn.innerHTML = '<span>Processing Telemetry...</span>';
+    btn.disabled = true;
+
+    setTimeout(() => {
+      btn.innerHTML = '<span>Generate & Download CSV</span> &rarr;';
+      btn.disabled = false;
+      closeCustomReportBuilder();
+      Dryftq.downloadReportCSV(title);
+    }, 600);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    Dryftq.setupNavigation('reports');
+
+    // Profile sync
+    const state = Dryftq.getState();
+    if (state.user) {
+      const uName = document.getElementById('user-name-reports');
+      const uDept = document.getElementById('user-dept-reports');
+      const uAv = document.getElementById('user-avatar-reports');
+      if (uName) uName.textContent = state.user.name;
+      if (uDept) uDept.textContent = state.user.department;
+      if (uAv && state.user.avatar) uAv.src = state.user.avatar;
+    }
+
+    // Dismiss modals on outside click
+    document.getElementById('report-preview-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'report-preview-modal') closeReportPreview();
+    });
+    document.getElementById('custom-builder-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'custom-builder-modal') closeCustomReportBuilder();
+    });
+  });
+</script>
+</body>
+</html>

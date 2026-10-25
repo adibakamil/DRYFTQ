@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DRYFTQ — Prevent the Unexpected | Industrial Intelligence</title>
+<meta name="description" content="DRYFTQ combines machine data, human insights and quantum intelligence to detect subtle process drift early — reducing downtime, waste and quality loss.">
+<meta name="theme-color" content="#ffffff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2312161B'/%3E%3Cpath d='M10 8h5.5a8 8 0 010 16H10z' fill='%23FF5A1F'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/img/robot.webp" type="image/webp">
+<link rel="stylesheet" href="assets/css/styles.css">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+
+<!-- Icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M3 12h3l3-7 4 14 3-7h5"/></symbol>
+  <symbol id="i-brain" viewBox="0 0 24 24"><path d="M9.5 2A3.5 3.5 0 006 5.5v1A3.5 3.5 0 004 10v.5a3.5 3.5 0 002 3.16V14a3.5 3.5 0 003.5 3.5M14.5 2A3.5 3.5 0 0118 5.5v1a3.5 3.5 0 012 3.5v.5a3.5 3.5 0 01-2 3.16V14a3.5 3.5 0 01-3.5 3.5M12 2v19M6 10h6M6 14h6m2-4h6m-6 4h6"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 3v18h18M18 9l-5 5-4-4-5 5"/><path d="M14 9h4v4"/></symbol>
+  <symbol id="i-car" viewBox="0 0 24 24"><path d="M5 11l2-5h10l2 5M4 11h16a1 1 0 011 1v5a1 1 0 01-1 1h-1a2 2 0 11-4 0H9a2 2 0 11-4 0H4a1 1 0 01-1-1v-5a1 1 0 011-1z"/></symbol>
+  <symbol id="i-chip" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 1v3m6-3v3M9 20v3m6-3v3M1 9h3m-3 6h3M20 9h3m-3 6h3"/></symbol>
+  <symbol id="i-pill" viewBox="0 0 24 24"><path d="M10.5 5.5l8 8a4.95 4.95 0 11-7 7l-8-8a4.95 4.95 0 017-7zM7.5 12.5l9-9"/></symbol>
+  <symbol id="i-factory" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M19 14l-7 7-7-7m7 7V3"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M5 10l7-7 7 7m-7-7v18"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M19 7l-.87 12.14A2 2 0 0116.14 21H7.86a2 2 0 01-2-1.86L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6l6 6-6 6"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-width="3"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/></symbol>
+  <symbol id="i-machine" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8" cy="8" r="1.5"/><circle cx="16" cy="8" r="1.5"/><path d="M7 16h10"/></symbol>
+  <symbol id="i-bars" viewBox="0 0 24 24"><path d="M5 21V11M12 21V4m7 17v-7"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M15 17h5l-1.4-1.4A2 2 0 0118 14.16V11a6 6 0 00-4-5.66V5a2 2 0 10-4 0v.34C7.67 6.17 6 8.39 6 11v3.16c0 .54-.21 1.05-.6 1.44L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></symbol>
+  <symbol id="i-report" viewBox="0 0 24 24"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.59a1 1 0 01.7.3l5.42 5.4a1 1 0 01.29.7V19a2 2 0 01-2 2z"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3M4.9 4.9l2.1 2.1m10 10l2.1 2.1m0-14.2L17 7M7 17l-2.1 2.1"/></symbol>
+  <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M19 0H5a5 5 0 00-5 5v14a5 5 0 005 5h14a5 5 0 005-5V5a5 5 0 00-5-5zM8 19H5V8h3v11zM6.5 6.73a1.76 1.76 0 110-3.53 1.76 1.76 0 010 3.53zM20 19h-3v-5.6c0-3.37-4-3.11-4 0V19h-3V8h3v1.77c1.4-2.59 7-2.78 7 2.48V19z"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24h-6.66l-5.21-6.82-5.97 6.82H1.68l7.73-8.84L1.25 2.25h6.83l4.71 6.23zm-1.16 17.52h1.83L7.08 4.13H5.12z"/></symbol>
+  <symbol id="i-youtube" viewBox="0 0 24 24"><path d="M23.5 6.19a3.02 3.02 0 00-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.5A3.02 3.02 0 00.5 6.19C0 8.07 0 12 0 12s0 3.93.5 5.81a3.02 3.02 0 002.12 2.14c1.87.5 9.38.5 9.38.5s7.5 0 9.38-.5a3.02 3.02 0 002.12-2.14C24 15.93 24 12 24 12s0-3.93-.5-5.81zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></symbol>
+</svg>
+
+<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-brand-ink focus:px-5 focus:py-3 focus:text-white">Skip to content</a>
+
+<!-- ============ HEADER ============ -->
+<header class="sticky top-0 z-40 border-b border-gray-200/80 bg-white/95 backdrop-blur" id="siteHeader">
+  <div class="container-x flex items-center justify-between gap-6" style="height:var(--nav-h)">
+    <a href="#hero" class="text-2xl font-black tracking-tight text-brand-ink" aria-label="DRYFTQ — home">DRYFTQ</a>
+
+    <nav class="hidden lg:block" aria-label="Primary">
+      <ul class="flex items-center gap-6 xl:gap-9" id="primaryNav">
+        <li><a class="nav-link" href="#hero" aria-current="true">Home</a></li>
+        <li><a class="nav-link" href="#about">About</a></li>
+        <li><a class="nav-link" href="#services">Services</a></li>
+        <li><a class="nav-link" href="#process">Portfolio</a></li>
+        <li><a class="nav-link" href="#platform">Blog</a></li>
+        <li><a class="nav-link" href="#contact-footer">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="hidden items-center gap-3 lg:flex">
+      <button class="btn btn-outline" id="navLoginBtn" type="button" aria-haspopup="dialog">Login</button>
+      <button class="btn btn-primary" id="navGetStartedBtn" type="button" aria-haspopup="dialog">Get Started <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+    </div>
+
+    <button class="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 lg:hidden" id="mobileMenuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+      <svg class="icon h-6 w-6" id="menuIcon" aria-hidden="true"><use href="#i-menu"/></svg>
+    </button>
+  </div>
+
+  <div class="hidden border-t border-gray-100 bg-white lg:hidden" id="mobileMenu">
+    <nav class="container-x py-3" aria-label="Mobile">
+      <ul class="flex flex-col">
+        <li><a class="block rounded-lg px-3 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 aria-[current=true]:bg-brand-tint aria-[current=true]:text-brand-action" href="#hero" aria-current="true">Home</a></li>
+        <li><a class="block rounded-lg px-3 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 aria-[current=true]:bg-brand-tint aria-[current=true]:text-brand-action" href="#about">About</a></li>
+        <li><a class="block rounded-lg px-3 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 aria-[current=true]:bg-brand-tint aria-[current=true]:text-brand-action" href="#services">Services</a></li>
+        <li><a class="block rounded-lg px-3 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 aria-[current=true]:bg-brand-tint aria-[current=true]:text-brand-action" href="#process">Portfolio</a></li>
+        <li><a class="block rounded-lg px-3 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 aria-[current=true]:bg-brand-tint aria-[current=true]:text-brand-action" href="#platform">Blog</a></li>
+        <li><a class="block rounded-lg px-3 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 aria-[current=true]:bg-brand-tint aria-[current=true]:text-brand-action" href="#contact-footer">Contact</a></li>
+      </ul>
+      <div class="grid grid-cols-2 gap-3 pb-3 pt-4">
+        <button class="btn btn-outline" id="mobileLoginBtn" type="button">Login</button>
+        <button class="btn btn-primary" id="mobileGetStartedBtn" type="button">Get Started</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============ HERO ============ -->
+<section id="hero" aria-labelledby="hero-title" class="overflow-hidden">
+  <div class="container-x hero-grid">
+    <div class="hero-art">
+      <img src="assets/img/robot.webp" width="379" height="375" alt="Futuristic white industrial AI robot with orange accents, shown in profile" fetchpriority="high" decoding="async">
+    </div>
+    <div class="hero-copy">
+      <img class="hero-wordmark hero-in" src="assets/img/wordmark.webp" width="433" height="178" alt="DRYFTQ" fetchpriority="high" decoding="async">
+      <h1 class="hero-title hero-in" id="hero-title"><span class="text-brand" aria-hidden="true">#</span> Prevent the Unexpected<span class="text-brand">.</span></h1>
+      <p class="lead hero-in max-w-[34rem]">DRYFTQ combines machine data, human insights and quantum intelligence to detect subtle process drift early—reducing downtime, waste and quality loss.</p>
+      <div class="hero-actions hero-in">
+        <a class="btn btn-primary btn-lg" id="heroExploreBtn" href="DRYFTQ%20ALL%20DASHBOARD/index.html" title="Open the DRYFTQ dashboard platform">Explore Platform <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <button class="btn btn-outline btn-lg" id="heroWatchDemoBtn" type="button" aria-haspopup="dialog"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg> Watch Demo <svg class="icon icon-arrow text-gray-500" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INDUSTRY STRIP ============ -->
+<section class="border-y border-gray-200 bg-white" aria-label="Industries served">
+  <div class="container-x flex flex-col items-center gap-3 py-5 lg:flex-row lg:justify-between lg:gap-8" style="min-height:72px">
+    <p class="text-xs font-bold uppercase tracking-wider text-gray-600 lg:border-r lg:border-gray-300 lg:pr-8">Built for precision-driven industries</p>
+    <ul class="flex flex-wrap items-center justify-center gap-x-7 gap-y-3 lg:justify-between lg:gap-x-8">
+      <li class="strip-item"><svg class="icon" aria-hidden="true"><use href="#i-car"/></svg>Automotive</li>
+      <li class="strip-item"><svg class="icon" aria-hidden="true"><use href="#i-chip"/></svg>Electronics</li>
+      <li class="strip-item"><svg class="icon" aria-hidden="true"><use href="#i-pill"/></svg>Pharma</li>
+      <li class="strip-item"><svg class="icon" aria-hidden="true"><use href="#i-factory"/></svg>Heavy Manufacturing</li>
+      <li class="strip-item"><svg class="icon" aria-hidden="true"><use href="#i-bolt"/></svg>Energy</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ SERVICES ============ -->
+<section class="section-y" id="services" aria-labelledby="services-h">
+  <div class="container-x">
+    <div class="section-head reveal">
+      <h2 class="h2" id="services-h">See drift before it becomes downtime.</h2>
+      <p class="lead mt-3">Real-time intelligence for a more stable, efficient and profitable operation.</p>
+    </div>
+    <ul class="grid gap-5 md:grid-cols-3 md:gap-6">
+      <li class="card card-hover reveal p-6 md:p-7">
+        <span class="icon-badge mb-5"><svg class="icon" aria-hidden="true"><use href="#i-pulse"/></svg></span>
+        <h3 class="mb-2 text-lg font-bold">Early Drift Detection</h3>
+        <p class="text-[15px] leading-relaxed text-gray-600">Spot subtle process deviations before they turn into costly downtime, waste or quality loss.</p>
+      </li>
+      <li class="card card-hover reveal p-6 md:p-7">
+        <span class="icon-badge mb-5"><svg class="icon" aria-hidden="true"><use href="#i-brain"/></svg></span>
+        <h3 class="mb-2 text-lg font-bold">Human + Machine Intelligence</h3>
+        <p class="text-[15px] leading-relaxed text-gray-600">Combines real machine data with human expertise and quantum models for deeper, faster insights.</p>
+      </li>
+      <li class="card card-hover reveal p-6 md:p-7">
+        <span class="icon-badge mb-5"><svg class="icon" aria-hidden="true"><use href="#i-target"/></svg></span>
+        <h3 class="mb-2 text-lg font-bold">Actionable Root Cause</h3>
+        <p class="text-[15px] leading-relaxed text-gray-600">Go beyond alerts with clear explanations and precise root cause analysis for faster resolution.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ PROCESS (dark) ============ -->
+<section class="on-dark overflow-hidden bg-brand-dark text-white" id="process" aria-labelledby="process-h" style="padding-top:var(--section-y)">
+  <div class="container-x">
+    <div class="grid items-center gap-10 lg:grid-cols-12 lg:gap-8">
+      <div class="reveal lg:col-span-5">
+        <h2 class="h2 !text-white" id="process-h">From raw signals to <br class="hidden sm:block">reliable decisions.</h2>
+        <p class="mt-4 max-w-md text-base leading-relaxed text-gray-300">DRYFTQ's quantum-powered platform turns complex industrial data into clear, actionable insights — in real time.</p>
+      </div>
+      <ol class="reveal grid grid-cols-2 gap-x-4 gap-y-8 lg:col-span-7 lg:grid-cols-4">
+        <li class="step"><span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-pulse"/></svg></span><h3 class="font-bold">Collect</h3><p class="mt-1 text-sm leading-snug text-gray-300">Raw sensor data &amp; machine signals</p></li>
+        <li class="step"><span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-brain"/></svg></span><h3 class="font-bold">Detect</h3><p class="mt-1 text-sm leading-snug text-gray-300">AI + quantum anomaly detection</p></li>
+        <li class="step"><span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg></span><h3 class="font-bold">Explain</h3><p class="mt-1 text-sm leading-snug text-gray-300">Root cause analysis &amp; insights</p></li>
+        <li class="step"><span class="step-icon"><svg class="icon" aria-hidden="true"><use href="#i-bolt"/></svg></span><h3 class="font-bold">Act</h3><p class="mt-1 text-sm leading-snug text-gray-300">Alerts, recommendations &amp; automation</p></li>
+      </ol>
+    </div>
+    <div class="relative mt-8 h-24 sm:h-28" aria-hidden="true"><canvas class="block h-full w-full" id="quantumWaveCanvas"></canvas></div>
+  </div>
+</section>
+
+<!-- ============ ABOUT / FACTORY FLOOR ============ -->
+<section class="section-y" id="about" aria-labelledby="about-h">
+  <div class="container-x">
+    <div class="section-head reveal">
+      <h2 class="h2" id="about-h">Designed for the realities of the factory floor.</h2>
+      <p class="lead mt-3">Built for industrial environments. Engineered for real-world impact.</p>
+    </div>
+    <ul class="grid divide-y divide-gray-200 md:grid-cols-3 md:divide-x md:divide-y-0">
+      <li class="reveal py-8 first:pt-0 md:px-8 md:py-2 md:first:pl-0 md:last:pr-0">
+        <span class="icon-badge mb-4"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg></span>
+        <h3 class="mb-2 text-lg font-bold">Real-time Monitoring</h3>
+        <p class="text-[15px] leading-relaxed text-gray-600">Track machines, processes and KPIs in real time with minimal latency.</p>
+      </li>
+      <li class="reveal py-8 md:px-8 md:py-2">
+        <span class="icon-badge mb-4"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span>
+        <h3 class="mb-2 text-lg font-bold">Quality Assurance</h3>
+        <p class="text-[15px] leading-relaxed text-gray-600">Detect defects and process variations early to maintain consistent quality.</p>
+      </li>
+      <li class="reveal py-8 last:pb-0 md:px-8 md:py-2 md:first:pl-0 md:last:pr-0">
+        <span class="icon-badge mb-4"><svg class="icon" aria-hidden="true"><use href="#i-trend"/></svg></span>
+        <h3 class="mb-2 text-lg font-bold">Predictive Operations</h3>
+        <p class="text-[15px] leading-relaxed text-gray-600">Reduce unplanned downtime and optimize performance with AI-driven predictions.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ PLATFORM ============ -->
+<section class="section-y bg-[#FAFAFA]" id="platform" aria-labelledby="platform-h">
+  <div class="container-x grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
+    <figure class="reveal min-w-0 lg:col-span-7">
+      <div class="card overflow-hidden">
+        <div class="flex flex-col md:flex-row">
+          <div class="flex flex-col justify-between border-b border-gray-200 bg-slate-50 p-3 md:w-44 md:flex-none md:border-b-0 md:border-r">
+            <div>
+              <div class="mb-3 flex items-center justify-between px-1 pt-1 text-sm font-black tracking-tight"><span>DRYFTQ</span><span class="rounded bg-gray-200 px-1.5 py-0.5 font-mono text-[10px] font-medium text-gray-700">v2.4</span></div>
+              <div class="-mx-1 flex gap-1 overflow-x-auto px-1 pb-1 md:flex-col md:overflow-visible md:pb-0" id="dashboardSidebarMenu" role="group" aria-label="Dashboard views">
+                <button class="tab-btn" type="button" data-tab="overview" aria-pressed="true"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg>Overview</button>
+                <button class="tab-btn" type="button" data-tab="machines" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-machine"/></svg>Machines</button>
+                <button class="tab-btn" type="button" data-tab="analytics" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-bars"/></svg>Analytics</button>
+                <button class="tab-btn" type="button" data-tab="alerts" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>Alerts</button>
+                <button class="tab-btn" type="button" data-tab="reports" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-report"/></svg>Reports</button>
+                <button class="tab-btn" type="button" data-tab="settings" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-gear"/></svg>Settings</button>
+              </div>
+            </div>
+            <p class="mt-4 hidden border-t border-gray-200 pt-3 font-mono text-[11px] text-gray-600 md:block">Telemetry: Active</p>
+          </div>
+
+          <div class="min-w-0 flex-1 p-4 sm:p-5" role="region" aria-live="polite" aria-label="Dashboard preview">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-gray-100 pb-3">
+              <div class="flex items-center gap-2"><h4 class="text-sm font-bold" id="currentViewTitle">Process Overview</h4><span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-800"><span class="h-1.5 w-1.5 rounded-full bg-emerald-600"></span>Live</span></div>
+              <span class="font-mono text-[11px] text-gray-600">Line 3 | 12:42 PM</span>
+            </div>
+            <div class="my-3 grid grid-cols-3 gap-2">
+              <div class="rounded-lg border border-gray-100 bg-gray-50 p-2"><span class="block text-[11px] font-medium text-gray-600">Machine Health</span><span class="mt-0.5 flex items-center gap-1 text-xs font-bold text-emerald-700"><span class="h-1.5 w-1.5 rounded-full bg-emerald-600"></span>Healthy</span></div>
+              <div class="rounded-lg border border-gray-100 bg-gray-50 p-2"><span class="block text-[11px] font-medium text-gray-600">Anomaly Score</span><span class="mt-0.5 flex items-center gap-1 text-xs font-bold text-blue-700"><span class="h-1.5 w-1.5 rounded-full bg-blue-600"></span>Low</span></div>
+              <div class="rounded-lg border border-gray-100 bg-gray-50 p-2"><span class="block text-[11px] font-medium text-gray-600">Process Stability</span><span class="mt-0.5 flex items-center gap-1 text-xs font-bold text-emerald-700"><span class="h-1.5 w-1.5 rounded-full bg-emerald-600"></span>Stable</span></div>
+            </div>
+            <div class="mb-3 rounded-lg border border-gray-100 p-3">
+              <div class="mb-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+                <span class="text-xs font-bold">Temperature (°C)</span>
+                <span class="flex items-center gap-3 text-[11px] font-medium text-gray-600"><span class="flex items-center gap-1"><span class="h-0.5 w-3 bg-blue-500"></span>Actual</span><span class="flex items-center gap-1"><span class="w-3 border-b border-dashed border-gray-400"></span>Expected</span><span class="flex items-center gap-1 text-brand-action"><span class="h-1.5 w-1.5 rounded-full bg-brand"></span>Anomaly</span></span>
+              </div>
+              <div class="relative h-28">
+                <svg class="h-full w-full" preserveAspectRatio="none" viewBox="0 0 500 110" role="img" aria-label="Line chart: actual temperature spikes above the expected baseline around 12:00">
+                  <path d="M0 20h500M0 55h500M0 90h500" stroke="#f1f5f9"/>
+                  <path d="M0,70 Q120,64 250,68 T500,66" fill="none" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1.8"/>
+                  <path d="M0,72 Q70,66 140,70 T260,62 Q310,22 340,70 T500,68" fill="none" stroke="#3b82f6" stroke-width="2"/>
+                  <circle cx="310" cy="24" r="5" fill="#FF5A1F"/><circle cx="310" cy="24" r="9" fill="none" stroke="#FF5A1F" stroke-width="1.5" opacity=".6"/>
+                </svg>
+                <span class="absolute left-[62%] top-0 -translate-x-1/2 rounded bg-brand-action px-1.5 py-0.5 text-[11px] font-bold text-white shadow">+14.2°C Drift</span>
+              </div>
+              <div class="mt-1 flex justify-between font-mono text-[10px] text-gray-600"><span>08:00</span><span>10:00</span><span>12:00</span><span>14:00</span><span>16:00</span></div>
+            </div>
+            <div class="grid gap-2.5 sm:grid-cols-2">
+              <div class="rounded-lg border border-gray-100 p-3">
+                <div class="mb-1 flex items-center justify-between gap-2"><span class="text-xs font-bold">Vibration</span><span class="flex items-center gap-1 text-[11px] font-semibold text-brand-action"><span class="h-1 w-1 rounded-full bg-brand"></span>Anomaly Detected</span></div>
+                <svg class="h-10 w-full" preserveAspectRatio="none" viewBox="0 0 200 35" aria-hidden="true"><path d="M0,18 L15,20 L30,16 L45,21 L60,17 L75,19 L90,13 L100,26 L110,4 L120,30 L130,8 L140,22 L160,18 L200,18" fill="none" stroke="#0ea5e9" stroke-width="1.6"/><circle cx="110" cy="4" r="2.5" fill="#FF5A1F"/></svg>
+              </div>
+              <div class="rounded-lg border border-gray-100 p-3">
+                <div class="mb-1 flex items-center justify-between gap-2"><span class="text-xs font-bold">Production Quality</span><span class="font-mono text-xs font-bold text-emerald-700">98.7% <span class="font-sans text-[11px] font-normal text-gray-600">Good</span></span></div>
+                <div class="flex h-10 items-end gap-1" aria-hidden="true"><i class="h-[90%] flex-1 rounded-t bg-emerald-500"></i><i class="h-[95%] flex-1 rounded-t bg-emerald-500"></i><i class="h-[88%] flex-1 rounded-t bg-emerald-500"></i><i class="h-[92%] flex-1 rounded-t bg-emerald-500"></i><i class="h-[96%] flex-1 rounded-t bg-emerald-500"></i><i class="h-[94%] flex-1 rounded-t bg-emerald-500"></i><i class="h-[91%] flex-1 rounded-t bg-emerald-500"></i><i class="h-[87%] flex-1 rounded-t bg-emerald-500"></i><i class="h-[52%] flex-1 rounded-t bg-orange-500"></i><i class="h-[38%] flex-1 rounded-t bg-brand"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <figcaption class="mt-3 text-center text-xs text-gray-600">Illustrative interface preview with sample data.</figcaption>
+    </figure>
+
+    <div class="reveal lg:col-span-5">
+      <h2 class="h2" id="platform-h">One clear view of <br class="hidden sm:block">process health.</h2>
+      <p class="lead mt-3">Real-time data, AI insights and actionable alerts — all in one powerful platform.</p>
+      <ul class="mt-7 space-y-4">
+        <li class="flex items-center gap-3 font-semibold text-gray-800"><span class="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-orange-100 text-brand-action"><svg class="icon !h-3.5 !w-3.5" aria-hidden="true"><use href="#i-check"/></svg></span>Live machine &amp; process monitoring</li>
+        <li class="flex items-center gap-3 font-semibold text-gray-800"><span class="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-orange-100 text-brand-action"><svg class="icon !h-3.5 !w-3.5" aria-hidden="true"><use href="#i-check"/></svg></span>Anomaly detection &amp; alerts</li>
+        <li class="flex items-center gap-3 font-semibold text-gray-800"><span class="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-orange-100 text-brand-action"><svg class="icon !h-3.5 !w-3.5" aria-hidden="true"><use href="#i-check"/></svg></span>Root cause analysis</li>
+        <li class="flex items-center gap-3 font-semibold text-gray-800"><span class="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-orange-100 text-brand-action"><svg class="icon !h-3.5 !w-3.5" aria-hidden="true"><use href="#i-check"/></svg></span>Customizable dashboards</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESULTS ============ -->
+<section class="section-y" id="results" aria-labelledby="results-h">
+  <div class="container-x">
+    <div class="section-head reveal">
+      <h2 class="h2" id="results-h">Real results for a more reliable tomorrow.</h2>
+      <p class="lead mt-3">Measurable outcomes. Lasting impact.</p>
+    </div>
+    <ul class="grid gap-5 md:grid-cols-3 md:gap-6">
+      <li class="card card-hover reveal flex items-start gap-4 p-6 md:flex-col md:items-center md:text-center"><span class="icon-badge"><svg class="icon" aria-hidden="true"><use href="#i-down"/></svg></span><div><h3 class="text-base font-bold">Downtime</h3><p class="mt-1 text-[15px] leading-snug text-gray-600">Less unplanned stops, more productive hours.</p></div></li>
+      <li class="card card-hover reveal flex items-start gap-4 p-6 md:flex-col md:items-center md:text-center"><span class="icon-badge"><svg class="icon" aria-hidden="true"><use href="#i-trash"/></svg></span><div><h3 class="text-base font-bold">Scrap &amp; Waste</h3><p class="mt-1 text-[15px] leading-snug text-gray-600">Higher yield, lower material loss.</p></div></li>
+      <li class="card card-hover reveal flex items-start gap-4 p-6 md:flex-col md:items-center md:text-center"><span class="icon-badge"><svg class="icon" aria-hidden="true"><use href="#i-up"/></svg></span><div><h3 class="text-base font-bold">Process Stability</h3><p class="mt-1 text-[15px] leading-snug text-gray-600">Consistent quality, better performance.</p></div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ CTA BAND ============ -->
+<section class="on-brand relative bg-brand-action text-white" id="contact" aria-labelledby="cta-h" style="padding-block:clamp(3.5rem,7vw,5rem)">
+  <div class="container-x reveal text-center">
+    <h2 class="h2 !text-white" id="cta-h">Ready to prevent the unexpected?</h2>
+    <p class="mx-auto mt-3 max-w-xl text-lg text-white/90">Drive efficiency, quality and uptime with DRYFTQ.</p>
+    <button class="btn btn-white btn-lg mt-7" id="ctaTalkTeamBtn" type="button" aria-haspopup="dialog">Talk to Our Team <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+  </div>
+</section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="border-t border-gray-200 bg-white" id="contact-footer">
+  <div class="container-x pb-8 pt-14 md:pt-16">
+    <div class="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-5">
+      <div class="col-span-2">
+        <span class="block text-xl font-black tracking-tight">DRYFTQ</span>
+        <p class="mt-3 max-w-xs text-sm leading-relaxed text-gray-600">The industrial AI and quantum intelligence platform for smarter, more resilient manufacturing.</p>
+        <ul class="mt-5 flex items-center gap-3">
+          <li><a class="social" href="#" aria-label="DRYFTQ on LinkedIn"><svg class="icon-fill h-4 w-4" aria-hidden="true"><use href="#i-linkedin"/></svg></a></li>
+          <li><a class="social" href="#" aria-label="DRYFTQ on X"><svg class="icon-fill h-4 w-4" aria-hidden="true"><use href="#i-x"/></svg></a></li>
+          <li><a class="social" href="#" aria-label="DRYFTQ on YouTube"><svg class="icon-fill h-4 w-4" aria-hidden="true"><use href="#i-youtube"/></svg></a></li>
+        </ul>
+      </div>
+      <nav aria-label="Platform"><h2 class="mb-3 text-xs font-bold uppercase tracking-wider text-brand-ink">Platform</h2><ul class="space-y-2.5 text-sm"><li><a class="foot-link" href="#platform">Overview</a></li><li><a class="foot-link" href="#about">Solutions</a></li><li><a class="foot-link" href="#services">Features</a></li></ul></nav>
+      <nav aria-label="Company"><h2 class="mb-3 text-xs font-bold uppercase tracking-wider text-brand-ink">Company</h2><ul class="space-y-2.5 text-sm"><li><a class="foot-link" href="#about">About</a></li><li><a class="foot-link" href="#contact">Contact</a></li><li><a class="foot-link" href="#">Careers</a></li></ul></nav>
+      <nav aria-label="Resources"><h2 class="mb-3 text-xs font-bold uppercase tracking-wider text-brand-ink">Resources</h2><ul class="space-y-2.5 text-sm"><li><a class="foot-link" href="#">Documentation</a></li><li><a class="foot-link" href="#">Blog</a></li><li><a class="foot-link" href="#">Privacy</a></li></ul></nav>
+    </div>
+    <div class="mt-12 flex flex-col items-center justify-between gap-2 border-t border-gray-100 pt-6 text-xs text-gray-600 sm:flex-row">
+      <p>&copy; <span id="year">2026</span> DRYFTQ. All rights reserved.</p>
+      <p class="font-medium">Smarter insights. Stronger industry.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ MODALS ============ -->
+<div class="modal" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginTitle" aria-hidden="true">
+  <div class="modal-panel max-w-md">
+    <button class="modal-close" type="button" aria-label="Close dialog"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+    <div class="mb-5 text-center"><span class="text-2xl font-black tracking-tight">DRYFTQ</span><h2 class="mt-2 text-lg font-bold" id="loginTitle">Sign in to Industrial Console</h2><p class="text-sm text-gray-600">Enter your enterprise operator credentials.</p></div>
+    <form class="space-y-4" id="loginForm">
+      <div><label class="label" for="loginEmail">Corporate Email</label><input class="field" id="loginEmail" name="email" type="email" autocomplete="username" placeholder="operator@enterprise.com" required></div>
+      <div><div class="mb-1.5 flex items-center justify-between"><label class="text-sm font-semibold text-gray-700" for="loginPw">Password</label><a class="text-sm font-medium text-brand-action hover:underline" href="#">Forgot?</a></div><input class="field" id="loginPw" name="password" type="password" autocomplete="current-password" placeholder="••••••••••••" required></div>
+      <button class="btn btn-primary w-full" type="submit">Sign In</button>
+      <p class="hidden rounded-lg bg-emerald-50 p-3 text-sm text-emerald-900" role="status" data-status></p>
+    </form>
+  </div>
+</div>
+
+<div class="modal" id="contactModal" role="dialog" aria-modal="true" aria-labelledby="contactTitle" aria-hidden="true">
+  <div class="modal-panel max-w-lg">
+    <button class="modal-close" type="button" aria-label="Close dialog"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+    <div class="mb-5 pr-8"><span class="text-xs font-bold uppercase tracking-wider text-brand-action">Enterprise Onboarding</span><h2 class="mt-1 text-xl font-extrabold" id="contactTitle">Talk to Our Engineering Team</h2><p class="text-sm text-gray-600">Deploy quantum process drift intelligence to your plant floor.</p></div>
+    <form class="space-y-4" id="inquiryForm">
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div><label class="label" for="firstName">First Name</label><input class="field" id="firstName" name="firstName" type="text" autocomplete="given-name" placeholder="Jane" required></div>
+        <div><label class="label" for="lastName">Last Name</label><input class="field" id="lastName" name="lastName" type="text" autocomplete="family-name" placeholder="Doe" required></div>
+      </div>
+      <div><label class="label" for="workEmail">Work Email</label><input class="field" id="workEmail" name="email" type="email" autocomplete="email" placeholder="jane@manufacturing.com" required></div>
+      <div><label class="label" for="sector">Industry Sector</label><select class="field" id="sector" name="sector"><option>Automotive &amp; Robotics</option><option>Electronics &amp; Semiconductor</option><option>Pharma &amp; Biotech</option><option>Heavy Manufacturing</option><option>Energy &amp; Utilities</option></select></div>
+      <button class="btn btn-primary w-full" type="submit">Request Pilot Evaluation <svg class="icon icon-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      <p class="hidden rounded-lg bg-emerald-50 p-3 text-sm text-emerald-900" role="status" data-status></p>
+    </form>
+  </div>
+</div>
+
+<div class="modal" id="videoModal" role="dialog" aria-modal="true" aria-labelledby="videoTitle" aria-hidden="true" style="background:rgb(8 10 12 / .8)">
+  <div class="modal-panel max-w-3xl !bg-gray-950 !p-4">
+    <button class="modal-close !text-gray-300 hover:!bg-white/10 hover:!text-white" type="button" aria-label="Close dialog" style="z-index:2"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+    <div class="relative flex aspect-video flex-col items-center justify-center overflow-hidden rounded-lg border border-gray-800 bg-gradient-to-tr from-[#111519] to-[#1e252c] p-6 text-center">
+      <span class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-brand-action text-white"><svg class="icon !h-7 !w-7 translate-x-0.5" aria-hidden="true"><use href="#i-play"/></svg></span>
+      <h2 class="text-lg font-bold text-white" id="videoTitle">DRYFTQ Platform Architecture Walkthrough</h2>
+      <p class="mt-1 text-sm text-gray-300">Autonomous Drift Detection in Automated Production Cells — video coming soon.</p>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>

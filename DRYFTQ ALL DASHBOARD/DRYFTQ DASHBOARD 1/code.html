@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>DRYFTQ - Plant Operations Dashboard</title>
+  <!-- Tailwind CSS CDN with forms and container-queries -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    // Keep the page script alive if the Tailwind CDN is unreachable (offline / blocked).
+    window.tailwind = window.tailwind || {};
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sidebar: '#071629',
+            sidebarHover: '#0d223f',
+            sidebarCard: '#0b1d34',
+            brandOrange: '#ff4d15',
+            brandOrangeDark: '#e6400c',
+            chartOrange: '#f95721',
+            chartBlue: '#1e78f6',
+            dashboardBg: '#f3f6fa'
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <!-- DRYFTQ Shared System -->
+  <link rel="stylesheet" href="../shared/dryftq-common.css"/>
+  <style data-purpose="base-styling">
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+</head>
+<body class="bg-[#071629] text-slate-800 antialiased overflow-x-hidden min-h-screen">
+<div class="flex min-h-screen w-full">
+  <!-- BEGIN: LeftSidebar -->
+  <aside class="w-64 xl:w-72 bg-[#071629] flex-shrink-0 text-white flex flex-col justify-between p-5 border-r border-[#122844] select-none" data-purpose="sidebar-navigation">
+    <div>
+      <!-- Logo and Close Header -->
+      <div class="flex items-center justify-between px-2 pt-2 pb-6">
+        <a href="/dashboard" class="text-2xl font-black tracking-wider text-white hover:text-orange-400 transition-colors">DRYFTQ</a>
+        <button aria-label="Close sidebar" class="text-slate-400 hover:text-white transition-colors" type="button">
+          <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </button>
+      </div>
+      <!-- Navigation Menu: All 9 Modules -->
+      <nav aria-label="Main Navigation" class="space-y-1.5">
+        <!-- 1. Dashboard (Active) -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl bg-[#ff4d15] text-white font-semibold text-sm shadow-md shadow-orange-950/20 transition-all" href="/dashboard">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <rect height="7" rx="2" stroke-width="2" width="7" x="3" y="3"></rect>
+            <rect height="7" rx="2" stroke-width="2" width="7" x="14" y="3"></rect>
+            <rect height="7" rx="2" stroke-width="2" width="7" x="14" y="14"></rect>
+            <rect height="7" rx="2" stroke-width="2" width="7" x="3" y="14"></rect>
+          </svg>
+          <span>Dashboard</span>
+        </a>
+        <!-- 2. Analytics -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-[#0d223f] hover:text-white font-medium text-sm transition-colors" href="/analytics">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>Analytics</span>
+        </a>
+        <!-- 3. Machines -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-[#0d223f] hover:text-white font-medium text-sm transition-colors" href="/machines">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <rect height="16" rx="3" stroke-width="2" width="18" x="3" y="4"></rect>
+            <circle cx="8" cy="12" r="2" stroke-width="2"></circle>
+            <circle cx="16" cy="12" r="2" stroke-width="2"></circle>
+          </svg>
+          <span>Machines</span>
+        </a>
+        <!-- 4. Alerts with live badge -->
+        <a class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-[#0d223f] hover:text-white font-medium text-sm transition-colors" href="/alerts">
+          <div class="flex items-center gap-3.5">
+            <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+              <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            </svg>
+            <span>Alerts</span>
+          </div>
+          <span id="nav-alert-badge" class="inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-[#ff511c] rounded-full">3</span>
+        </a>
+        <!-- 5. Reports -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-[#0d223f] hover:text-white font-medium text-sm transition-colors" href="/reports">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>Reports</span>
+        </a>
+        <!-- 6. Maintenance -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-[#0d223f] hover:text-white font-medium text-sm transition-colors" href="/maintenance">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            <circle cx="12" cy="12" r="3" stroke-width="2"></circle>
+          </svg>
+          <span>Maintenance</span>
+        </a>
+        <!-- 7. Integrations -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-[#0d223f] hover:text-white font-medium text-sm transition-colors" href="/integrations">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>Integrations</span>
+        </a>
+        <!-- 8. Team Management -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-[#0d223f] hover:text-white font-medium text-sm transition-colors" href="/team">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>Team Management</span>
+        </a>
+        <!-- 9. Settings -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-[#0d223f] hover:text-white font-medium text-sm transition-colors" href="/settings">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <circle cx="12" cy="12" r="3" stroke-width="2"></circle>
+            <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+    </div>
+    <!-- Bottom Status & Insights Box -->
+    <div class="space-y-4 pt-6">
+      <!-- AI Insight Box -->
+      <div class="bg-[#0b1c31] border border-[#162c4a] rounded-2xl p-3.5 flex items-center gap-3">
+        <div class="flex-shrink-0 w-8 h-8 rounded-lg bg-[#0e3040] flex items-center justify-center">
+          <span class="inline-block w-3.5 h-3.5 bg-emerald-400 rotate-45 rounded-sm"></span>
+        </div>
+        <p class="text-xs text-slate-300 font-medium leading-relaxed">
+          AI-powered insights for a smarter tomorrow.
+        </p>
+      </div>
+      <!-- System Operational Status -->
+      <div class="px-2 space-y-1">
+        <div class="flex items-center gap-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+          <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+          </svg>
+          <span>System Status</span>
+        </div>
+        <div class="flex items-center gap-2 text-xs text-slate-300 pl-5 font-medium">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          <span id="system-status-text">All Systems Operational</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <!-- END: LeftSidebar -->
+
+  <!-- BEGIN: MainContentArea -->
+  <main class="flex-1 bg-[#f4f7fb] overflow-y-auto" data-purpose="main-dashboard-body">
+    <div class="max-w-[1440px] mx-auto p-6 md:p-8 space-y-6">
+      <!-- BEGIN: TopBar -->
+      <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4" data-purpose="top-navigation-bar">
+        <!-- Global Search Bar -->
+        <div class="relative w-full sm:w-96">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+            <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <input id="global-search-input" class="w-full bg-white border-0 py-2.5 pl-10 pr-4 text-sm text-slate-700 placeholder:text-slate-400 rounded-full shadow-sm ring-1 ring-slate-200/80 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Search machines, alerts, reports..." type="text"/>
+        </div>
+        <!-- User Profile & Notifications -->
+        <div class="flex items-center gap-4 self-end sm:self-auto">
+          <!-- Alert Bell Button -->
+          <button aria-label="Notifications" onclick="Dryftq.openNotificationsDrawer()" class="relative p-2 text-slate-600 hover:text-slate-900 transition-colors" type="button" title="View Notifications">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+              <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            </svg>
+            <span id="header-bell-dot" class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
+          </button>
+          <!-- Activity Refresh Button -->
+          <button id="refresh-telemetry-btn" aria-label="Activity" onclick="triggerTelemetryRefresh()" class="p-2 text-slate-600 hover:text-slate-900 transition-colors" type="button" title="Refresh Live Plant Telemetry">
+            <svg id="refresh-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+              <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            </svg>
+          </button>
+          <!-- User Info Pill -->
+          <div onclick="Dryftq.navigateTo('settings')" class="flex items-center gap-3 pl-2 cursor-pointer hover:opacity-90 transition-opacity" title="Open Settings & Profile">
+            <div class="w-10 h-10 rounded-full overflow-hidden bg-slate-200 ring-2 ring-white shadow-sm flex-shrink-0">
+              <img id="user-header-avatar" alt="Aditya Kamil portrait" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSRfJq3H6IHVbW2vQM1QWNIUP2hgZiOMQfbtloTfx_jQDnueTc7j7a2tGcevplBEa7ib9wXvQys5y1pYErmKqBucSIOLneGoCkTbNdtpeo2dSYcAZYEM5arycSvYxGzL24pXh2TIksKDcQJO8uMjc3A2NEVL2jUEtS8Es3cC55KD51v41HUvyw6as4Z7C1h6hhRh_bcP1DWjGe_QeUtWPT7VmVsY3u1kzqnUqrATs"/>
+            </div>
+            <div class="leading-tight text-left">
+              <h4 id="user-header-name" class="text-sm font-bold text-slate-900">Aditya Kamil</h4>
+              <p id="user-header-role" class="text-xs text-slate-400 font-medium">Plant Operations</p>
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- END: TopBar -->
+
+      <!-- BEGIN: PageHeader -->
+      <section class="space-y-1" data-purpose="page-title-banner">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Dashboard</h1>
+            <p class="text-xs sm:text-sm text-slate-500 font-medium">Overview of your plant operations</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200/60">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              Live Telemetry Streaming
+            </span>
+          </div>
+        </div>
+      </section>
+      <!-- END: PageHeader -->
+
+      <!-- BEGIN: KPICardsGrid -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5" data-purpose="kpi-metrics-row">
+        <!-- Card 1: Machine Health -->
+        <div onclick="Dryftq.navigateTo('machines')" class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md hover:border-slate-300 transition-all cursor-pointer group" title="Click to view all machines">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-400 group-hover:text-slate-600">Machine Health</span>
+            <span class="text-slate-300 group-hover:text-slate-500 text-xs">&rarr;</span>
+          </div>
+          <div class="mt-2 space-y-1">
+            <span id="kpi-health-status" class="text-xs font-bold text-slate-800 block">Healthy</span>
+            <p id="kpi-health-value" class="text-3xl font-extrabold text-slate-900 tracking-tight">88.7%</p>
+          </div>
+        </div>
+        <!-- Card 2: Anomaly Detection -->
+        <div onclick="Dryftq.navigateTo('alerts', { status: 'Active' })" class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md hover:border-slate-300 transition-all cursor-pointer group" title="Click to review active anomalies">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-400 group-hover:text-slate-600">Anomaly Detection</span>
+            <span class="text-slate-300 group-hover:text-slate-500 text-xs">&rarr;</span>
+          </div>
+          <div class="mt-2 space-y-1">
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600">
+              <span class="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-b-[6px] border-b-emerald-500"></span>
+              Active
+            </span>
+            <p id="kpi-anomaly-count" class="text-3xl font-extrabold text-slate-900 tracking-tight">3</p>
+          </div>
+        </div>
+        <!-- Card 3: Process Stability -->
+        <div onclick="Dryftq.navigateTo('analytics', { tab: 'Quality' })" class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md hover:border-slate-300 transition-all cursor-pointer group" title="Click to view analytics quality & stability">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-400 group-hover:text-slate-600">Process Stability</span>
+            <span class="text-slate-300 group-hover:text-slate-500 text-xs">&rarr;</span>
+          </div>
+          <div class="mt-2 space-y-1">
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600">
+              <span class="w-2 h-2 rounded-full border-2 border-emerald-500 flex items-center justify-center">
+                <span class="w-1 h-1 bg-emerald-500 rounded-full"></span>
+              </span>
+              Stable
+            </span>
+            <p class="text-3xl font-extrabold text-slate-900 tracking-tight">92.3%</p>
+          </div>
+        </div>
+        <!-- Card 4: Overall OEE -->
+        <div onclick="Dryftq.navigateTo('analytics', { tab: 'OEE' })" class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md hover:border-slate-300 transition-all cursor-pointer group" title="Click to view OEE analytics">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-400 group-hover:text-slate-600">Overall OEE</span>
+            <span class="text-slate-300 group-hover:text-slate-500 text-xs">&rarr;</span>
+          </div>
+          <div class="mt-2 space-y-1">
+            <p class="text-3xl font-extrabold text-slate-900 tracking-tight">85.6%</p>
+            <div class="flex items-center gap-1 text-xs font-semibold text-emerald-600">
+              <span>↑ 2.1%</span>
+              <span class="text-slate-400 font-normal">vs last 7 days</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- END: KPICardsGrid -->
+
+      <!-- BEGIN: PerformanceOverview -->
+      <section class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 space-y-6" data-purpose="chart-analytics-container">
+        <!-- Card Header & Filter Controls -->
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <h2 class="text-lg font-bold text-slate-900">Performance Overview</h2>
+          <div class="flex items-center gap-3">
+            <!-- Dropdown Selector -->
+            <div class="relative inline-block text-left" id="time-range-container">
+              <button id="time-range-btn" onclick="toggleTimeDropdown()" class="inline-flex items-center gap-2 bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 px-3.5 py-1.5 rounded-full hover:bg-slate-100 transition-colors" type="button">
+                <span id="time-range-label">Last 7 Days</span>
+                <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                  <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+              </button>
+              <div id="time-range-menu" class="hidden absolute right-0 mt-1 w-40 bg-white rounded-xl shadow-lg border border-slate-100 py-1 z-30">
+                <button onclick="setTimeRange('Last 24 Hours')" class="w-full text-left px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50">Last 24 Hours</button>
+                <button onclick="setTimeRange('Last 7 Days')" class="w-full text-left px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50">Last 7 Days</button>
+                <button onclick="setTimeRange('Last 30 Days')" class="w-full text-left px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50">Last 30 Days</button>
+              </div>
+            </div>
+            <!-- Time Granularity Pill Toggle -->
+            <div class="flex items-center bg-slate-50 border border-slate-200 rounded-full p-0.5 text-xs font-semibold text-slate-500">
+              <button id="btn-granularity-daily" onclick="setGranularity('daily')" class="px-3 py-1 rounded-full text-slate-400 hover:text-slate-700 transition-colors" type="button">Daily</button>
+              <button id="btn-granularity-hourly" onclick="setGranularity('hourly')" class="px-3 py-1 rounded-full bg-white text-slate-800 shadow-sm transition-colors" type="button">Hourly</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dual Chart & Side Metric Visuals -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+          <!-- Left Chart Area (Span 3 Columns) -->
+          <div class="lg:col-span-3 space-y-4">
+            <!-- Chart Legend -->
+            <div class="flex items-center gap-6 text-xs font-semibold text-slate-700 pl-8">
+              <!-- Temperature Legend Item -->
+              <div class="flex items-center gap-2 cursor-pointer" onclick="toggleMetricVisibility('temp')" title="Click to filter Temperature">
+                <span id="legend-temp-label">Temperature (°C)</span>
+                <div class="flex items-center">
+                  <span class="w-2.5 h-2.5 bg-[#f95721] rounded-sm transform rotate-45 mr-1"></span>
+                  <span class="w-6 h-0.5 bg-[#f95721]"></span>
+                  <span class="w-2 h-2 rounded-full bg-[#f95721] ml-1"></span>
+                </div>
+              </div>
+              <!-- Vibration Legend Item -->
+              <div class="flex items-center gap-2 cursor-pointer" onclick="toggleMetricVisibility('vib')" title="Click to filter Vibration">
+                <span class="w-2 h-2 rounded-full bg-[#1e78f6]"></span>
+                <span id="legend-vib-label">Vibration</span>
+              </div>
+            </div>
+
+            <!-- SVG Dual Line Chart Container -->
+            <div class="w-full h-64 relative font-mono text-[11px] text-slate-400" id="dual-chart-container">
+              <svg id="dashboard-svg-chart" class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 760 220">
+                <defs>
+                  <filter height="140%" id="shadow" width="140%" x="-20%" y="-20%">
+                    <fedropshadow dx="0" dy="1" flood-opacity="0.15" stddeviation="1"></fedropshadow>
+                  </filter>
+                </defs>
+                <!-- Horizontal Grid Lines -->
+                <g class="text-slate-200" stroke="currentColor" stroke-dasharray="2,2" stroke-width="1">
+                  <line x1="45" x2="750" y1="20" y2="20"></line>
+                  <line x1="45" x2="750" y1="65" y2="65"></line>
+                  <line x1="45" x2="750" y1="110" y2="110"></line>
+                  <line x1="45" x2="750" y1="155" y2="155"></line>
+                  <line x1="45" x2="750" y1="200" y2="200"></line>
+                </g>
+                <!-- Y-Axis Value Labels -->
+                <text class="font-sans font-semibold text-[11px]" fill="#94a3b8" text-anchor="end" x="35" y="24">100</text>
+                <text class="font-sans font-semibold text-[11px]" fill="#94a3b8" text-anchor="end" x="35" y="69">80</text>
+                <text class="font-sans font-semibold text-[11px]" fill="#94a3b8" text-anchor="end" x="35" y="114">60</text>
+                <text class="font-sans font-semibold text-[11px]" fill="#94a3b8" text-anchor="end" x="35" y="159">20</text>
+                <text class="font-sans font-semibold text-[11px]" fill="#94a3b8" text-anchor="end" x="35" y="204">00</text>
+
+                <!-- Blue Trend Line (Vibration) -->
+                <polyline id="vibration-polyline" fill="none" points="
+                  60,170 110,165 150,155 190,158 230,150 270,145 320,155 
+                  370,140 420,132 460,150 500,150 540,165 590,145 640,145 
+                  680,165 720,150 745,152
+                " stroke="#1e78f6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></polyline>
+
+                <!-- Blue Data Point Dots -->
+                <g id="vibration-points" fill="#1e78f6"></g>
+
+                <!-- Orange Trend Line (Temperature) -->
+                <polyline id="temperature-polyline" fill="none" points="
+                  60,140 110,132 150,118 190,130 230,120 270,88 320,95 
+                  370,125 420,115 460,95 500,120 540,125 590,135 635,110 
+                  670,108 700,112 730,125 745,120
+                " stroke="#f95721" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></polyline>
+
+                <!-- Orange Data Point Dots -->
+                <g id="temperature-points" fill="#f95721"></g>
+              </svg>
+
+              <!-- Live Hover Tooltip -->
+              <div id="chart-tooltip" class="dryftq-chart-tooltip"></div>
+
+              <!-- X-Axis Timestamps -->
+              <div id="chart-x-axis" class="flex justify-between pl-10 pr-2 pt-2 text-[11px] font-medium text-slate-400">
+                <span>00:00</span>
+                <span>04:00</span>
+                <span>08:00</span>
+                <span>10:00</span>
+                <span>12:00</span>
+                <span>16:00</span>
+                <span>24:00</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column Sub-Metrics (Span 1 Column) -->
+          <div class="lg:col-span-1 space-y-6 pt-4 lg:pt-0 lg:border-l lg:border-slate-100 lg:pl-6">
+            <!-- Vibration Mini Trend -->
+            <div class="space-y-1">
+              <span class="text-xs font-semibold text-slate-400">Vibration</span>
+              <p id="submetric-vibration" class="text-lg font-bold text-slate-900">2.2 mm/s</p>
+              <div class="h-8 w-full pt-1">
+                <svg class="w-full h-full overflow-visible" viewbox="0 0 160 30">
+                  <polyline fill="none" points="5,20 30,19 60,17 90,14 110,18 135,19 155,7" stroke="#1e78f6" stroke-linecap="round" stroke-width="2.5"></polyline>
+                  <circle cx="155" cy="7" fill="#1e78f6" r="3"></circle>
+                </svg>
+              </div>
+            </div>
+            <!-- Classification Progress Bar Chart -->
+            <div class="space-y-1 pt-2">
+              <span class="text-xs font-semibold text-slate-400">Classification (mm/s)</span>
+              <p class="text-lg font-bold text-slate-900">98.7%</p>
+              <!-- Mini ascending bar visualization -->
+              <div class="flex items-end gap-1.5 h-12 pt-3">
+                <span class="w-2.5 h-3 bg-emerald-500 rounded-xs hover:opacity-80 transition-opacity" title="Normal: 0.2"></span>
+                <span class="w-2.5 h-3.5 bg-emerald-500 rounded-xs hover:opacity-80 transition-opacity" title="Normal: 0.4"></span>
+                <span class="w-2.5 h-4 bg-emerald-500 rounded-xs hover:opacity-80 transition-opacity" title="Normal: 0.6"></span>
+                <span class="w-2.5 h-5 bg-emerald-500 rounded-xs hover:opacity-80 transition-opacity" title="Normal: 0.8"></span>
+                <span class="w-2.5 h-6 bg-emerald-500 rounded-xs hover:opacity-80 transition-opacity" title="Normal: 1.0"></span>
+                <span class="w-2.5 h-7 bg-emerald-500 rounded-xs hover:opacity-80 transition-opacity" title="Normal: 1.2"></span>
+                <span class="w-2.5 h-8 bg-emerald-500 rounded-xs hover:opacity-80 transition-opacity" title="Normal: 1.4"></span>
+                <span class="w-2.5 h-9 bg-emerald-500 rounded-xs hover:opacity-80 transition-opacity" title="Normal: 1.8"></span>
+                <span class="w-2.5 h-10 bg-[#ff4d15] rounded-xs hover:opacity-80 transition-opacity" title="Elevated: 2.2"></span>
+                <span class="w-2.5 h-11 bg-[#ff4d15] rounded-xs hover:opacity-80 transition-opacity" title="Warning: 2.8"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- END: PerformanceOverview -->
+
+      <!-- BEGIN: BottomGridWidgets -->
+      <section class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch" data-purpose="bottom-widgets">
+        <!-- Urgent Alert Card Banner -->
+        <div id="urgent-alert-banner" onclick="handleUrgentAlertClick()" class="bg-gradient-to-r from-[#ff4d15] to-[#f94105] text-white rounded-3xl p-5 sm:p-6 shadow-md shadow-orange-500/20 flex items-center justify-between cursor-pointer hover:shadow-lg transition-all" title="Click to view alert details">
+          <div class="flex items-center gap-4 sm:gap-5">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center flex-shrink-0 border border-white/30">
+              <span class="text-xl sm:text-2xl font-black text-white">A</span>
+            </div>
+            <div class="space-y-1">
+              <h3 id="urgent-alert-title" class="text-base sm:text-lg font-extrabold tracking-tight">Anomaly Detected</h3>
+              <p id="urgent-alert-desc" class="text-xs sm:text-sm text-orange-100 font-medium">High vibration detected on Line 2</p>
+              <p id="urgent-alert-rec" class="text-xs sm:text-sm text-orange-200/90 font-normal">Recommended: Check bearings.</p>
+            </div>
+          </div>
+          <!-- Action Navigation Link Button -->
+          <button aria-label="View Anomaly Details" class="text-white hover:text-orange-200 transition-colors p-2" type="button">
+            <svg class="w-6 h-6 stroke-[2.5]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+              <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Recent Events Log Panel -->
+        <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-slate-100 flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-base font-bold text-slate-900">Recent Events</h3>
+            <a class="text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors" href="/alerts">View all</a>
+          </div>
+          <!-- Events List Container -->
+          <div id="recent-events-list" class="space-y-3">
+            <!-- Event Row 1 -->
+            <div class="flex items-center text-xs sm:text-sm text-slate-700">
+              <span class="w-2.5 h-2.5 bg-red-500 rotate-45 mr-3 flex-shrink-0"></span>
+              <span class="font-bold text-slate-900 w-14">10:30</span>
+              <span class="text-slate-600 truncate">Vibration detected on Line 2</span>
+            </div>
+            <!-- Event Row 2 -->
+            <div class="flex items-center text-xs sm:text-sm text-slate-700">
+              <span class="w-2.5 h-2.5 bg-blue-500 rotate-45 mr-3 flex-shrink-0"></span>
+              <span class="font-bold text-slate-900 w-14">09:15</span>
+              <span class="text-slate-600 truncate">Temperature threshold exceeded</span>
+            </div>
+            <!-- Event Row 3 -->
+            <div class="flex items-center text-xs sm:text-sm text-slate-700">
+              <span class="w-2.5 h-2.5 bg-amber-500 rotate-45 mr-3 flex-shrink-0"></span>
+              <span class="font-bold text-slate-900 w-14">08:45</span>
+              <span class="text-slate-600 truncate">Process back to normal</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- END: BottomGridWidgets -->
+    </div>
+  </main>
+  <!-- END: MainContentArea -->
+</div>
+
+<!-- Scripts -->
+<script src="../shared/dryftq-state.js"></script>
+<script>
+  let currentRange = 'Last 7 Days';
+  let currentGranularity = 'hourly';
+  let showTemp = true;
+  let showVib = true;
+
+  // Chart dataset variations
+  const chartDataSets = {
+    'Last 7 Days': {
+      xLabels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      tempPoints: [
+        { x: 60, y: 140, val: 62 }, { x: 170, y: 130, val: 65 }, { x: 280, y: 92, val: 84 },
+        { x: 400, y: 110, val: 74 }, { x: 510, y: 95, val: 82 }, { x: 630, y: 125, val: 68 }, { x: 745, y: 118, val: 71 }
+      ],
+      vibPoints: [
+        { x: 60, y: 170, val: 1.1 }, { x: 170, y: 160, val: 1.3 }, { x: 280, y: 142, val: 1.9 },
+        { x: 400, y: 130, val: 2.2 }, { x: 510, y: 155, val: 1.5 }, { x: 630, y: 148, val: 1.7 }, { x: 745, y: 150, val: 1.6 }
+      ]
+    },
+    'Last 24 Hours': {
+      xLabels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
+      tempPoints: [
+        { x: 60, y: 150, val: 58 }, { x: 170, y: 145, val: 60 }, { x: 280, y: 110, val: 76 },
+        { x: 400, y: 88, val: 88 }, { x: 510, y: 95, val: 85 }, { x: 630, y: 120, val: 72 }, { x: 745, y: 130, val: 66 }
+      ],
+      vibPoints: [
+        { x: 60, y: 180, val: 0.8 }, { x: 170, y: 175, val: 0.9 }, { x: 280, y: 155, val: 1.4 },
+        { x: 400, y: 132, val: 2.2 }, { x: 510, y: 140, val: 1.9 }, { x: 630, y: 160, val: 1.3 }, { x: 745, y: 165, val: 1.2 }
+      ]
+    },
+    'Last 30 Days': {
+      xLabels: ['W1', 'W2', 'W3', 'W4', 'W5'],
+      tempPoints: [
+        { x: 60, y: 135, val: 64 }, { x: 230, y: 120, val: 70 }, { x: 400, y: 105, val: 78 },
+        { x: 570, y: 90, val: 86 }, { x: 745, y: 110, val: 75 }
+      ],
+      vibPoints: [
+        { x: 60, y: 165, val: 1.2 }, { x: 230, y: 150, val: 1.5 }, { x: 400, y: 145, val: 1.7 },
+        { x: 570, y: 135, val: 2.0 }, { x: 745, y: 148, val: 1.6 }
+      ]
+    }
+  };
+
+  function renderChart() {
+    const data = chartDataSets[currentRange] || chartDataSets['Last 7 Days'];
+    const tempPoly = document.getElementById('temperature-polyline');
+    const vibPoly = document.getElementById('vibration-polyline');
+    const tempGroup = document.getElementById('temperature-points');
+    const vibGroup = document.getElementById('vibration-points');
+    const xAxis = document.getElementById('chart-x-axis');
+    const tooltip = document.getElementById('chart-tooltip');
+
+    // X-Axis labels
+    xAxis.innerHTML = data.xLabels.map(l => `<span>${l}</span>`).join('');
+
+    // Temperature line & points
+    if (showTemp) {
+      const tempPointsStr = data.tempPoints.map(p => `${p.x},${p.y}`).join(' ');
+      tempPoly.setAttribute('points', tempPointsStr);
+      tempPoly.style.display = 'block';
+
+      tempGroup.innerHTML = data.tempPoints.map(p => `
+        <circle cx="${p.x}" cy="${p.y}" r="4.5" class="dryftq-clickable"
+          onmouseenter="showPointTooltip(event, 'Temperature: ${p.val} °C', ${p.x}, ${p.y})"
+          onmouseleave="hidePointTooltip()"
+          stroke="#ffffff" stroke-width="1.5">
+        </circle>
+      `).join('');
+    } else {
+      tempPoly.style.display = 'none';
+      tempGroup.innerHTML = '';
+    }
+
+    // Vibration line & points
+    if (showVib) {
+      const vibPointsStr = data.vibPoints.map(p => `${p.x},${p.y}`).join(' ');
+      vibPoly.setAttribute('points', vibPointsStr);
+      vibPoly.style.display = 'block';
+
+      vibGroup.innerHTML = data.vibPoints.map(p => `
+        <circle cx="${p.x}" cy="${p.y}" r="4.5" class="dryftq-clickable"
+          onmouseenter="showPointTooltip(event, 'Vibration: ${p.val} mm/s', ${p.x}, ${p.y})"
+          onmouseleave="hidePointTooltip()"
+          stroke="#ffffff" stroke-width="1.5">
+        </circle>
+      `).join('');
+    } else {
+      vibPoly.style.display = 'none';
+      vibGroup.innerHTML = '';
+    }
+  }
+
+  function showPointTooltip(e, text, x, y) {
+    const tooltip = document.getElementById('chart-tooltip');
+    tooltip.textContent = text;
+    tooltip.style.left = `${(x / 760) * 100}%`;
+    tooltip.style.top = `${y - 32}px`;
+    tooltip.style.opacity = '1';
+    tooltip.style.transform = 'translate(-50%, -4px)';
+  }
+
+  function hidePointTooltip() {
+    const tooltip = document.getElementById('chart-tooltip');
+    tooltip.style.opacity = '0';
+  }
+
+  function toggleTimeDropdown() {
+    const menu = document.getElementById('time-range-menu');
+    menu.classList.toggle('hidden');
+  }
+
+  function setTimeRange(range) {
+    currentRange = range;
+    document.getElementById('time-range-label').textContent = range;
+    document.getElementById('time-range-menu').classList.add('hidden');
+    renderChart();
+    Dryftq.toast(`View updated to ${range}.`, 'info', 'Filter Applied');
+  }
+
+  function setGranularity(gran) {
+    currentGranularity = gran;
+    const btnDaily = document.getElementById('btn-granularity-daily');
+    const btnHourly = document.getElementById('btn-granularity-hourly');
+
+    if (gran === 'daily') {
+      btnDaily.classList.add('bg-white', 'text-slate-800', 'shadow-sm');
+      btnDaily.classList.remove('text-slate-400');
+      btnHourly.classList.remove('bg-white', 'text-slate-800', 'shadow-sm');
+      btnHourly.classList.add('text-slate-400');
+    } else {
+      btnHourly.classList.add('bg-white', 'text-slate-800', 'shadow-sm');
+      btnHourly.classList.remove('text-slate-400');
+      btnDaily.classList.remove('bg-white', 'text-slate-800', 'shadow-sm');
+      btnDaily.classList.add('text-slate-400');
+    }
+    renderChart();
+  }
+
+  function toggleMetricVisibility(type) {
+    if (type === 'temp') {
+      showTemp = !showTemp;
+      document.getElementById('legend-temp-label').classList.toggle('line-through', !showTemp);
+    } else {
+      showVib = !showVib;
+      document.getElementById('legend-vib-label').classList.toggle('line-through', !showVib);
+    }
+    renderChart();
+  }
+
+  function triggerTelemetryRefresh() {
+    const icon = document.getElementById('refresh-icon');
+    icon.classList.add('animate-spin');
+    setTimeout(() => {
+      icon.classList.remove('animate-spin');
+      updateDashboardData();
+      Dryftq.toast('Telemetry refreshed successfully from all machine sensors.', 'success', 'Streams Synchronized');
+    }, 700);
+  }
+
+  function handleUrgentAlertClick() {
+    const state = Dryftq.getState();
+    const active = state.alerts.find(a => a.status === 'Active');
+    if (active) {
+      Dryftq.navigateTo('alerts', { alertId: active.id });
+    } else {
+      Dryftq.navigateTo('alerts');
+    }
+  }
+
+  function updateDashboardData() {
+    const state = Dryftq.getState();
+
+    // KPI 1: Machine Health
+    const healthyCount = state.machines.filter(m => m.status === 'Running').length;
+    const healthPercent = Math.round((healthyCount / state.machines.length) * 100);
+    const healthEl = document.getElementById('kpi-health-value');
+    if (healthEl) healthEl.textContent = `${healthPercent}.0%`;
+
+    // KPI 2: Anomaly count
+    const activeAlerts = state.alerts.filter(a => a.status === 'Active');
+    const anomalyEl = document.getElementById('kpi-anomaly-count');
+    if (anomalyEl) anomalyEl.textContent = activeAlerts.length;
+
+    // Header badge
+    const badge = document.getElementById('nav-alert-badge');
+    if (badge) {
+      badge.textContent = activeAlerts.length;
+      badge.style.display = activeAlerts.length > 0 ? 'inline-flex' : 'none';
+    }
+    const bellDot = document.getElementById('header-bell-dot');
+    if (bellDot) bellDot.style.display = activeAlerts.length > 0 ? 'block' : 'none';
+
+    // Urgent Banner
+    const topAlert = activeAlerts[0];
+    if (topAlert) {
+      document.getElementById('urgent-alert-title').textContent = topAlert.title;
+      document.getElementById('urgent-alert-desc').textContent = `${topAlert.description} (${topAlert.machineName})`;
+      document.getElementById('urgent-alert-rec').textContent = `Reading: ${topAlert.reading} (Threshold: ${topAlert.threshold})`;
+    } else {
+      document.getElementById('urgent-alert-title').textContent = 'All Systems Normal';
+      document.getElementById('urgent-alert-desc').textContent = 'No critical anomalies detected across lines';
+      document.getElementById('urgent-alert-rec').textContent = 'Continuous AI monitoring engaged.';
+    }
+
+    // Recent Events
+    const eventsList = document.getElementById('recent-events-list');
+    if (eventsList && state.recentEvents) {
+      eventsList.innerHTML = state.recentEvents.slice(0, 3).map(ev => {
+        const color = ev.severity === 'critical' ? 'bg-red-500' : (ev.severity === 'warning' ? 'bg-amber-500' : 'bg-blue-500');
+        return `
+          <div onclick="Dryftq.navigateTo('alerts')" class="flex items-center text-xs sm:text-sm text-slate-700 cursor-pointer hover:bg-slate-50 p-1 rounded-lg transition-colors">
+            <span class="w-2.5 h-2.5 ${color} rotate-45 mr-3 flex-shrink-0"></span>
+            <span class="font-bold text-slate-900 w-14">${Dryftq.escapeHtml(ev.time)}</span>
+            <span class="text-slate-600 truncate">${Dryftq.escapeHtml(ev.title)}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // User info
+    if (state.user) {
+      const uName = document.getElementById('user-header-name');
+      const uRole = document.getElementById('user-header-role');
+      const uAv = document.getElementById('user-header-avatar');
+      if (uName) uName.textContent = state.user.name;
+      if (uRole) uRole.textContent = state.user.department;
+      if (uAv && state.user.avatar) uAv.src = state.user.avatar;
+    }
+  }
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', () => {
+    Dryftq.setupNavigation('dashboard');
+    updateDashboardData();
+    renderChart();
+
+    window.addEventListener('dryftq:state-change', () => {
+      updateDashboardData();
+    });
+
+    // Close time dropdown on outside click
+    document.addEventListener('click', (e) => {
+      const container = document.getElementById('time-range-container');
+      if (container && !container.contains(e.target)) {
+        document.getElementById('time-range-menu').classList.add('hidden');
+      }
+    });
+  });
+</script>
+</body>
+</html>

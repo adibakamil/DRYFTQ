@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>DRYFTQ - Alerts Dashboard</title>
+  <!-- Tailwind CSS CDN with forms and container-queries -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <!-- DRYFTQ Shared System -->
+  <link rel="stylesheet" href="../shared/dryftq-common.css"/>
+  <style data-purpose="base-styling">
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+</head>
+<body class="bg-[#FAFCFD] text-slate-800 antialiased overflow-x-hidden min-h-screen">
+<div class="flex min-h-screen w-full">
+  <!-- BEGIN: LeftSidebar -->
+  <aside class="w-64 xl:w-72 bg-[#081729] flex-shrink-0 text-white flex flex-col justify-between p-5 border-r border-[#122844] select-none" data-purpose="sidebar-navigation">
+    <div>
+      <!-- Logo and Close Header -->
+      <div class="flex items-center justify-between px-2 pt-2 pb-6">
+        <a href="/dashboard" class="text-2xl font-black tracking-wider text-white hover:text-orange-400 transition-colors">DRYFTQ</a>
+        <button aria-label="Close sidebar" class="text-slate-400 hover:text-white transition-colors" type="button">
+          <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </button>
+      </div>
+      <!-- Navigation Menu: All 9 Modules -->
+      <nav aria-label="Main Navigation" class="space-y-1.5">
+        <!-- 1. Dashboard -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-[#0d223f] hover:text-white font-medium text-sm transition-colors" href="/dashboard">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <rect height="7" rx="2" stroke-width="2" width="7" x="3" y="3"></rect>
+            <rect height="7" rx="2" stroke-width="2" width="7" x="14" y="3"></rect>
+            <rect height="7" rx="2" stroke-width="2" width="7" x="14" y="14"></rect>
+            <rect height="7" rx="2" stroke-width="2" width="7" x="3" y="14"></rect>
+          </svg>
+          <span>Dashboard</span>
+        </a>
+        <!-- 2. Analytics -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-[#0d223f] hover:text-white font-medium text-sm transition-colors" href="/analytics">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>Analytics</span>
+        </a>
+        <!-- 3. Machines -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-[#0d223f] hover:text-white font-medium text-sm transition-colors" href="/machines">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <rect height="16" rx="3" stroke-width="2" width="18" x="3" y="4"></rect>
+            <circle cx="8" cy="12" r="2" stroke-width="2"></circle>
+            <circle cx="16" cy="12" r="2" stroke-width="2"></circle>
+          </svg>
+          <span>Machines</span>
+        </a>
+        <!-- 4. Alerts (ACTIVE) -->
+        <a class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-[#FF4A1C] text-white font-semibold text-sm shadow-md transition-colors" href="/alerts">
+          <div class="flex items-center gap-3.5">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+              <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            </svg>
+            <span>Alerts</span>
+          </div>
+          <span id="nav-alert-badge" class="inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-white/20 rounded-full">3</span>
+        </a>
+        <!-- 5. Reports -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-[#0d223f] hover:text-white font-medium text-sm transition-colors" href="/reports">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>Reports</span>
+        </a>
+        <!-- 6. Maintenance -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-[#0d223f] hover:text-white font-medium text-sm transition-colors" href="/maintenance">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            <circle cx="12" cy="12" r="3" stroke-width="2"></circle>
+          </svg>
+          <span>Maintenance</span>
+        </a>
+        <!-- 7. Integrations -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-[#0d223f] hover:text-white font-medium text-sm transition-colors" href="/integrations">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>Integrations</span>
+        </a>
+        <!-- 8. Team Management -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-[#0d223f] hover:text-white font-medium text-sm transition-colors" href="/team">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>Team Management</span>
+        </a>
+        <!-- 9. Settings -->
+        <a class="flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-slate-300 hover:bg-[#0d223f] hover:text-white font-medium text-sm transition-colors" href="/settings">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <circle cx="12" cy="12" r="3" stroke-width="2"></circle>
+            <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+    </div>
+    <!-- Bottom Section: AI Insight & System Status -->
+    <div class="px-5 pb-6 space-y-5">
+      <div class="flex items-center gap-3">
+        <div class="w-7 h-7 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center shrink-0">
+          <div class="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
+        </div>
+        <div class="text-[12px] leading-tight text-slate-300 font-normal">
+          <p>AI-powered insights for</p>
+          <p>a smarter tomorrow.</p>
+        </div>
+      </div>
+      <div class="h-px bg-white/10 w-full"></div>
+      <div class="space-y-1">
+        <div class="text-[12px] text-slate-400 flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+          <span>System Status</span>
+        </div>
+        <div class="text-[12px] font-medium text-slate-200 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span>All Systems Operational</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <!-- END: LeftSidebar -->
+
+  <!-- BEGIN: MainContent -->
+  <main class="flex-1 flex flex-col h-screen overflow-y-auto bg-[#FAFCFD]" data-purpose="main-content">
+    <!-- BEGIN: TopBar -->
+    <header class="px-9 pt-7 pb-4 flex items-start justify-between">
+      <div>
+        <h1 class="text-3xl font-extrabold text-[#0B1E34] tracking-tight">Alerts</h1>
+        <p class="text-sm text-slate-500 mt-0.5">Real-time alerts, sensor anomalies and resolution workflow</p>
+      </div>
+      <!-- Top Right: Notification Icons & User Profile -->
+      <div class="flex items-center gap-5 pt-1">
+        <button aria-label="Notifications" onclick="Dryftq.openNotificationsDrawer()" class="text-slate-500 hover:text-slate-700 transition p-1" title="View Notifications">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+          </svg>
+        </button>
+        <button aria-label="Active Notifications" onclick="filterByAlertStatus('Active')" class="relative text-slate-500 hover:text-slate-700 transition p-1" title="Active Alerts">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+          </svg>
+          <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#FF4D26] ring-2 ring-white"></span>
+        </button>
+        <div onclick="Dryftq.navigateTo('settings')" class="flex items-center gap-3 pl-2 border-l border-slate-200 cursor-pointer hover:opacity-90 transition-opacity" title="Settings & Profile">
+          <img id="user-avatar-alerts" alt="Aditya Kamil" class="w-9 h-9 rounded-full object-cover ring-1 ring-slate-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-mR1kAo66CUHVrNpsTEq0hEmPMEs49PPzAcGMIw2QuTuDBPakKjZlMklXE7JA3Lb-qf2bZ2cRgNKyYJygOeLTZcg9CfqnIZo0y5MabLi765zuvRqLFJKZg7GrLbr6aaQ_jaa81DuHiGk_0d_WlHLyxvgryLG5xAGhQwFiKztfZtNhRK2recGWSHG-VqxPnZ-z3fN2trrCamvn-tdkhBd31cYY49SJsAZkQBVUjxX2JbfekqmQRtkuGA">
+          <div class="leading-tight text-left">
+            <div id="user-name-alerts" class="text-[13px] font-bold text-[#0B1E34]">Aditya Kamil</div>
+            <div id="user-dept-alerts" class="text-[11px] text-slate-400">Plant Operations</div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- END: TopBar -->
+
+    <!-- Content Workspace Container -->
+    <div class="px-9 flex flex-col gap-5 flex-1">
+      <!-- BEGIN: FilterTabsRow -->
+      <section class="flex items-center gap-2 pt-1" id="alert-status-tabs" data-purpose="tab-navigation">
+        <button onclick="filterByAlertStatus('All')" data-tab="All" class="bg-[#FF4A1C] hover:bg-[#eb421b] text-white text-[14px] font-bold px-7 h-[50px] rounded-lg shadow-sm transition flex items-center justify-center min-w-[170px]">
+          All Alerts (<span id="alert-count-all">5</span>)
+        </button>
+        <button onclick="filterByAlertStatus('Acknowledged')" data-tab="Acknowledged" class="text-slate-800 hover:text-black text-[14px] font-semibold px-6 h-[50px] rounded-lg hover:bg-slate-100 transition flex items-center justify-center">
+          Acknowledged (<span id="alert-count-ack">1</span>)
+        </button>
+        <button onclick="filterByAlertStatus('Resolved')" data-tab="Resolved" class="text-slate-800 hover:text-black text-[14px] font-semibold px-6 h-[50px] rounded-lg hover:bg-slate-100 transition flex items-center justify-center">
+          Resolved (<span id="alert-count-res">1</span>)
+        </button>
+      </section>
+      <!-- END: FilterTabsRow -->
+
+      <!-- BEGIN: SelectionDropdownRow -->
+      <section class="flex flex-wrap items-center justify-between gap-4" data-purpose="filter-controls">
+        <div class="relative inline-block text-left" id="services-filter-container">
+          <button id="services-filter-btn" onclick="toggleServicesDropdown()" class="w-[380px] h-[48px] inline-flex items-center justify-between px-4 bg-white border border-slate-300 rounded-lg text-sm font-semibold text-slate-800 shadow-sm hover:bg-slate-50" type="button">
+            <span id="services-filter-label">All Plant Lines & Services</span>
+            <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"></path>
+            </svg>
+          </button>
+          <div id="services-filter-menu" class="hidden absolute left-0 mt-1 w-[380px] bg-white rounded-xl shadow-lg border border-slate-200 py-1.5 z-30">
+            <button onclick="filterByService('All')" class="w-full text-left px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50">All Plant Lines & Services</button>
+            <button onclick="filterByService('Line 1')" class="w-full text-left px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50">Line 1 (CNC-01, PUMP-01, PRESS-01)</button>
+            <button onclick="filterByService('Line 2')" class="w-full text-left px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50">Line 2 (PRESS-02, CNC-02, MILL-01)</button>
+            <button onclick="filterByService('Line 3')" class="w-full text-left px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50">Line 3 (CONV-01, LATHE-02)</button>
+            <button onclick="filterByService('Line 4')" class="w-full text-left px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50">Line 4 (ROBOT-01, PACK-01)</button>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <button onclick="filterBySeverity('Critical')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition-colors">
+            Critical Only
+          </button>
+          <button onclick="filterBySeverity('Warning')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-50 text-amber-600 border border-amber-200 hover:bg-amber-100 transition-colors">
+            Warnings Only
+          </button>
+          <button onclick="resetAlertFilters()" class="text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors">
+            Reset Filters
+          </button>
+        </div>
+      </section>
+      <!-- END: SelectionDropdownRow -->
+
+      <!-- BEGIN: AlertsTableContainer -->
+      <section class="flex-1 pb-8 flex flex-col justify-between" data-purpose="alerts-list">
+        <!-- Table Column Headers -->
+        <div class="grid grid-cols-12 items-center px-4 py-2 text-xs font-semibold text-slate-400 border-b border-slate-200/80">
+          <div class="col-span-8 flex items-center gap-3">
+            <span class="w-2.5 h-2.5 rounded-full border border-slate-300 inline-block ml-0.5"></span>
+            <span class="text-slate-600">Alert</span>
+          </div>
+          <div class="col-span-2 text-slate-600">Time</div>
+          <div class="col-span-2 text-right pr-3 text-slate-600">Status</div>
+        </div>
+
+        <!-- Dynamic Alerts Stack -->
+        <div id="alerts-stack-container" class="divide-y divide-slate-100">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+      <!-- END: AlertsTableContainer -->
+    </div>
+  </main>
+  <!-- END: MainContent -->
+</div>
+
+<!-- Alert Details & Maintenance Decision Modal -->
+<div id="alert-details-modal" class="dryftq-modal-backdrop">
+  <div class="dryftq-modal-content w-full max-w-xl p-7 bg-white rounded-2xl shadow-2xl space-y-6">
+    <div class="flex items-start justify-between border-b border-slate-100 pb-4">
+      <div>
+        <div class="flex items-center gap-2.5">
+          <span id="modal-alert-severity-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-700">Critical</span>
+          <h2 id="modal-alert-title" class="text-xl font-bold text-slate-900">High Temperature</h2>
+        </div>
+        <p id="modal-alert-machine" class="text-xs text-slate-500 mt-1">Machine: Line 2 - CNC-02</p>
+      </div>
+      <button onclick="closeAlertModal()" class="text-slate-400 hover:text-slate-700 p-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round"></path></svg>
+      </button>
+    </div>
+
+    <!-- Telemetry Comparison Card -->
+    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-2">
+      <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
+        <span>Observed Reading:</span>
+        <span id="modal-alert-reading" class="text-base font-extrabold text-red-600">105°C</span>
+      </div>
+      <div class="flex items-center justify-between text-xs text-slate-500">
+        <span>Operating Threshold:</span>
+        <span id="modal-alert-threshold" class="font-bold text-slate-700">90°C</span>
+      </div>
+      <div class="flex items-center justify-between text-xs text-slate-500">
+        <span>Alert Triggered Time:</span>
+        <span id="modal-alert-timestamp" class="font-medium text-slate-700">10:25 AM · Oct 16, 2025</span>
+      </div>
+      <div class="pt-2 border-t border-slate-200/60">
+        <p id="modal-alert-desc" class="text-xs text-slate-700 leading-relaxed font-medium">Temperature in Line 2 exceeded the threshold. Recommended check cooling lines.</p>
+      </div>
+    </div>
+
+    <!-- Maintenance Decision Section -->
+    <div class="bg-orange-50/70 border border-orange-200/80 p-4 rounded-xl space-y-3">
+      <h3 class="text-xs font-bold text-orange-950 uppercase tracking-wider flex items-center gap-1.5">
+        <span>🛠️</span> Maintenance Decision Required
+      </h3>
+      <p class="text-xs text-orange-900 leading-relaxed">
+        Does this alarm require dispatching a technician or scheduling a corrective work order?
+      </p>
+      <div class="flex items-center gap-3">
+        <button onclick="openMaintenanceFromAlert()" class="px-4 py-2 bg-[#FF4A1C] hover:bg-[#e63f13] text-white text-xs font-bold rounded-lg shadow-sm transition-colors flex items-center gap-1.5">
+          <span>Create Maintenance Work Order</span> &rarr;
+        </button>
+        <button onclick="resolveAlertDirectly()" class="px-4 py-2 bg-white hover:bg-orange-100 border border-orange-300 text-orange-900 text-xs font-semibold rounded-lg transition-colors">
+          Resolve Without Maintenance
+        </button>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+      <button id="modal-btn-ack" onclick="handleAcknowledgeAlert()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-lg transition-colors">
+        Acknowledge Alert
+      </button>
+      <div class="flex items-center gap-2">
+        <button onclick="closeAlertModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg">Close</button>
+        <button id="modal-btn-resolve" onclick="handleResolveAlert()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg shadow-sm transition-colors">
+          Mark as Resolved
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Prefilled Maintenance Order Modal -->
+<div id="alert-maint-order-modal" class="dryftq-modal-backdrop">
+  <div class="dryftq-modal-content w-full max-w-lg p-7 bg-white rounded-2xl shadow-2xl space-y-5">
+    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+      <div>
+        <h3 class="text-lg font-bold text-slate-900">Schedule Work Order</h3>
+        <p class="text-xs text-slate-500">Linked to Alert: <span id="wo-linked-alert-id" class="font-bold text-[#FF4A1C]">ALT-101</span></p>
+      </div>
+      <button onclick="closeMaintenanceOrderModal()" class="text-slate-400 hover:text-slate-700 p-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round"></path></svg>
+      </button>
+    </div>
+    <form onsubmit="handleCreateWorkOrder(event)" class="space-y-4 text-xs">
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Task Title *</label>
+        <input required id="wo-title" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#FF4A1C]"/>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Machine *</label>
+          <input required id="wo-machine" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#FF4A1C]"/>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Priority</label>
+          <select id="wo-priority" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800">
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Assigned Technician</label>
+          <select id="wo-tech" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800">
+            <option value="Priya Sharma">Priya Sharma (Maintenance)</option>
+            <option value="Vikash Singh">Vikash Singh (Operator)</option>
+            <option value="Aditya Kamil">Aditya Kamil (Admin)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Due Date</label>
+          <input id="wo-due" value="Tomorrow" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800"/>
+        </div>
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Actionable Notes / Root Cause</label>
+        <textarea id="wo-notes" rows="2" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800" placeholder="Inspect mechanical clearances and sensors..."></textarea>
+      </div>
+      <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+        <button type="button" onclick="closeMaintenanceOrderModal()" class="px-4 py-2 font-semibold text-slate-600 hover:bg-slate-100 rounded-lg">Cancel</button>
+        <button type="submit" class="px-5 py-2 font-bold bg-[#FF4A1C] hover:bg-[#e63f13] text-white rounded-lg shadow-sm">Confirm & Schedule</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="../shared/dryftq-state.js"></script>
+<script>
+  let currentAlertFilter = 'All';
+  let currentServiceFilter = 'All';
+  let currentSeverityFilter = null;
+  let activeAlert = null;
+
+  function renderAlertsList() {
+    const state = Dryftq.getState();
+    const container = document.getElementById('alerts-stack-container');
+
+    // Counts
+    const activeCount = state.alerts.filter(a => a.status === 'Active').length;
+    const ackCount = state.alerts.filter(a => a.status === 'Acknowledged').length;
+    const resCount = state.alerts.filter(a => a.status === 'Resolved').length;
+
+    document.getElementById('alert-count-all').textContent = state.alerts.length;
+    document.getElementById('alert-count-ack').textContent = ackCount;
+    document.getElementById('alert-count-res').textContent = resCount;
+
+    const navBadge = document.getElementById('nav-alert-badge');
+    if (navBadge) navBadge.textContent = activeCount;
+
+    let filtered = state.alerts.filter(a => {
+      if (currentAlertFilter === 'Acknowledged' && a.status !== 'Acknowledged') return false;
+      if (currentAlertFilter === 'Resolved' && a.status !== 'Resolved') return false;
+      if (currentAlertFilter === 'Active' && a.status !== 'Active') return false;
+      if (currentServiceFilter !== 'All' && !a.machineName.includes(currentServiceFilter)) return false;
+      if (currentSeverityFilter && a.severity !== currentSeverityFilter) return false;
+      return true;
+    });
+
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div class="py-16 text-center text-slate-400">
+          <p class="font-bold text-sm text-slate-600">No alerts matching filter criteria</p>
+          <button onclick="resetAlertFilters()" class="mt-2 text-xs text-[#FF4A1C] hover:underline font-bold">Reset Filters</button>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = filtered.map(a => {
+      let iconColor = 'bg-red-50 text-[#FF4D26]';
+      if (a.severity === 'Warning') iconColor = 'bg-amber-50 text-amber-500';
+      if (a.severity === 'Info') iconColor = 'bg-blue-50 text-blue-600';
+
+      let statusBadge = '';
+      if (a.status === 'Active') {
+        statusBadge = '<span class="inline-flex items-center justify-center px-3.5 py-1 rounded-full text-xs font-semibold bg-[#FEE2E2] text-[#DC2626] min-w-[85px]">Active</span>';
+      } else if (a.status === 'Acknowledged') {
+        statusBadge = '<span class="inline-flex items-center justify-center px-3.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 min-w-[85px]">Acknowledged</span>';
+      } else {
+        statusBadge = '<span class="inline-flex items-center justify-center px-3.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 min-w-[85px]">Resolved</span>';
+      }
+
+      return `
+        <article onclick="openAlertModal('${Dryftq.escapeHtml(a.id)}')" class="grid grid-cols-12 items-center px-4 py-5 hover:bg-white/80 transition-colors group cursor-pointer" data-purpose="alert-item" title="Click to view alert details & maintenance decision">
+          <div class="col-span-8 flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full ${iconColor} flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+              </svg>
+            </div>
+            <div class="flex flex-col">
+              <h2 class="text-sm font-bold text-[#0B1E34] group-hover:text-[#FF4A1C] transition-colors">${Dryftq.escapeHtml(a.title)}</h2>
+              <p class="text-xs font-semibold text-slate-700 mt-0.5">${Dryftq.escapeHtml(a.details)} · <span class="text-slate-500 font-normal">${Dryftq.escapeHtml(a.machineName)}</span></p>
+              <p class="text-[11px] text-slate-400 mt-0.5">${Dryftq.escapeHtml(a.description)}</p>
+            </div>
+          </div>
+          <div class="col-span-2 text-left">
+            <span class="text-xs font-bold text-slate-900">${a.time}</span>
+            <p class="text-[11px] text-slate-400 mt-0.5">${a.date}</p>
+          </div>
+          <div class="col-span-2 flex justify-end pr-2">
+            ${statusBadge}
+          </div>
+        </article>
+      `;
+    }).join('');
+  }
+
+  function filterByAlertStatus(status) {
+    currentAlertFilter = status;
+    const buttons = document.querySelectorAll('#alert-status-tabs button');
+    buttons.forEach(btn => {
+      if (btn.getAttribute('data-tab') === status) {
+        btn.className = 'bg-[#FF4A1C] hover:bg-[#eb421b] text-white text-[14px] font-bold px-7 h-[50px] rounded-lg shadow-sm transition flex items-center justify-center min-w-[170px]';
+      } else {
+        btn.className = 'text-slate-800 hover:text-black text-[14px] font-semibold px-6 h-[50px] rounded-lg hover:bg-slate-100 transition flex items-center justify-center';
+      }
+    });
+    renderAlertsList();
+  }
+
+  function toggleServicesDropdown() {
+    document.getElementById('services-filter-menu').classList.toggle('hidden');
+  }
+
+  function filterByService(service) {
+    currentServiceFilter = service;
+    document.getElementById('services-filter-label').textContent = service === 'All' ? 'All Plant Lines & Services' : service;
+    document.getElementById('services-filter-menu').classList.add('hidden');
+    renderAlertsList();
+  }
+
+  function filterBySeverity(sev) {
+    currentSeverityFilter = sev;
+    renderAlertsList();
+    Dryftq.toast(`Filtering by severity: ${sev}`, 'info');
+  }
+
+  function resetAlertFilters() {
+    currentAlertFilter = 'All';
+    currentServiceFilter = 'All';
+    currentSeverityFilter = null;
+    document.getElementById('services-filter-label').textContent = 'All Plant Lines & Services';
+    filterByAlertStatus('All');
+  }
+
+  function openAlertModal(alertId) {
+    const state = Dryftq.getState();
+    const alert = state.alerts.find(a => a.id === alertId);
+    if (!alert) return;
+
+    activeAlert = alert;
+    document.getElementById('modal-alert-title').textContent = alert.title;
+    document.getElementById('modal-alert-machine').textContent = `Machine: ${alert.machineName}`;
+    document.getElementById('modal-alert-reading').textContent = alert.reading;
+    document.getElementById('modal-alert-threshold').textContent = alert.threshold;
+    document.getElementById('modal-alert-timestamp').textContent = `${alert.time} · ${alert.date}`;
+    document.getElementById('modal-alert-desc').textContent = alert.description;
+
+    const sevBadge = document.getElementById('modal-alert-severity-badge');
+    sevBadge.textContent = alert.severity;
+    if (alert.severity === 'Critical') {
+      sevBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-700';
+    } else if (alert.severity === 'Warning') {
+      sevBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800';
+    } else {
+      sevBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800';
+    }
+
+    const btnAck = document.getElementById('modal-btn-ack');
+    if (alert.status === 'Active') {
+      btnAck.style.display = 'inline-block';
+      btnAck.textContent = 'Acknowledge Alert';
+    } else {
+      btnAck.style.display = 'none';
+    }
+
+    document.getElementById('alert-details-modal').classList.add('open');
+  }
+
+  function closeAlertModal() {
+    document.getElementById('alert-details-modal').classList.remove('open');
+  }
+
+  function handleAcknowledgeAlert() {
+    if (!activeAlert) return;
+    Dryftq.acknowledgeAlert(activeAlert.id);
+    closeAlertModal();
+    renderAlertsList();
+  }
+
+  function handleResolveAlert() {
+    if (!activeAlert) return;
+    Dryftq.resolveAlert(activeAlert.id);
+    closeAlertModal();
+    renderAlertsList();
+  }
+
+  function resolveAlertDirectly() {
+    handleResolveAlert();
+  }
+
+  function openMaintenanceFromAlert() {
+    if (!activeAlert) return;
+    closeAlertModal();
+
+    document.getElementById('wo-linked-alert-id').textContent = activeAlert.id;
+    document.getElementById('wo-title').value = `Inspection: ${activeAlert.title}`;
+    document.getElementById('wo-machine').value = activeAlert.machineId;
+    document.getElementById('wo-priority').value = activeAlert.severity === 'Critical' ? 'High' : 'Medium';
+    document.getElementById('wo-notes').value = `Triggered by ${activeAlert.id}: ${activeAlert.details}. ${activeAlert.description}`;
+
+    document.getElementById('alert-maint-order-modal').classList.add('open');
+  }
+
+  function closeMaintenanceOrderModal() {
+    document.getElementById('alert-maint-order-modal').classList.remove('open');
+  }
+
+  function handleCreateWorkOrder(e) {
+    e.preventDefault();
+    const taskTitle = document.getElementById('wo-title').value;
+    const mach = document.getElementById('wo-machine').value;
+    const prio = document.getElementById('wo-priority').value;
+    const tech = document.getElementById('wo-tech').value;
+    const due = document.getElementById('wo-due').value;
+    const notes = document.getElementById('wo-notes').value;
+
+    Dryftq.createMaintenanceTask({
+      task: taskTitle,
+      machine: mach,
+      type: 'Corrective',
+      priority: prio,
+      technician: tech,
+      dueDate: due,
+      notes: notes,
+      linkedAlertId: activeAlert ? activeAlert.id : null
+    });
+
+    closeMaintenanceOrderModal();
+    renderAlertsList();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    Dryftq.setupNavigation('alerts');
+    renderAlertsList();
+
+    // Query params check (e.g. ?alertId=ALT-101 or ?status=Active)
+    const params = Dryftq.getQueryParams();
+    if (params.status) {
+      filterByAlertStatus(params.status);
+    }
+    if (params.alertId) {
+      openAlertModal(params.alertId);
+    }
+
+    // User profile sync
+    const state = Dryftq.getState();
+    if (state.user) {
+      const uName = document.getElementById('user-name-alerts');
+      const uDept = document.getElementById('user-dept-alerts');
+      const uAv = document.getElementById('user-avatar-alerts');
+      if (uName) uName.textContent = state.user.name;
+      if (uDept) uDept.textContent = state.user.department;
+      if (uAv && state.user.avatar) uAv.src = state.user.avatar;
+    }
+
+    // Modal click outside to dismiss
+    document.getElementById('alert-details-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'alert-details-modal') closeAlertModal();
+    });
+    document.getElementById('alert-maint-order-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'alert-maint-order-modal') closeMaintenanceOrderModal();
+    });
+
+    // Close service menu on outside click
+    document.addEventListener('click', (e) => {
+      const container = document.getElementById('services-filter-container');
+      if (container && !container.contains(e.target)) {
+        document.getElementById('services-filter-menu').classList.add('hidden');
+      }
+    });
+
+    window.addEventListener('dryftq:state-change', () => {
+      renderAlertsList();
+    });
+  });
+</script>
+</body>
+</html>

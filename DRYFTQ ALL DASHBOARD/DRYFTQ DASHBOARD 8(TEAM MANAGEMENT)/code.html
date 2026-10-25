@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>DRYFTQ - Team Management</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Tailwind Configuration -->
+  <script>
+    // Keep the page script alive if the Tailwind CDN is unreachable (offline / blocked).
+    window.tailwind = window.tailwind || {};
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandDark: '#031B30',
+            brandOrange: '#FF3D0A',
+            mainBg: '#F5F9FC',
+            textDark: '#14283D',
+            textMuted: '#71849A',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Font (Inter) -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../shared/dryftq-common.css"/>
+  <style data-purpose="custom-styling">
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-mainBg text-textDark antialiased flex h-screen w-screen overflow-hidden">
+
+  <!-- BEGIN: LeftSidebar -->
+  <aside class="w-[310px] min-w-[310px] bg-brandDark text-white flex flex-col justify-between h-full select-none" data-purpose="sidebar" id="dryftq-sidebar-container">
+    <!-- Rendered via Dryftq.renderSidebar('team') -->
+  </aside>
+  <!-- END: LeftSidebar -->
+
+  <!-- BEGIN: MainContent -->
+  <main class="flex-1 flex flex-col h-full overflow-y-auto px-10 py-8 bg-mainBg" data-purpose="main-content">
+    <!-- BEGIN: TopBar -->
+    <header class="flex items-center justify-between pb-8" data-purpose="page-header">
+      <div>
+        <h1 class="text-3xl font-extrabold text-[#14283D] tracking-tight">Team Management</h1>
+        <p class="text-[17px] text-textMuted font-medium mt-1">Manage plant operations personnel, access tiers, and engineering roles</p>
+      </div>
+
+      <!-- Right Header Actions (Notifications & User Profile) -->
+      <div class="flex items-center gap-6">
+        <a href="/alerts" aria-label="Notifications" class="relative text-[#14283D] hover:text-slate-600 transition p-2 hover:bg-white rounded-xl">
+          <svg class="w-6 h-6 stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </a>
+
+        <!-- Notification with Alert Dot -->
+        <a href="/alerts" aria-label="Active Alerts" class="relative text-[#14283D] hover:text-slate-600 transition p-2 hover:bg-white rounded-xl">
+          <svg class="w-6 h-6 stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full ring-2 ring-mainBg"></span>
+        </a>
+
+        <!-- Current User Avatar and Info (bound to state.user) -->
+        <a href="/settings" class="flex items-center gap-3 pl-2 group cursor-pointer hover:opacity-90 transition">
+          <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm shrink-0 bg-slate-200">
+            <img id="header-avatar" alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUtPooY97zGkPhrK9OuZYT7QuTbmzaHbXRxAHlfAzjZ2wMzSoIegx_wU30J7dhVvCgd2z9nEKhwZu4lhLwsT5MXxx5LBq4gaEL7Q_IqjpBVX5_OLKtvbHFjm5QEqPYcSkrJ6nbGROQPW3w0x7jglFgj2d2_3WIs-_2-exHAAWBzfO9RbDLSBi3Hp9DIRw5uk4n8ukgtjFfwERjyhVPy43bsPp6zpX_xoEmT22kOPzxiHrx7zMTJe4XHg"/>
+          </div>
+          <div class="text-left leading-tight">
+            <div id="header-username" class="text-[14px] font-bold text-[#14283D] group-hover:text-brandOrange transition">Adiba Kamil</div>
+            <div id="header-dept" class="text-[12px] text-textMuted font-medium">Plant Operations</div>
+          </div>
+        </a>
+      </div>
+    </header>
+    <!-- END: TopBar -->
+
+    <!-- BEGIN: MetricCardsAndAction -->
+    <section class="grid grid-cols-12 gap-5 items-center mb-8" data-purpose="metrics-row">
+      <!-- Card: Total Members -->
+      <div class="col-span-12 sm:col-span-6 lg:col-span-2 bg-white rounded-2xl p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-slate-100 flex flex-col justify-center">
+        <span class="text-sm font-semibold text-textMuted mb-2">Total Members</span>
+        <span id="metric-total" class="text-4xl font-extrabold text-[#14283D] tracking-tight">0</span>
+      </div>
+      <!-- Card: Active Users -->
+      <div class="col-span-12 sm:col-span-6 lg:col-span-2 bg-white rounded-2xl p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-slate-100 flex flex-col justify-center">
+        <span class="text-sm font-semibold text-textMuted mb-2">Active Users</span>
+        <span id="metric-active" class="text-4xl font-extrabold text-[#14283D] tracking-tight">0</span>
+      </div>
+      <!-- Card: Admins -->
+      <div class="col-span-12 sm:col-span-6 lg:col-span-2 bg-white rounded-2xl p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-slate-100 flex flex-col justify-center">
+        <span class="text-sm font-semibold text-textMuted mb-2">Admins</span>
+        <span id="metric-admins" class="text-4xl font-extrabold text-[#14283D] tracking-tight">0</span>
+      </div>
+      <!-- Card: Viewers -->
+      <div class="col-span-12 sm:col-span-6 lg:col-span-2 bg-white rounded-2xl p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-slate-100 flex flex-col justify-center">
+        <span class="text-sm font-semibold text-textMuted mb-2">Viewers</span>
+        <span id="metric-viewers" class="text-4xl font-extrabold text-[#14283D] tracking-tight">0</span>
+      </div>
+      <!-- Button Container / Action -->
+      <div class="col-span-12 lg:col-span-4 flex justify-end">
+        <button onclick="openInviteModal()" class="inline-flex items-center gap-2 bg-[#FF3D0A] hover:bg-[#e03405] text-white px-7 py-3 rounded-xl font-bold text-sm tracking-wide shadow-md shadow-orange-500/20 transition-all cursor-pointer" type="button">
+          <svg class="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <line x1="12" x2="12" y1="5" y2="19"></line>
+            <line x1="5" x2="19" y1="12" y2="12"></line>
+          </svg>
+          <span>Invite Member</span>
+        </button>
+      </div>
+    </section>
+    <!-- END: MetricCardsAndAction -->
+
+    <!-- Filters & Search Toolbar -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+      <div class="flex items-center gap-2 flex-wrap" id="role-filter-container">
+        <button onclick="filterByRole('ALL')" data-role="ALL" class="role-filter-btn px-4 py-1.5 rounded-lg text-sm font-semibold bg-[#031B30] text-white transition">All Roles</button>
+        <button onclick="filterByRole('Admin')" data-role="Admin" class="role-filter-btn px-4 py-1.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-100 transition">Admins</button>
+        <button onclick="filterByRole('Operator')" data-role="Operator" class="role-filter-btn px-4 py-1.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-100 transition">Operators</button>
+        <button onclick="filterByRole('Analyst')" data-role="Analyst" class="role-filter-btn px-4 py-1.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-100 transition">Analysts</button>
+        <button onclick="filterByRole('Maintenance')" data-role="Maintenance" class="role-filter-btn px-4 py-1.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-100 transition">Maintenance</button>
+        <button onclick="filterByRole('Viewer')" data-role="Viewer" class="role-filter-btn px-4 py-1.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-100 transition">Viewers</button>
+      </div>
+      
+      <div class="relative w-full md:w-72">
+        <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" x2="16.65" y1="21" y2="16.65"></line>
+        </svg>
+        <input type="text" id="member-search" oninput="handleSearch(this.value)" placeholder="Search by name, email, department..." class="w-full pl-10 pr-4 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brandOrange/30 focus:border-brandOrange" />
+      </div>
+    </div>
+
+    <!-- BEGIN: TeamTable -->
+    <section class="flex-1 bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_2px_8px_rgba(0,0,0,0.02)]" data-purpose="members-table-container">
+      <div class="w-full overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="text-textMuted text-[13px] font-semibold border-b border-slate-100">
+              <th class="pb-4 font-semibold" scope="col">
+                <div class="flex items-center gap-1 cursor-pointer hover:text-slate-700">
+                  <span>Member</span>
+                </div>
+              </th>
+              <th class="pb-4 font-semibold pl-2" scope="col">Role</th>
+              <th class="pb-4 font-semibold" scope="col">Department</th>
+              <th class="pb-4 font-semibold" scope="col">Status</th>
+              <th class="pb-4 font-semibold" scope="col">Last Active</th>
+              <th class="pb-4 font-semibold text-right pr-4" scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="team-table-body" class="divide-y divide-slate-100 text-[14px]">
+            <!-- Rendered dynamically -->
+          </tbody>
+        </table>
+      </div>
+      <div id="empty-team-state" class="hidden py-12 text-center">
+        <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </div>
+        <h4 class="text-sm font-bold text-slate-700">No team members match criteria</h4>
+        <p class="text-xs text-slate-400 mt-1">Try adjusting your role filter or search term</p>
+      </div>
+    </section>
+    <!-- END: TeamTable -->
+  </main>
+  <!-- END: MainContent -->
+
+  <!-- Invite Member Modal -->
+  <div id="invite-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
+        <div>
+          <h3 class="text-xl font-bold text-[#14283D]">Invite Team Member</h3>
+          <p class="text-xs text-slate-500 mt-0.5">Add an engineer or supervisor to the DRYFTQ plant workspace</p>
+        </div>
+        <button onclick="closeInviteModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+        </button>
+      </div>
+
+      <form id="invite-form" onsubmit="handleInviteSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Full Name</label>
+          <input type="text" id="invite-name" required placeholder="e.g. Elena Rostova" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brandOrange/30 focus:border-brandOrange" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Work Email</label>
+          <input type="email" id="invite-email" required placeholder="elena@dryftq.internal" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brandOrange/30 focus:border-brandOrange" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Role</label>
+            <select id="invite-role" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brandOrange/30 focus:border-brandOrange">
+              <option value="Operator">Operator</option>
+              <option value="Maintenance">Maintenance</option>
+              <option value="Analyst">Analyst</option>
+              <option value="Admin">Admin</option>
+              <option value="Viewer">Viewer</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Department</label>
+            <select id="invite-dept" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brandOrange/30 focus:border-brandOrange">
+              <option value="Plant Operations">Plant Operations</option>
+              <option value="Production">Production</option>
+              <option value="Maintenance">Maintenance</option>
+              <option value="Analytics">Analytics</option>
+              <option value="Quality Control">Quality Control</option>
+              <option value="Management">Management</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="p-3 bg-slate-50 rounded-xl text-xs text-slate-500 flex items-start gap-2.5">
+          <svg class="w-4 h-4 text-brandOrange shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          <span>An access invite key will be automatically provisioned for internal SSO login. Permissions take effect immediately.</span>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-3">
+          <button type="button" onclick="closeInviteModal()" class="px-5 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition">Cancel</button>
+          <button type="submit" class="px-6 py-2.5 text-sm font-bold bg-[#FF3D0A] hover:bg-[#e03405] text-white rounded-xl shadow-md shadow-orange-500/20 transition">Send Invitation</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Role Modal -->
+  <div id="edit-role-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+        <h3 class="text-lg font-bold text-[#14283D]">Update Member Role</h3>
+        <button onclick="closeEditRoleModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+        </button>
+      </div>
+
+      <div class="mb-4">
+        <p class="text-xs text-slate-500">Member:</p>
+        <p id="edit-role-member-name" class="text-sm font-bold text-[#14283D] mt-0.5">-</p>
+      </div>
+
+      <div class="mb-5">
+        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Assigned Role</label>
+        <select id="edit-role-select" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brandOrange/30 focus:border-brandOrange">
+          <option value="Admin">Admin (Full Control)</option>
+          <option value="Operator">Operator (Floor Controls)</option>
+          <option value="Analyst">Analyst (Data & Telemetry)</option>
+          <option value="Maintenance">Maintenance (Work Orders)</option>
+          <option value="Viewer">Viewer (Read Only)</option>
+        </select>
+      </div>
+
+      <div class="flex items-center justify-end gap-3">
+        <button type="button" onclick="closeEditRoleModal()" class="px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition">Cancel</button>
+        <button type="button" onclick="saveRoleChange()" class="px-5 py-2 text-sm font-bold bg-[#FF3D0A] hover:bg-[#e03405] text-white rounded-xl shadow-sm transition">Save Role</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Remove Confirmation Modal -->
+  <div id="remove-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center">
+      <div class="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+      </div>
+      <h3 class="text-lg font-bold text-[#14283D]">Remove Team Member?</h3>
+      <p class="text-xs text-slate-500 mt-2 mb-6">Are you sure you want to revoke access for <span id="remove-member-name" class="font-bold text-slate-700">-</span>? This will immediately terminate active sessions.</p>
+      <div class="flex items-center justify-center gap-3">
+        <button onclick="closeRemoveModal()" class="px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition">Cancel</button>
+        <button onclick="confirmRemoveMember()" class="px-5 py-2 text-sm font-bold bg-red-600 hover:bg-red-700 text-white rounded-xl shadow-sm transition">Yes, Remove</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shared State and App Script -->
+  <script src="../shared/dryftq-state.js"></script>
+  <script>
+    let currentRoleFilter = 'ALL';
+    let searchQuery = '';
+    let selectedMemberId = null;
+
+    function initTeamPage() {
+      Dryftq.renderSidebar('team');
+
+      const state = Dryftq.getState();
+      // Bind User header
+      if (state.user) {
+        const nameEl = document.getElementById('header-username');
+        const deptEl = document.getElementById('header-dept');
+        const avatarEl = document.getElementById('header-avatar');
+        if (nameEl) nameEl.textContent = state.user.name;
+        if (deptEl) deptEl.textContent = state.user.department;
+        if (avatarEl && state.user.avatar) avatarEl.src = state.user.avatar;
+      }
+
+      renderTeamMetrics();
+      renderTeamTable();
+
+      window.addEventListener('dryftq:state-change', () => {
+        renderTeamMetrics();
+        renderTeamTable();
+      });
+    }
+
+    function renderTeamMetrics() {
+      const state = Dryftq.getState();
+      const team = state.team || [];
+
+      const total = team.length;
+      const active = team.filter(m => m.status === 'Active').length;
+      const admins = team.filter(m => m.role === 'Admin').length;
+      const viewers = team.filter(m => m.role === 'Viewer').length;
+
+      document.getElementById('metric-total').textContent = total;
+      document.getElementById('metric-active').textContent = active;
+      document.getElementById('metric-admins').textContent = admins;
+      document.getElementById('metric-viewers').textContent = viewers;
+    }
+
+    function filterByRole(role) {
+      currentRoleFilter = role;
+      document.querySelectorAll('.role-filter-btn').forEach(btn => {
+        if (btn.dataset.role === role) {
+          btn.className = 'role-filter-btn px-4 py-1.5 rounded-lg text-sm font-semibold bg-[#031B30] text-white transition';
+        } else {
+          btn.className = 'role-filter-btn px-4 py-1.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-100 transition';
+        }
+      });
+      renderTeamTable();
+    }
+
+    function handleSearch(val) {
+      searchQuery = (val || '').toLowerCase().trim();
+      renderTeamTable();
+    }
+
+    function getRoleBadge(role) {
+      switch (role) {
+        case 'Admin':
+          return `<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#E8F1FD] text-[#2563EB]">Admin</span>`;
+        case 'Operator':
+          return `<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#FFEDD5] text-[#EA580C]">Operator</span>`;
+        case 'Analyst':
+          return `<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#F3E8FF] text-[#9333EA]">Analyst</span>`;
+        case 'Maintenance':
+          return `<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#ECFDF5] text-[#059669]">Maintenance</span>`;
+        case 'Viewer':
+        default:
+          return `<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#FEF9C3] text-[#CA8A04]">Viewer</span>`;
+      }
+    }
+
+    function renderTeamTable() {
+      const state = Dryftq.getState();
+      const team = state.team || [];
+      const tbody = document.getElementById('team-table-body');
+      const emptyState = document.getElementById('empty-team-state');
+
+      let filtered = team.filter(member => {
+        const matchesRole = (currentRoleFilter === 'ALL' || member.role === currentRoleFilter);
+        const matchesSearch = !searchQuery || 
+          member.name.toLowerCase().includes(searchQuery) ||
+          (member.email && member.email.toLowerCase().includes(searchQuery)) ||
+          (member.department && member.department.toLowerCase().includes(searchQuery));
+        return matchesRole && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      tbody.innerHTML = filtered.map(member => {
+        const statusBadge = member.status === 'Active'
+          ? `<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#DCFCE7] text-[#16A34A]">Active</span>`
+          : `<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#FEE2E2] text-[#DC2626]">Inactive</span>`;
+
+        return `
+          <tr class="hover:bg-slate-50/70 transition border-b border-slate-100">
+            <td class="py-4 pr-4">
+              <div class="flex items-center gap-3.5">
+                <div class="w-10 h-10 rounded-full overflow-hidden bg-slate-200 shrink-0 border border-slate-200">
+                  <img alt="${Dryftq.escapeHtml(member.name)}" class="w-full h-full object-cover" src="${Dryftq.escapeHtml(member.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80')}"/>
+                </div>
+                <div>
+                  <span class="font-bold text-[#14283D] text-[15px] block">${Dryftq.escapeHtml(member.name)}</span>
+                  <span class="text-xs text-textMuted">${Dryftq.escapeHtml(member.email || (member.name.toLowerCase().replace(/\s+/g, '.') + '@dryftq.internal'))}</span>
+                </div>
+              </div>
+            </td>
+            <td class="py-4 pl-2">
+              ${getRoleBadge(member.role)}
+            </td>
+            <td class="py-4 text-[#71849A] font-medium text-[14px]">
+              ${Dryftq.escapeHtml(member.department || 'Plant Operations')}
+            </td>
+            <td class="py-4">
+              ${statusBadge}
+            </td>
+            <td class="py-4 text-[#71849A] font-medium text-[14px]">
+              ${Dryftq.escapeHtml(member.lastActive || 'Recently')}
+            </td>
+            <td class="py-4 text-right pr-4">
+              <div class="inline-flex items-center gap-2">
+                <button onclick="openEditRoleModal('${Dryftq.escapeHtml(member.id)}')" class="px-3 py-1.5 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition" title="Change Role">
+                  Edit Role
+                </button>
+                <button onclick="openRemoveModal('${Dryftq.escapeHtml(member.id)}')" class="p-1.5 text-slate-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition" title="Remove Member">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Invite Modal Logic
+    function openInviteModal() {
+      document.getElementById('invite-modal').classList.remove('hidden');
+      document.getElementById('invite-modal').classList.add('flex');
+    }
+
+    function closeInviteModal() {
+      document.getElementById('invite-modal').classList.add('hidden');
+      document.getElementById('invite-modal').classList.remove('flex');
+      document.getElementById('invite-form').reset();
+    }
+
+    function handleInviteSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('invite-name').value.trim();
+      const email = document.getElementById('invite-email').value.trim();
+      const role = document.getElementById('invite-role').value;
+      const dept = document.getElementById('invite-dept').value;
+
+      if (!name || !email) {
+        Dryftq.showToast('Please provide a valid name and email address', 'error');
+        return;
+      }
+
+      const avatarList = [
+        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80',
+        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80',
+        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80',
+        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80'
+      ];
+      const randomAvatar = avatarList[Math.floor(Math.random() * avatarList.length)];
+
+      Dryftq.addTeamMember({
+        name: name,
+        email: email,
+        role: role,
+        department: dept,
+        status: 'Active',
+        lastActive: 'Just now',
+        avatar: randomAvatar
+      });
+
+      closeInviteModal();
+      Dryftq.showToast(`Team invitation sent to ${name} (${role})`, 'success');
+    }
+
+    // Role Edit Logic
+    function openEditRoleModal(id) {
+      selectedMemberId = id;
+      const state = Dryftq.getState();
+      const member = (state.team || []).find(m => m.id === id);
+      if (!member) return;
+
+      document.getElementById('edit-role-member-name').textContent = `${member.name} (${member.department})`;
+      document.getElementById('edit-role-select').value = member.role;
+      document.getElementById('edit-role-modal').classList.remove('hidden');
+      document.getElementById('edit-role-modal').classList.add('flex');
+    }
+
+    function closeEditRoleModal() {
+      document.getElementById('edit-role-modal').classList.add('hidden');
+      document.getElementById('edit-role-modal').classList.remove('flex');
+      selectedMemberId = null;
+    }
+
+    function saveRoleChange() {
+      if (!selectedMemberId) return;
+      const newRole = document.getElementById('edit-role-select').value;
+      Dryftq.updateTeamMember(selectedMemberId, { role: newRole });
+      closeEditRoleModal();
+      Dryftq.showToast(`Updated member role to ${newRole}`, 'success');
+    }
+
+    // Remove Modal Logic
+    function openRemoveModal(id) {
+      selectedMemberId = id;
+      const state = Dryftq.getState();
+      const member = (state.team || []).find(m => m.id === id);
+      if (!member) return;
+
+      document.getElementById('remove-member-name').textContent = member.name;
+      document.getElementById('remove-modal').classList.remove('hidden');
+      document.getElementById('remove-modal').classList.add('flex');
+    }
+
+    function closeRemoveModal() {
+      document.getElementById('remove-modal').classList.add('hidden');
+      document.getElementById('remove-modal').classList.remove('flex');
+      selectedMemberId = null;
+    }
+
+    function confirmRemoveMember() {
+      if (!selectedMemberId) return;
+      Dryftq.removeTeamMember(selectedMemberId);
+      closeRemoveModal();
+      Dryftq.showToast('Member removed from team', 'info');
+    }
+
+    document.addEventListener('DOMContentLoaded', initTeamPage);
+  </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "dryftq-plant-operations-dashboard",
+  "version": "2.0.0",
+  "description": "DRYFTQ Industrial OS - AI-Powered Plant Operations & Telemetry Dashboard Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node static_audit.js && node test_state_logic.js && node test_dom_simulation.js && node test_regressions.js && node test_all_modules.js",
+    "verify": "node verify_all.js",
+    "test:all": "npm test && node verify_all.js"
+  },
+  "keywords": [
+    "industrial-iot",
+    "telemetry",
+    "dashboard",
+    "dryftq",
+    "plant-operations"
+  ],
+  "author": "DRYFTQ Platform Engineering",
+  "license": "UNLICENSED"
+}

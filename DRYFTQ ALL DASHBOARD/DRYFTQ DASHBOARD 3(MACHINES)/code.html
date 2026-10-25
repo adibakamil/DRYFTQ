@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>DRYFTQ - Machines Dashboard</title>
+  <!-- Tailwind CSS CDN with forms and container-queries -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <!-- DRYFTQ Shared System -->
+  <link rel="stylesheet" href="../shared/dryftq-common.css"/>
+  <style data-purpose="base-styling">
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+</head>
+<body class="bg-[#F8FAFC] text-slate-800 h-screen w-screen overflow-hidden flex">
+<!-- BEGIN: LeftSidebar -->
+<aside class="w-[260px] min-w-[260px] bg-[#03192B] flex flex-col justify-between select-none h-full z-20 text-slate-300" data-purpose="sidebar-navigation">
+  <!-- Top Nav Section -->
+  <div class="flex flex-col">
+    <!-- Logo Bar -->
+    <div class="h-20 px-6 flex items-center justify-between border-b border-[#082239]">
+      <a href="/dashboard" class="text-white text-2xl font-black tracking-wider flex items-center hover:text-orange-400 transition-colors">
+        DRYFTQ
+      </a>
+      <button aria-label="Close navigation" class="text-slate-400 hover:text-white transition-colors p-1" title="Close navigation">
+        <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </button>
+    </div>
+    <!-- Navigation Links: All 9 Modules -->
+    <nav class="mt-4 px-3 space-y-1">
+      <!-- 1. Dashboard -->
+      <a class="flex items-center gap-3.5 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors group" href="/dashboard">
+        <svg class="w-5 h-5 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+        </svg>
+        <span>Dashboard</span>
+      </a>
+      <!-- 2. Analytics -->
+      <a class="flex items-center gap-3.5 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors group" href="/analytics">
+        <svg class="w-5 h-5 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+        </svg>
+        <span>Analytics</span>
+      </a>
+      <!-- 3. Machines (Active Page) -->
+      <a class="flex items-center gap-3.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-white bg-[#FF4A1C] shadow-md transition-colors" href="/machines">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+        <span>Machines</span>
+      </a>
+      <!-- 4. Alerts with live badge -->
+      <a class="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors group" href="/alerts">
+        <div class="flex items-center gap-3.5">
+          <svg class="w-5 h-5 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+          </svg>
+          <span>Alerts</span>
+        </div>
+        <span id="nav-alert-badge" class="inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-[#FF4A1C] rounded-full">3</span>
+      </a>
+      <!-- 5. Reports -->
+      <a class="flex items-center gap-3.5 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors group" href="/reports">
+        <svg class="w-5 h-5 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+        </svg>
+        <span>Reports</span>
+      </a>
+      <!-- 6. Maintenance -->
+      <a class="flex items-center gap-3.5 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors group" href="/maintenance">
+        <svg class="w-5 h-5 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+          <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+        </svg>
+        <span>Maintenance</span>
+      </a>
+      <!-- 7. Integrations -->
+      <a class="flex items-center gap-3.5 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors group" href="/integrations">
+        <svg class="w-5 h-5 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+        </svg>
+        <span>Integrations</span>
+      </a>
+      <!-- 8. Team Management -->
+      <a class="flex items-center gap-3.5 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors group" href="/team">
+        <svg class="w-5 h-5 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+        </svg>
+        <span>Team Management</span>
+      </a>
+      <!-- 9. Settings -->
+      <a class="flex items-center gap-3.5 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors group" href="/settings">
+        <svg class="w-5 h-5 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+        </svg>
+        <span>Settings</span>
+      </a>
+    </nav>
+  </div>
+  <!-- Bottom Info & Operational Status -->
+  <div class="px-5 pb-6 space-y-5" data-purpose="sidebar-footer">
+    <div class="flex items-start gap-3">
+      <div class="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center shrink-0 mt-0.5">
+        <div class="w-2.5 h-2.5 bg-emerald-400 rounded-sm rotate-45"></div>
+      </div>
+      <p class="text-xs text-slate-300 leading-snug">
+        AI-powered insights for<br/><span class="text-slate-400">a smarter tomorrow.</span>
+      </p>
+    </div>
+    <div class="border-t border-[#092842] pt-4 space-y-2.5">
+      <div class="flex items-center gap-2.5 text-xs text-slate-400 font-medium">
+        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+        <span>System Status</span>
+      </div>
+      <div class="flex items-center gap-2.5 text-xs text-white font-medium pl-0.5">
+        <span class="relative flex h-2.5 w-2.5">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+        </span>
+        <span>All Systems Operational</span>
+      </div>
+    </div>
+  </div>
+</aside>
+<!-- END: LeftSidebar -->
+
+<!-- BEGIN: MainContent -->
+<main class="flex-1 flex flex-col h-full overflow-hidden bg-[#F8FAFC]" data-purpose="main-layout">
+  <!-- Top Header Bar -->
+  <header class="px-8 pt-7 pb-4 flex items-center justify-between" data-purpose="dashboard-header">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Machines</h1>
+      <p class="text-sm text-slate-500 mt-0.5 font-normal">Monitor and manage your plant machines</p>
+    </div>
+    <!-- User & Notifications Controls -->
+    <div class="flex items-center gap-5">
+      <button aria-label="Notifications" onclick="Dryftq.openNotificationsDrawer()" class="text-slate-600 hover:text-slate-900 transition-colors p-1" title="View Notifications">
+        <svg class="w-5 h-5 stroke-[2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </button>
+      <button aria-label="Urgent notifications" onclick="Dryftq.navigateTo('alerts')" class="relative text-slate-600 hover:text-slate-900 transition-colors p-1" title="Active Alerts">
+        <svg class="w-5 h-5 stroke-[2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full ring-2 ring-[#F8FAFC]"></span>
+      </button>
+      <div onclick="Dryftq.navigateTo('settings')" class="flex items-center gap-3 pl-2 cursor-pointer hover:opacity-90 transition-opacity" title="Settings & Profile">
+        <img id="user-avatar-machines" alt="User avatar" class="w-10 h-10 rounded-full object-cover shadow-sm ring-1 ring-slate-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8mbvFrtqVIi5B977ohsSN9BALNKLFg6iFLgkS_524_uq1HUphvOwfp6dAKHhk_hg9Qim3yyDqZQ5pjrYqpA_VmJpF2NZEeCy1I-LTurBRclnrBd7Weq2RgB4Rk94x2Xx2HZwEYdHkkz7QoTesfepvp5rToft7Z_20vdl7XceoM7eEYVMZ18IipDcugNM9et727BLjq6EpPK6aJxOjWpvEciC1DYsFlGKtzpLbmI481kpWsSphCXvgtA"/>
+        <div class="text-left">
+          <div id="user-name-machines" class="text-sm font-semibold text-slate-900 leading-tight">Aditya Kamil</div>
+          <div id="user-dept-machines" class="text-xs text-slate-500 font-medium">Plant Operations</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Scrollable Workspace Container -->
+  <div class="flex-1 overflow-y-auto px-8 pb-8 space-y-5">
+    <!-- Search and Add Machine Row -->
+    <div class="flex items-center justify-between gap-4 mt-2" data-purpose="action-bar">
+      <!-- Search Input Bar -->
+      <div class="relative w-full max-w-xl">
+        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"></path>
+          </svg>
+        </div>
+        <input class="w-full pl-10 pr-4 py-2 text-sm bg-white border border-slate-200 rounded-xl placeholder-slate-400 text-slate-700 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-[#FF4A1C] shadow-xs transition-colors" id="machine-search" placeholder="Search machines by name, ID or line..." type="text"/>
+      </div>
+      <!-- Add New Machine Action Button -->
+      <button onclick="openAddMachineModal()" class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#FF4A1C] hover:bg-[#e63f13] text-white text-sm font-semibold rounded-xl shadow-sm transition-colors whitespace-nowrap">
+        <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span>Add New Machine</span>
+      </button>
+    </div>
+
+    <!-- Status Filter Tabs Pill List -->
+    <div class="flex items-center gap-2 pt-1" id="machine-status-filters" data-purpose="status-filters">
+      <button onclick="filterByStatus('All')" data-status="All" class="px-4 py-1.5 rounded-lg text-sm font-semibold bg-[#FF4A1C] text-white shadow-xs">
+        All (<span id="count-all">10</span>)
+      </button>
+      <button onclick="filterByStatus('Running')" data-status="Running" class="px-4 py-1.5 rounded-lg text-sm font-medium bg-white/70 hover:bg-white text-slate-600 hover:text-slate-900 border border-slate-200/60 shadow-2xs transition-colors">
+        Running (<span id="count-running">8</span>)
+      </button>
+      <button onclick="filterByStatus('Idle')" data-status="Idle" class="px-4 py-1.5 rounded-lg text-sm font-medium bg-white/70 hover:bg-white text-slate-600 hover:text-slate-900 border border-slate-200/60 shadow-2xs transition-colors">
+        Idle (<span id="count-idle">1</span>)
+      </button>
+      <button onclick="filterByStatus('Error')" data-status="Error" class="px-4 py-1.5 rounded-lg text-sm font-medium bg-white/70 hover:bg-white text-slate-600 hover:text-slate-900 border border-slate-200/60 shadow-2xs transition-colors">
+        Error (<span id="count-error">1</span>)
+      </button>
+      <button onclick="filterByStatus('Maintenance')" data-status="Maintenance" class="px-4 py-1.5 rounded-lg text-sm font-medium bg-white/70 hover:bg-white text-slate-600 hover:text-slate-900 border border-slate-200/60 shadow-2xs transition-colors">
+        Maintenance (<span id="count-maintenance">1</span>)
+      </button>
+    </div>
+
+    <!-- BEGIN: MachinesTable -->
+    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden" data-purpose="machines-data-table">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse data-table">
+          <thead>
+            <tr class="border-b border-slate-100 text-slate-500 font-semibold text-xs tracking-wide">
+              <th onclick="sortMachines('id')" class="py-4 px-6 font-semibold cursor-pointer hover:text-slate-800 select-none">
+                <div class="flex items-center gap-1">Machine <span id="sort-icon-id">↕</span></div>
+              </th>
+              <th onclick="sortMachines('status')" class="py-4 px-6 font-semibold cursor-pointer hover:text-slate-800 select-none">
+                <div class="flex items-center gap-1">Status <span id="sort-icon-status">↕</span></div>
+              </th>
+              <th onclick="sortMachines('load')" class="py-4 px-6 font-semibold cursor-pointer hover:text-slate-800 select-none">
+                <div class="flex items-center gap-1">Load <span id="sort-icon-load">↕</span></div>
+              </th>
+              <th onclick="sortMachines('temp')" class="py-4 px-6 font-semibold cursor-pointer hover:text-slate-800 select-none">
+                <div class="flex items-center gap-1">Temperature <span id="sort-icon-temp">↕</span></div>
+              </th>
+              <th onclick="sortMachines('vibration')" class="py-4 px-6 font-semibold cursor-pointer hover:text-slate-800 select-none">
+                <div class="flex items-center gap-1">Vibration <span id="sort-icon-vibration">↕</span></div>
+              </th>
+              <th class="py-4 px-6 font-semibold">Power</th>
+              <th class="py-4 px-6 font-semibold">Last Maintenance</th>
+            </tr>
+          </thead>
+          <tbody id="machines-table-body" class="divide-y divide-slate-100/90 text-sm">
+            <!-- Dynamically Rendered -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- END: MachinesTable -->
+  </div>
+</main>
+<!-- END: MainContent -->
+
+<!-- Machine Details Drawer / Modal -->
+<div id="machine-details-modal" class="dryftq-modal-backdrop">
+  <div class="dryftq-modal-content w-full max-w-xl p-7 bg-white rounded-2xl shadow-2xl space-y-6">
+    <div class="flex items-start justify-between border-b border-slate-100 pb-4">
+      <div>
+        <div class="flex items-center gap-3">
+          <h2 id="modal-machine-id" class="text-2xl font-black text-slate-900 tracking-tight">CNC-01</h2>
+          <span id="modal-machine-status-badge" class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600">Running</span>
+        </div>
+        <p id="modal-machine-sub" class="text-xs text-slate-500 mt-1">Line 1 · Milling Center · Health Score: 92%</p>
+      </div>
+      <button onclick="closeMachineModal()" class="text-slate-400 hover:text-slate-700 p-1 rounded-lg">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round"></path></svg>
+      </button>
+    </div>
+
+    <!-- Telemetry Cards 2x2 -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+        <span class="text-[11px] font-semibold text-slate-400 block">Current Load</span>
+        <span id="modal-load" class="text-lg font-bold text-slate-800">78%</span>
+      </div>
+      <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+        <span class="text-[11px] font-semibold text-slate-400 block">Temperature</span>
+        <span id="modal-temp" class="text-lg font-bold text-slate-800">68°C</span>
+      </div>
+      <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+        <span class="text-[11px] font-semibold text-slate-400 block">Vibration</span>
+        <span id="modal-vib" class="text-lg font-bold text-slate-800">1.2 mm/s</span>
+      </div>
+      <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+        <span class="text-[11px] font-semibold text-slate-400 block">Active Power</span>
+        <span id="modal-power" class="text-lg font-bold text-slate-800">2.4 kW</span>
+      </div>
+    </div>
+
+    <!-- Related Alerts for this machine -->
+    <div>
+      <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Related Sensor Alerts</h3>
+      <div id="modal-machine-alerts" class="space-y-2">
+        <p class="text-xs text-slate-500 italic">No active alarms for this unit.</p>
+      </div>
+    </div>
+
+    <!-- Contextual Actions -->
+    <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+      <button id="modal-analytics-btn" onclick="openMachineAnalytics()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-colors">
+        View Machine Analytics
+      </button>
+      <button id="modal-schedule-maint-btn" onclick="openScheduleMaintenanceForMachine()" class="px-5 py-2.5 bg-[#FF4A1C] hover:bg-[#e63f13] text-white text-xs font-bold rounded-xl shadow-sm transition-colors">
+        Schedule Maintenance
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Machine Modal -->
+<div id="add-machine-modal" class="dryftq-modal-backdrop">
+  <div class="dryftq-modal-content w-full max-w-lg p-7 bg-white rounded-2xl shadow-2xl space-y-5">
+    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+      <h3 class="text-lg font-bold text-slate-900">Register New Machine</h3>
+      <button onclick="closeAddMachineModal()" class="text-slate-400 hover:text-slate-700 p-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round"></path></svg>
+      </button>
+    </div>
+    <form id="add-machine-form" onsubmit="handleAddMachine(event)" class="space-y-4 text-xs">
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Machine ID *</label>
+          <input required id="new-mach-id" placeholder="e.g. CNC-03" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#FF4A1C]"/>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Line / Location *</label>
+          <select id="new-mach-line" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800">
+            <option value="Line 1">Line 1</option>
+            <option value="Line 2">Line 2</option>
+            <option value="Line 3">Line 3</option>
+            <option value="Line 4">Line 4</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Machine Name / Model *</label>
+        <input required id="new-mach-name" placeholder="e.g. 5-Axis Vertical Machining Center" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#FF4A1C]"/>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Operational Status</label>
+          <select id="new-mach-status" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800">
+            <option value="Running">Running</option>
+            <option value="Idle">Idle</option>
+            <option value="Maintenance">Maintenance</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Initial Load (%)</label>
+          <input id="new-mach-load" type="number" min="0" max="100" value="70" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800"/>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-3">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Temp (°C)</label>
+          <input id="new-mach-temp" type="number" value="65" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800"/>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Vibration (mm/s)</label>
+          <input id="new-mach-vib" type="number" step="0.1" value="1.2" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800"/>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Power (kW)</label>
+          <input id="new-mach-power" value="2.5 kW" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800"/>
+        </div>
+      </div>
+      <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+        <button type="button" onclick="closeAddMachineModal()" class="px-4 py-2 font-semibold text-slate-600 hover:bg-slate-100 rounded-lg">Cancel</button>
+        <button type="submit" class="px-5 py-2 font-bold bg-[#FF4A1C] hover:bg-[#e63f13] text-white rounded-lg shadow-sm">Save Machine</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="../shared/dryftq-state.js"></script>
+<script>
+  let currentStatusFilter = 'All';
+  let sortField = 'id';
+  let sortDirection = 'asc';
+  let activeSelectedMachineId = null;
+
+  function renderMachinesTable() {
+    const state = Dryftq.getState();
+    const tbody = document.getElementById('machines-table-body');
+    const searchVal = document.getElementById('machine-search').value.toLowerCase().trim();
+
+    // Update count badges
+    document.getElementById('count-all').textContent = state.machines.length;
+    document.getElementById('count-running').textContent = state.machines.filter(m => m.status === 'Running').length;
+    document.getElementById('count-idle').textContent = state.machines.filter(m => m.status === 'Idle').length;
+    document.getElementById('count-error').textContent = state.machines.filter(m => m.status === 'Error').length;
+    document.getElementById('count-maintenance').textContent = state.machines.filter(m => m.status === 'Maintenance').length;
+
+    let filtered = state.machines.filter(m => {
+      // Status filter
+      if (currentStatusFilter !== 'All' && m.status !== currentStatusFilter) return false;
+      // Search filter
+      if (searchVal) {
+        return m.id.toLowerCase().includes(searchVal) ||
+               m.name.toLowerCase().includes(searchVal) ||
+               m.line.toLowerCase().includes(searchVal) ||
+               m.status.toLowerCase().includes(searchVal);
+      }
+      return true;
+    });
+
+    // Sorting
+    filtered.sort((a, b) => {
+      let va = a[sortField];
+      let vb = b[sortField];
+      if (sortField === 'temp' || sortField === 'vibration') {
+        va = Number(va) || 0;
+        vb = Number(vb) || 0;
+      } else if (sortField === 'load') {
+        va = parseInt(va) || 0;
+        vb = parseInt(vb) || 0;
+      }
+      if (va < vb) return sortDirection === 'asc' ? -1 : 1;
+      if (va > vb) return sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" class="py-12 text-center text-slate-400">
+            <p class="font-semibold text-sm">No machines match the selected filter criteria.</p>
+            <button onclick="clearFilters()" class="mt-2 text-xs text-[#FF4A1C] hover:underline font-bold">Clear Filters</button>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(m => {
+      let statusBadge = '';
+      if (m.status === 'Running') {
+        statusBadge = '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600">Running</span>';
+      } else if (m.status === 'Idle') {
+        statusBadge = '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-600">Idle</span>';
+      } else if (m.status === 'Error') {
+        statusBadge = '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-500">Error</span>';
+      } else {
+        statusBadge = '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-orange-50 text-[#FF4A1C]">Maintenance</span>';
+      }
+
+      return `
+        <tr onclick="openMachineModal('${Dryftq.escapeHtml(m.id)}')" class="hover:bg-slate-50/80 transition-colors cursor-pointer group" title="Click to view machine details">
+          <td class="py-4 px-6 font-bold text-slate-900 flex items-center justify-between">
+            <span>${Dryftq.escapeHtml(m.id)}</span>
+            <span class="text-[11px] text-slate-400 font-normal group-hover:text-[#FF4A1C] transition-colors">${Dryftq.escapeHtml(m.line)} &rarr;</span>
+          </td>
+          <td class="py-4 px-6">${statusBadge}</td>
+          <td class="py-4 px-6 text-slate-600 font-medium">${Dryftq.escapeHtml(m.load)}</td>
+          <td class="py-4 px-6 text-slate-600 font-medium">${m.temp !== undefined && m.temp !== null && m.temp !== '' ? Dryftq.escapeHtml(m.temp) + '°C' : '-'}</td>
+          <td class="py-4 px-6 text-slate-600 font-medium">${m.vibration !== undefined && m.vibration !== null && m.vibration !== '' ? Dryftq.escapeHtml(m.vibration) + ' mm/s' : '-'}</td>
+          <td class="py-4 px-6 text-slate-600 font-medium">${Dryftq.escapeHtml(m.power)}</td>
+          <td class="py-4 px-6 text-slate-500 font-normal">${Dryftq.escapeHtml(m.lastMaint)}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function filterByStatus(status) {
+    currentStatusFilter = status;
+    const buttons = document.querySelectorAll('#machine-status-filters button');
+    buttons.forEach(btn => {
+      if (btn.getAttribute('data-status') === status) {
+        btn.className = 'px-4 py-1.5 rounded-lg text-sm font-semibold bg-[#FF4A1C] text-white shadow-xs';
+      } else {
+        btn.className = 'px-4 py-1.5 rounded-lg text-sm font-medium bg-white/70 hover:bg-white text-slate-600 hover:text-slate-900 border border-slate-200/60 shadow-2xs transition-colors';
+      }
+    });
+    renderMachinesTable();
+  }
+
+  function sortMachines(field) {
+    if (sortField === field) {
+      sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      sortField = field;
+      sortDirection = 'asc';
+    }
+    document.querySelectorAll('[id^="sort-icon-"]').forEach(el => el.textContent = '↕');
+    const activeIcon = document.getElementById(`sort-icon-${field}`);
+    if (activeIcon) activeIcon.textContent = sortDirection === 'asc' ? '↑' : '↓';
+    renderMachinesTable();
+  }
+
+  function clearFilters() {
+    document.getElementById('machine-search').value = '';
+    filterByStatus('All');
+  }
+
+  function openMachineModal(machineId) {
+    const state = Dryftq.getState();
+    const machine = state.machines.find(m => m.id === machineId);
+    if (!machine) return;
+
+    activeSelectedMachineId = machineId;
+    document.getElementById('modal-machine-id').textContent = machine.id;
+    document.getElementById('modal-machine-sub').textContent = `${machine.line} · ${machine.name} · Health: ${machine.health || 88}%`;
+
+    const statusBadge = document.getElementById('modal-machine-status-badge');
+    statusBadge.textContent = machine.status;
+    if (machine.status === 'Running') {
+      statusBadge.className = 'px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600';
+    } else if (machine.status === 'Error') {
+      statusBadge.className = 'px-3 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-600';
+    } else if (machine.status === 'Maintenance') {
+      statusBadge.className = 'px-3 py-1 rounded-full text-xs font-semibold bg-orange-50 text-orange-600';
+    } else {
+      statusBadge.className = 'px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-600';
+    }
+
+    document.getElementById('modal-load').textContent = machine.load || '70%';
+    document.getElementById('modal-temp').textContent = machine.temp ? `${machine.temp}°C` : 'Normal';
+    document.getElementById('modal-vib').textContent = machine.vibration ? `${machine.vibration} mm/s` : 'Normal';
+    document.getElementById('modal-power').textContent = machine.power || '1.8 kW';
+
+    // Alerts for this machine
+    const relatedAlerts = state.alerts.filter(a => a.machineId === machine.id && a.status === 'Active');
+    const alertsContainer = document.getElementById('modal-machine-alerts');
+    if (relatedAlerts.length > 0) {
+      alertsContainer.innerHTML = relatedAlerts.map(a => `
+        <div class="p-3 bg-red-50 border border-red-100 rounded-xl flex items-center justify-between">
+          <div>
+            <h4 class="text-xs font-bold text-red-800">${Dryftq.escapeHtml(a.title)} (${Dryftq.escapeHtml(a.severity)})</h4>
+            <p class="text-[11px] text-red-600 mt-0.5">${a.details}</p>
+          </div>
+          <button onclick="reviewAlertFromMachine('${a.id}')" class="px-3 py-1 bg-white text-red-700 font-bold text-xs rounded-lg border border-red-200 hover:bg-red-50">
+            Review &rarr;
+          </button>
+        </div>
+      `).join('');
+    } else {
+      alertsContainer.innerHTML = '<p class="text-xs text-slate-500 italic py-1">No active alarms currently registered on this machine.</p>';
+    }
+
+    document.getElementById('machine-details-modal').classList.add('open');
+  }
+
+  function closeMachineModal() {
+    document.getElementById('machine-details-modal').classList.remove('open');
+  }
+
+  function openMachineAnalytics() {
+    if (activeSelectedMachineId) {
+      Dryftq.navigateTo('analytics', { machine: activeSelectedMachineId });
+    }
+  }
+
+  function openScheduleMaintenanceForMachine() {
+    if (activeSelectedMachineId) {
+      Dryftq.navigateTo('maintenance', { newForMachine: activeSelectedMachineId });
+    }
+  }
+
+  function reviewAlertFromMachine(alertId) {
+    Dryftq.navigateTo('alerts', { alertId: alertId });
+  }
+
+  // Add Machine Modal
+  function openAddMachineModal() {
+    document.getElementById('add-machine-modal').classList.add('open');
+  }
+
+  function closeAddMachineModal() {
+    document.getElementById('add-machine-modal').classList.remove('open');
+  }
+
+  function handleAddMachine(e) {
+    e.preventDefault();
+    const id = document.getElementById('new-mach-id').value.trim();
+    const name = document.getElementById('new-mach-name').value.trim();
+    const line = document.getElementById('new-mach-line').value;
+    const status = document.getElementById('new-mach-status').value;
+    const load = document.getElementById('new-mach-load').value + '%';
+    const temp = document.getElementById('new-mach-temp').value;
+    const vib = document.getElementById('new-mach-vib').value;
+    const power = document.getElementById('new-mach-power').value;
+
+    const res = Dryftq.addMachine({
+      id: id,
+      name: name,
+      line: line,
+      status: status,
+      load: load,
+      temp: temp,
+      vibration: vib,
+      power: power
+    });
+
+    if (res) {
+      closeAddMachineModal();
+      document.getElementById('add-machine-form').reset();
+      renderMachinesTable();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    Dryftq.setupNavigation('machines');
+    renderMachinesTable();
+
+    // Query params check
+    const params = Dryftq.getQueryParams();
+    if (params.search) {
+      document.getElementById('machine-search').value = params.search;
+      renderMachinesTable();
+    }
+    if (params.machine) {
+      openMachineModal(params.machine);
+    }
+
+    // Search input listener
+    document.getElementById('machine-search').addEventListener('input', () => {
+      renderMachinesTable();
+    });
+
+    // Close modals on outside click
+    document.getElementById('machine-details-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'machine-details-modal') closeMachineModal();
+    });
+    document.getElementById('add-machine-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'add-machine-modal') closeAddMachineModal();
+    });
+
+    // Profile sync
+    const state = Dryftq.getState();
+    if (state.user) {
+      const uName = document.getElementById('user-name-machines');
+      const uDept = document.getElementById('user-dept-machines');
+      const uAv = document.getElementById('user-avatar-machines');
+      if (uName) uName.textContent = state.user.name;
+      if (uDept) uDept.textContent = state.user.department;
+      if (uAv && state.user.avatar) uAv.src = state.user.avatar;
+    }
+
+    window.addEventListener('dryftq:state-change', () => {
+      renderMachinesTable();
+    });
+  });
+</script>
+</body>
+</html>

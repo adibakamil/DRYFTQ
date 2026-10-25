@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>DRYFTQ - Integrations Platform</title>
+  <!-- Tailwind CSS CDN with forms and container-queries -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <!-- DRYFTQ Shared System -->
+  <link rel="stylesheet" href="../shared/dryftq-common.css"/>
+  <style data-purpose="base-styling">
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+</head>
+<body class="bg-[#F5F9FC] text-slate-800 antialiased min-h-screen flex selection:bg-blue-100">
+<!-- BEGIN: Sidebar -->
+<aside class="w-[280px] flex-shrink-0 bg-[#031D32] text-white flex flex-col min-h-screen select-none z-20">
+  <!-- Top brand row with logo & close button -->
+  <div class="px-7 pt-7 pb-6 flex items-center justify-between">
+    <a href="/dashboard" class="text-[26px] font-extrabold tracking-[0.06em] text-white leading-none hover:text-orange-400 transition-colors">
+      DRYFTQ
+    </a>
+    <button aria-label="Close sidebar" class="text-gray-300 hover:text-white transition-colors p-1" type="button">
+      <svg class="w-5 h-5 stroke-[2.2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </button>
+  </div>
+  <!-- Divider -->
+  <div class="h-px bg-white/10 w-full mb-3"></div>
+  <!-- Navigation links: All 9 Modules -->
+  <nav class="flex-1 px-4 space-y-0.5 overflow-y-auto" data-purpose="main-navigation">
+    <!-- 1. Dashboard -->
+    <a class="flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition-colors font-medium text-[15px]" href="/dashboard">
+      <svg class="w-5 h-5 stroke-[1.8] flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <span>Dashboard</span>
+    </a>
+    <!-- 2. Analytics -->
+    <a class="flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition-colors font-medium text-[15px]" href="/analytics">
+      <svg class="w-5 h-5 stroke-[1.8] flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <span>Analytics</span>
+    </a>
+    <!-- 3. Machines -->
+    <a class="flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition-colors font-medium text-[15px]" href="/machines">
+      <svg class="w-5 h-5 stroke-[1.8] flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <rect height="16" rx="2" stroke-linecap="round" stroke-linejoin="round" width="16" x="4" y="4"></rect>
+        <path d="M9 9h6v6H9zM9 1v3m6-3v3m-6 16v3m6-3v3M1 9h3m-3 6h3m16-6h3m-3 6h3" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <span>Machines</span>
+    </a>
+    <!-- 4. Alerts with badge -->
+    <a class="flex items-center justify-between px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition-colors font-medium text-[15px]" href="/alerts">
+      <div class="flex items-center gap-3.5">
+        <svg class="w-5 h-5 stroke-[1.8] flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span>Alerts</span>
+      </div>
+      <span id="nav-alert-badge" class="inline-flex items-center justify-center w-[22px] h-[22px] bg-[#FF5A1F] text-white text-[12px] font-bold rounded-full leading-none shadow-sm">
+        3
+      </span>
+    </a>
+    <!-- 5. Reports -->
+    <a class="flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition-colors font-medium text-[15px]" href="/reports">
+      <svg class="w-5 h-5 stroke-[1.8] flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <span>Reports</span>
+    </a>
+    <!-- 6. Maintenance -->
+    <a class="flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition-colors font-medium text-[15px]" href="/maintenance">
+      <svg class="w-5 h-5 stroke-[1.8] flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <span>Maintenance</span>
+    </a>
+    <!-- 7. Integrations (Active Context) -->
+    <a class="flex items-center gap-3.5 px-4 py-3 rounded-xl text-white bg-[#FF4D15] font-semibold text-[15px] shadow-md" href="/integrations">
+      <svg class="w-5 h-5 stroke-[2] flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <span>Integrations</span>
+    </a>
+    <!-- 8. Team Management -->
+    <a class="flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition-colors font-medium text-[15px]" href="/team">
+      <svg class="w-5 h-5 stroke-[1.8] flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+      </svg>
+      <span>Team Management</span>
+    </a>
+    <!-- 9. Settings -->
+    <a class="flex items-center gap-3.5 px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition-colors font-medium text-[15px]" href="/settings">
+      <svg class="w-5 h-5 stroke-[1.8] flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <span>Settings</span>
+    </a>
+  </nav>
+  <!-- Sidebar Bottom Section -->
+  <div class="px-6 pb-7 pt-4 space-y-6">
+    <div class="flex items-center gap-3.5 pt-2">
+      <div class="w-8 h-8 rounded-full bg-[#00E599]/20 flex items-center justify-center flex-shrink-0">
+        <span class="w-3.5 h-3.5 rounded-full bg-[#00E599] inline-block shadow-[0_0_12px_#00E599]"></span>
+      </div>
+      <p class="text-[13px] text-gray-300 leading-snug font-normal">
+        AI-powered insights for a smarter tomorrow.
+      </p>
+    </div>
+    <div class="space-y-3 pt-1">
+      <div class="flex items-center gap-3 text-gray-300 text-[13px] font-medium">
+        <svg class="w-4 h-4 text-emerald-400 stroke-[1.8]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span>System Status</span>
+      </div>
+      <div class="flex items-center gap-3 text-gray-400 text-[13px]">
+        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        <span class="tracking-tight">All Systems Operational</span>
+      </div>
+    </div>
+  </div>
+</aside>
+<!-- END: Sidebar -->
+
+<!-- BEGIN: MainContent -->
+<main class="flex-1 flex flex-col min-w-0 bg-[#F5F9FC] overflow-y-auto min-h-screen">
+  <!-- BEGIN: MainHeader -->
+  <header class="px-10 pt-8 pb-7 flex items-center justify-between" data-purpose="page-header">
+    <div>
+      <h1 class="text-[32px] font-bold text-[#14283D] tracking-tight leading-tight">
+        Integrations
+      </h1>
+      <p class="text-[15px] text-[#74869A] mt-1 font-normal">
+        Connect and stream industrial telemetry with your cloud and edge platforms
+      </p>
+    </div>
+    <!-- Right Profile & Notifications -->
+    <div class="flex items-center gap-6" data-purpose="user-profile-header">
+      <button aria-label="Notifications" onclick="Dryftq.openNotificationsDrawer()" class="text-[#74869A] hover:text-[#14283D] transition-colors" type="button" title="View Notifications">
+        <svg class="w-6 h-6 stroke-[1.8]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </button>
+      <button aria-label="Alert notifications" onclick="Dryftq.navigateTo('alerts')" class="relative text-[#74869A] hover:text-[#14283D] transition-colors" type="button" title="Active Alerts">
+        <svg class="w-6 h-6 stroke-[1.8]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span class="absolute 0 top-0 right-0 w-2 h-2 bg-[#FF3B30] rounded-full ring-2 ring-[#F5F9FC]"></span>
+      </button>
+      <div onclick="Dryftq.navigateTo('settings')" class="flex items-center gap-3.5 pl-2 cursor-pointer hover:opacity-90 transition-opacity" title="Settings & Profile">
+        <img id="user-avatar-integ" alt="Aditya Kamil" class="w-11 h-11 rounded-full object-cover ring-2 ring-white shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNoaM6OcrKMgS0If83vAYWKS585PGpkyPZrJ4xd-0CE9fr2wdc9gdpNp37BvsXEwID75Gfb2TjJ_PidyHw5Fd4vXWU93GQ2aNZu0k9zyvUvEckEV081pCtv-L25mQ5b-iC4oBvg0eSS8vXxaf6XbZyzDnqFK0JApNnJRCmjYqm1eSeE092PYQoRm_XuJ1_HZL9yNJLRQ5Eb1cbqSP_7Ml0hwDp8DV0Dr_REBejgbxcolFseQdJLIh7"/>
+        <div class="flex flex-col text-left">
+          <span id="user-name-integ" class="text-[15px] font-bold text-[#14283D] leading-tight">Aditya Kamil</span>
+          <span id="user-dept-integ" class="text-[13px] text-[#74869A] font-medium leading-tight mt-0.5">Plant Operations</span>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- END: MainHeader -->
+
+  <!-- Dashboard Content Sections -->
+  <div class="px-10 pb-12 space-y-10">
+    <!-- BEGIN: ConnectedIntegrationsSection -->
+    <section data-purpose="connected-integrations">
+      <div class="flex items-center justify-between mb-5">
+        <h2 class="text-[22px] font-bold text-[#14283D] tracking-tight">
+          Connected Integrations (<span id="connected-count">4</span>)
+        </h2>
+        <span class="text-xs text-slate-400 font-semibold">Click any card to configure credentials & parameters</span>
+      </div>
+      <!-- Grid of Connected Cards -->
+      <div id="connected-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+    <!-- END: ConnectedIntegrationsSection -->
+
+    <!-- BEGIN: AvailableIntegrationsSection -->
+    <section data-purpose="available-integrations">
+      <h2 class="text-[22px] font-bold text-[#14283D] tracking-tight mb-5">
+        Available Integrations (<span id="available-count">4</span>)
+      </h2>
+      <!-- Grid of Available Cards -->
+      <div id="available-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+    <!-- END: AvailableIntegrationsSection -->
+  </div>
+</main>
+<!-- END: MainContent -->
+
+<!-- Integration Configuration Modal -->
+<div id="integ-config-modal" class="dryftq-modal-backdrop">
+  <div class="dryftq-modal-content w-full max-w-lg p-7 bg-white rounded-2xl shadow-2xl space-y-5">
+    <div class="flex items-start justify-between border-b border-slate-100 pb-3">
+      <div>
+        <div class="flex items-center gap-2.5">
+          <h3 id="modal-integ-name" class="text-xl font-bold text-[#14283D]">AWS 3 IoT Hub</h3>
+          <span id="modal-integ-status-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600">Connected</span>
+        </div>
+        <p id="modal-integ-category" class="text-xs text-[#74869A] mt-0.5">Cloud IoT & Telemetry Broker</p>
+      </div>
+      <button onclick="closeIntegModal()" class="text-slate-400 hover:text-slate-700 p-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round"></path></svg>
+      </button>
+    </div>
+
+    <form onsubmit="handleSaveIntegConfig(event)" class="space-y-4 text-xs">
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Broker / Endpoint URL *</label>
+        <input required id="integ-endpoint" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#FF4D15]"/>
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">API Key / Access Token *</label>
+        <input required id="integ-apikey" type="password" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#FF4D15]"/>
+        <span class="text-[10px] text-slate-400 mt-0.5 block">Stored securely in your plant's encrypted local environment.</span>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Telemetry Sync Interval</label>
+          <select id="integ-interval" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-800">
+            <option value="15s">Every 15 Seconds</option>
+            <option value="30s">Every 30 Seconds</option>
+            <option value="60s">Every 60 Seconds</option>
+            <option value="Real-time">Real-Time Streaming</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Connection State</label>
+          <select id="integ-state-toggle" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-800">
+            <option value="Connected">Enabled & Connected</option>
+            <option value="Disconnected">Disabled / Disconnected</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Test Connection Feedback Box -->
+      <div id="integ-test-feedback" class="hidden p-3 rounded-xl text-xs font-medium"></div>
+
+      <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+        <button id="btn-test-connection" type="button" onclick="testCurrentIntegration()" class="px-4 py-2.5 font-bold text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition-colors flex items-center gap-1.5">
+          <span>Test Handshake</span>
+        </button>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="closeIntegModal()" class="px-4 py-2.5 font-semibold text-slate-600 hover:bg-slate-100 rounded-xl">Cancel</button>
+          <button type="submit" class="px-5 py-2.5 font-bold bg-[#FF4D15] hover:bg-[#d94114] text-white rounded-xl shadow-sm transition-colors">Save Configuration</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="../shared/dryftq-state.js"></script>
+<script>
+  let activeIntegId = null;
+
+  // SVG Icons for each provider
+  const logos = {
+    aws: `<svg class="h-10 w-auto" fill="none" viewBox="0 0 100 60"><path d="M26.2 31.6c-.7.5-1.7.8-2.9.8-3.2 0-4.6-2-4.6-5 0-3.3 1.9-5.4 4.8-5.4 1.2 0 2 .3 2.7.8v8.8zm5.7-14.7h-5.4v2.9c-1.3-2-3.6-3.4-6.4-3.4-5.8 0-9.8 4.5-9.8 11.2 0 6.6 3.8 11 9.8 11 2.8 0 5.1-1.3 6.4-3.3v2.8h5.4V16.9zm13.1 21.6l-5.6-21.6h5.8l3.1 14.6 3.4-14.6h5.1l3.4 14.7 3.2-14.7h5.6L57.7 38.5h-5.6l-3.3-13.8-3.3 13.8h-1.4z" fill="#14283D"></path><path d="M78.6 44.2C62.7 54.3 36.1 55.4 13.5 44.5c-.3-.2-.7.1-.4.5 4.6 5.6 14.4 11.2 28.5 11.2 15.3 0 27.5-6.2 37.5-11.4.5-.3.1-.9-.5-.6z" fill="#FF9900"></path></svg>`,
+    azure: `<svg class="h-10 w-auto" fill="none" viewBox="0 0 96 96"><path d="M54.5 8L17 76.5h27.8l9.7-18.6L68.5 84H96L54.5 8z" fill="#007FFF"></path><path d="M17 76.5L34.2 46 45 66.8 17 76.5z" fill="#005BA1"></path></svg>`,
+    influx: `<svg class="h-10 w-auto" fill="none" viewBox="0 0 100 100"><path d="M50 8L14 28v44l36 20 36-20V28L50 8z" stroke="#0054F6" stroke-linejoin="round" stroke-width="6.5"></path><path d="M50 8v44M86 28L50 52M14 28l36 24M50 52v40" stroke="#0054F6" stroke-linejoin="round" stroke-width="6.5"></path></svg>`,
+    slack: `<svg class="h-10 w-auto" fill="none" viewBox="0 0 120 120"><path d="M25.6 74.4a12.4 12.4 0 01-12.4-12.4 12.4 12.4 0 0112.4-12.4h12.4v24.8H25.6z" fill="#E01E5A"></path><path d="M50.4 74.4a12.4 12.4 0 0112.4-12.4 12.4 12.4 0 0112.4 12.4v31a12.4 12.4 0 01-12.4 12.4 12.4 12.4 0 01-12.4-12.4v-31z" fill="#E01E5A"></path><path d="M45.6 25.6a12.4 12.4 0 0112.4-12.4 12.4 12.4 0 0112.4 12.4v12.4H45.6V25.6z" fill="#36C5F0"></path></svg>`,
+    datadog: `<svg class="h-11 w-auto" fill="none" viewBox="0 0 100 100"><rect fill="#632CA6" height="70" rx="16" width="70" x="15" y="15"></rect><path d="M35 34c2 0 4 1 5 3l4 6h12l4-6c1-2 3-3 5-3 4 0 7 3 7 7 0 2-1 4-2 5l-2 3 5 5c2 2 3 4 3 7 0 5-4 9-9 9h-2l-3 4c-2 2-5 3-8 3s-6-1-8-3l-3-4h-2c-5 0-9-4-9-9 0-3 1-5 3-7l5-5-2-3c-1-1-2-3-2-5 0-4 3-7 7-7z" fill="none" stroke="white" stroke-linejoin="round" stroke-width="3"></path></svg>`,
+    grafana: `<svg class="h-11 w-auto" fill="none" viewBox="0 0 100 100"><circle cx="50" cy="50" fill="#F46800" r="16"></circle><path d="M50 15c-19.3 0-35 15.7-35 35 0 8.3 2.9 16 7.8 22l5.6-4.2C24.8 62.7 22.5 56.6 22.5 50c0-15.2 12.3-27.5 27.5-27.5s27.5 12.3 27.5 27.5c0 14.8-11.7 26.8-26.3 27.4l.6 7.5C70.6 84.1 85 68.7 85 50c0-19.3-15.7-35-35-35z" fill="#FF9830"></path></svg>`,
+    gcp: `<svg class="h-10 w-auto" fill="none" viewBox="0 0 88 70"><path d="M48.4 11.5c-8.4 0-15.7 4.8-19.3 11.9 2.9 2.5 5.2 5.7 6.6 9.4 2.6-4.5 7.4-7.5 12.8-7.5 8.1 0 14.7 6.6 14.7 14.7 0 .8-.1 1.6-.2 2.4 4.3 1.1 7.9 3.8 10.2 7.4 2-2.4 3.1-5.5 3.1-8.9-.1-10.7-9.2-19.4-20.2-19.4z" fill="#EA4335"></path><path d="M68.4 62.9H21.7C10.5 62.9 1.4 53.8 1.4 42.6c0-9.6 6.7-17.7 15.7-19.8 1.7-2.8 3.9-5.2 6.5-7 1.8 3.7 2.6 7.8 2.3 12-2.8 1.6-4.9 4.3-5.8 7.5-1.1-.3-2.3-.5-3.5-.5-6.7 0-12.1 5.4-12.1 12.1 0 6.7 5.4 12.1 12.1 12.1h46.7c5.8 0 10.6-4.7 10.6-10.6 0-5.4-4.1-9.8-9.3-10.5-2.2-2.8-5.6-4.6-9.4-4.9.1-.4.1-.9.1-1.3 0-4.3-2.1-8.1-5.4-10.4 4.3 1.1 7.9 3.8 10.2 7.4 6.5 2.5 11 8.8 11 16.1 0 9.7-7.8 17.6-17.5 17.6z" fill="#34A853"></path></svg>`,
+    teams: `<svg class="h-10 w-auto" fill="none" viewBox="0 0 110 100"><circle cx="76" cy="28" fill="#505AC9" r="14"></circle><path d="M60 48h32c6.6 0 12 5.4 12 12v12c0 2.2-1.8 4-4 4H60V48z" fill="#505AC9"></path><circle cx="44" cy="32" fill="#7B83EB" r="17"></circle><rect fill="#4B53BC" height="42" rx="8" width="52" x="18" y="52"></rect></svg>`
+  };
+
+  function renderIntegrations() {
+    const state = Dryftq.getState();
+    const connectedContainer = document.getElementById('connected-cards-grid');
+    const availableContainer = document.getElementById('available-cards-grid');
+
+    const connected = state.integrations.filter(i => i.status === 'Connected');
+    const available = state.integrations.filter(i => i.status !== 'Connected');
+
+    document.getElementById('connected-count').textContent = connected.length;
+    document.getElementById('available-count').textContent = available.length;
+
+    // Render Connected Cards
+    connectedContainer.innerHTML = connected.map(i => `
+      <div onclick="openIntegModal('${Dryftq.escapeHtml(i.id)}')" class="bg-white rounded-[22px] p-7 shadow-[0_2px_12px_rgba(20,40,61,0.03)] border border-[#E3EDF6] flex flex-col justify-between h-[255px] cursor-pointer hover:shadow-lg hover:border-slate-300 transition-all group">
+        <div class="h-16 flex items-center">
+          ${logos[i.id] || ''}
+        </div>
+        <div>
+          <div class="flex items-center justify-between">
+            <h3 class="text-[20px] font-bold text-[#14283D] tracking-tight group-hover:text-[#FF4D15] transition-colors">${Dryftq.escapeHtml(i.name)}</h3>
+            <span class="text-xs text-slate-400">&rarr;</span>
+          </div>
+          <p class="text-[15px] font-semibold text-[#16A66A] mt-1.5 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-[#16A66A] animate-pulse"></span>
+            Connected
+          </p>
+          <p class="text-[14px] text-[#74869A] mt-1">Last Sync: ${i.lastSync || '2 min ago'}</p>
+        </div>
+      </div>
+    `).join('');
+
+    // Render Available Cards
+    availableContainer.innerHTML = available.map(i => `
+      <div onclick="openIntegModal('${Dryftq.escapeHtml(i.id)}')" class="bg-white rounded-[22px] p-7 shadow-[0_2px_12px_rgba(20,40,61,0.03)] border border-[#E3EDF6] flex flex-col justify-between h-[255px] cursor-pointer hover:shadow-lg hover:border-slate-300 transition-all">
+        <div>
+          <div class="h-16 flex items-center">
+            ${logos[i.id] || ''}
+          </div>
+          <h3 class="text-[20px] font-bold text-[#14283D] tracking-tight mt-3">${Dryftq.escapeHtml(i.name)}</h3>
+          <p class="text-xs text-[#74869A] mt-1">${i.category}</p>
+        </div>
+        <div class="pt-2">
+          <button onclick="event.stopPropagation(); openIntegModal('${Dryftq.escapeHtml(i.id)}')" class="w-full py-2.5 px-4 rounded-xl border border-[#D5E1EC] hover:border-[#FF4D15] text-[15px] font-semibold text-[#14283D] hover:bg-orange-50 hover:text-[#FF4D15] transition-colors shadow-sm">
+            Configure & Connect
+          </button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function openIntegModal(integId) {
+    const state = Dryftq.getState();
+    const item = state.integrations.find(i => i.id === integId);
+    if (!item) return;
+
+    activeIntegId = integId;
+    document.getElementById('modal-integ-name').textContent = item.name;
+    document.getElementById('modal-integ-category').textContent = item.category;
+
+    const badge = document.getElementById('modal-integ-status-badge');
+    badge.textContent = item.status;
+    badge.className = item.status === 'Connected' ? 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600' : 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-500';
+
+    document.getElementById('integ-endpoint').value = item.endpoint || `https://api.${item.id}.dryftq.io`;
+    document.getElementById('integ-apikey').value = item.apiKey || 'sk_live_9a87f61c...';
+    document.getElementById('integ-interval').value = item.syncInterval || '30s';
+    document.getElementById('integ-state-toggle').value = item.status;
+
+    document.getElementById('integ-test-feedback').classList.add('hidden');
+    document.getElementById('integ-config-modal').classList.add('open');
+  }
+
+  function closeIntegModal() {
+    document.getElementById('integ-config-modal').classList.remove('open');
+  }
+
+  function testCurrentIntegration() {
+    const btn = document.getElementById('btn-test-connection');
+    const feedback = document.getElementById('integ-test-feedback');
+    const endpoint = document.getElementById('integ-endpoint').value.trim();
+    const apiKey = document.getElementById('integ-apikey').value.trim();
+
+    if (!endpoint || !apiKey) {
+      feedback.textContent = 'Endpoint URL and API Key are required to perform handshake test.';
+      feedback.className = 'p-3 rounded-xl text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200 block';
+      return;
+    }
+
+    btn.innerHTML = '<span>Verifying TLS Handshake...</span>';
+    btn.disabled = true;
+
+    setTimeout(() => {
+      btn.innerHTML = '<span>Test Handshake</span>';
+      btn.disabled = false;
+      feedback.textContent = 'Handshake verified: 200 OK. Latency: 42ms. Telemetry ingress channel active.';
+      feedback.className = 'p-3 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 block';
+      Dryftq.toast('Connection verified with remote gateway.', 'success', 'Ping Succeeded');
+    }, 750);
+  }
+
+  function handleSaveIntegConfig(e) {
+    e.preventDefault();
+    if (!activeIntegId) return;
+
+    const endpoint = document.getElementById('integ-endpoint').value.trim();
+    const apiKey = document.getElementById('integ-apikey').value.trim();
+    const syncInterval = document.getElementById('integ-interval').value;
+    const isConn = document.getElementById('integ-state-toggle').value === 'Connected';
+
+    Dryftq.saveIntegrationConfig(activeIntegId, {
+      endpoint: endpoint,
+      apiKey: apiKey,
+      syncInterval: syncInterval
+    });
+    Dryftq.toggleIntegration(activeIntegId, isConn);
+
+    closeIntegModal();
+    renderIntegrations();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    Dryftq.setupNavigation('integrations');
+    renderIntegrations();
+
+    // Profile sync
+    const state = Dryftq.getState();
+    if (state.user) {
+      const uName = document.getElementById('user-name-integ');
+      const uDept = document.getElementById('user-dept-integ');
+      const uAv = document.getElementById('user-avatar-integ');
+      if (uName) uName.textContent = state.user.name;
+      if (uDept) uDept.textContent = state.user.department;
+      if (uAv && state.user.avatar) uAv.src = state.user.avatar;
+    }
+
+    document.getElementById('integ-config-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'integ-config-modal') closeIntegModal();
+    });
+
+    window.addEventListener('dryftq:state-change', () => {
+      renderIntegrations();
+    });
+  });
+</script>
+</body>
+</html>

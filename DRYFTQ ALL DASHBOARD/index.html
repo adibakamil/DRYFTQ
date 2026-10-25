@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DRYFTQ Plant Operations Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #031B30; color: #FFFFFF; }
+  </style>
+  <script>
+    // ---------------------------------------------------------------
+    // Dual-protocol routing.
+    // Served over HTTP(S) by the DRYFTQ server -> clean routes ("/dashboard").
+    // Opened from disk (file://), or by any plain static file host
+    // (the landing page's `npm run serve`, GitHub Pages, ... ) -> real
+    // module folders, because those hosts have no /dashboard route.
+    // The landing page links straight into this folder:
+    //   ../index.html -> "DRYFTQ ALL DASHBOARD/index.html" -> a dashboard module
+    // (server.js answers its own /index.html with 302 -> /dashboard.)
+    // ---------------------------------------------------------------
+    (function () {
+      var FOLDERS = {
+        dashboard: 'DRYFTQ DASHBOARD 1',
+        analytics: 'DRYFTQ DASHBOARD 2 (ANALYTICS)',
+        machines: 'DRYFTQ DASHBOARD 3(MACHINES)',
+        alerts: 'DRYFTQ DASHOARD 4(ALERT)',
+        reports: 'DRYFTQ DASHBOARD 5 (REPORT)',
+        maintenance: 'DRYFTQ DASHBOARD 6 (MAINTENANCE)',
+        integrations: 'DRYFTQ DASHBOARD 7(INTEGRATIONS)',
+        team: 'DRYFTQ DASHBOARD 8(TEAM MANAGEMENT)',
+        settings: 'DRYFTQ DASHBOARD 9(SETTING)'
+      };
+
+      function toFileUrl(cleanUrl) {
+        var raw = String(cleanUrl).split('?');
+        var key = (raw[0].replace(/^\/+/, '') || 'dashboard').toLowerCase();
+        var folder = FOLDERS[key];
+        if (!folder) return cleanUrl;
+        return './' + folder + '/code.html' + (raw[1] ? '?' + raw[1] : '');
+      }
+
+      // Rebase every site-absolute href ("/analytics", "/team", ...) onto a real
+      // module folder so it resolves on hosts that do not know the clean routes.
+      function rewriteLinks() {
+        var links = document.querySelectorAll('a[href]');
+        for (var i = 0; i < links.length; i++) {
+          var href = links[i].getAttribute('href');
+          if (href && href.charAt(0) === '/' && href.charAt(1) !== '/') {
+            links[i].setAttribute('href', toFileUrl(href));
+          }
+        }
+      }
+
+      window.__dryftqIsFile = window.location.protocol === 'file:';
+      window.__dryftqToFile = toFileUrl;
+      window.__dryftqRewriteLinks = rewriteLinks;
+
+      if (window.__dryftqIsFile) {
+        document.addEventListener('DOMContentLoaded', rewriteLinks);
+      }
+    })();
+  </script>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6">
+  <div class="max-w-xl w-full text-center">
+    <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#FF3D0A] shadow-lg shadow-orange-500/30 mb-6">
+      <span class="text-3xl font-black tracking-wider text-white">D</span>
+    </div>
+    <h1 class="text-3xl font-extrabold tracking-tight text-white mb-2">DRYFTQ Industrial OS</h1>
+    <p class="text-slate-400 text-sm mb-8">AI-Powered Industrial Telemetry, Predictive Analytics & Plant Operations</p>
+
+    <div class="bg-[#07243E] border border-[#0d3459] rounded-2xl p-6 text-left shadow-2xl mb-8">
+      <div class="flex items-center justify-between mb-4 pb-3 border-b border-[#0d3459]">
+        <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">Operational Modules</span>
+        <span class="text-xs text-emerald-400 font-semibold flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          9 Modules Connected
+        </span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-sm">
+        <a href="/dashboard" class="flex items-center gap-3 p-2.5 rounded-xl bg-[#031B30]/60 hover:bg-[#FF3D0A] hover:text-white transition group border border-white/5">
+          <span class="text-base">📊</span>
+          <span class="font-semibold text-slate-200 group-hover:text-white">1. Dashboard</span>
+        </a>
+        <a href="/analytics" class="flex items-center gap-3 p-2.5 rounded-xl bg-[#031B30]/60 hover:bg-[#FF3D0A] hover:text-white transition group border border-white/5">
+          <span class="text-base">📈</span>
+          <span class="font-semibold text-slate-200 group-hover:text-white">2. Analytics</span>
+        </a>
+        <a href="/machines" class="flex items-center gap-3 p-2.5 rounded-xl bg-[#031B30]/60 hover:bg-[#FF3D0A] hover:text-white transition group border border-white/5">
+          <span class="text-base">⚙️</span>
+          <span class="font-semibold text-slate-200 group-hover:text-white">3. Machines</span>
+        </a>
+        <a href="/alerts" class="flex items-center gap-3 p-2.5 rounded-xl bg-[#031B30]/60 hover:bg-[#FF3D0A] hover:text-white transition group border border-white/5">
+          <span class="text-base">🚨</span>
+          <span class="font-semibold text-slate-200 group-hover:text-white">4. Alerts</span>
+        </a>
+        <a href="/reports" class="flex items-center gap-3 p-2.5 rounded-xl bg-[#031B30]/60 hover:bg-[#FF3D0A] hover:text-white transition group border border-white/5">
+          <span class="text-base">📋</span>
+          <span class="font-semibold text-slate-200 group-hover:text-white">5. Reports</span>
+        </a>
+        <a href="/maintenance" class="flex items-center gap-3 p-2.5 rounded-xl bg-[#031B30]/60 hover:bg-[#FF3D0A] hover:text-white transition group border border-white/5">
+          <span class="text-base">🔧</span>
+          <span class="font-semibold text-slate-200 group-hover:text-white">6. Maintenance</span>
+        </a>
+        <a href="/integrations" class="flex items-center gap-3 p-2.5 rounded-xl bg-[#031B30]/60 hover:bg-[#FF3D0A] hover:text-white transition group border border-white/5">
+          <span class="text-base">🔌</span>
+          <span class="font-semibold text-slate-200 group-hover:text-white">7. Integrations</span>
+        </a>
+        <a href="/team" class="flex items-center gap-3 p-2.5 rounded-xl bg-[#031B30]/60 hover:bg-[#FF3D0A] hover:text-white transition group border border-white/5">
+          <span class="text-base">👥</span>
+          <span class="font-semibold text-slate-200 group-hover:text-white">8. Team</span>
+        </a>
+        <a href="/settings" class="col-span-1 sm:col-span-2 flex items-center gap-3 p-2.5 rounded-xl bg-[#031B30]/60 hover:bg-[#FF3D0A] hover:text-white transition group border border-white/5">
+          <span class="text-base">⚙️</span>
+          <span class="font-semibold text-slate-200 group-hover:text-white">9. Settings & Profile</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-center gap-4">
+      <a href="/dashboard" class="inline-flex items-center gap-2 bg-[#FF3D0A] hover:bg-[#e03405] text-white px-8 py-3.5 rounded-xl font-bold text-sm tracking-wide shadow-lg shadow-orange-500/20 transition cursor-pointer">
+        <span>Launch Primary Dashboard</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </a>
+    </div>
+  </div>
+  <script>
+    // Forward to the primary dashboard. Real module folders resolve on file://
+    // and on every static host (they are also valid on server.js itself, which
+    // redirects /index.html -> /dashboard before this page is ever served).
+    (function () {
+      // Rebase the module links ("/analytics" -> "./.../code.html") so they stay
+      // clickable if the redirect is ever blocked.
+      if (typeof window.__dryftqRewriteLinks === 'function') window.__dryftqRewriteLinks();
+
+      var target = typeof window.__dryftqToFile === 'function'
+        ? window.__dryftqToFile('/dashboard')
+        : './DRYFTQ DASHBOARD 1/code.html';
+      window.location.replace(target);
+    })();
+  </script>
+</body>
+</html>

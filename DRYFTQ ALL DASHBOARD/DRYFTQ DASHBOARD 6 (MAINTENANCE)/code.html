@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>DRYFTQ - Maintenance Operations</title>
+  <!-- Tailwind CSS CDN with forms and container-queries -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <!-- DRYFTQ Shared System -->
+  <link rel="stylesheet" href="../shared/dryftq-common.css"/>
+  <style data-purpose="base-styling">
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#F3F6FA] flex text-[#1E293B]">
+<!-- BEGIN: Sidebar -->
+<aside class="w-[280px] shrink-0 bg-[#081827] text-white flex flex-col justify-between py-6 px-5 min-h-screen border-r border-slate-800" data-purpose="main-sidebar">
+  <!-- Top Nav Container -->
+  <div>
+    <!-- Brand & Dismiss Icon -->
+    <div class="flex items-center justify-between pb-6 border-b border-slate-800/60 mb-6">
+      <a href="/dashboard" class="text-2xl font-black tracking-wider text-white hover:text-orange-400 transition-colors">DRYFTQ</a>
+      <button aria-label="Close sidebar" class="text-slate-400 hover:text-white transition-colors" type="button">
+        <svg class="w-5 h-5 stroke-[2.2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </button>
+    </div>
+    <!-- Main Navigation Menu: All 9 Modules -->
+    <nav aria-label="Sidebar Navigation" class="space-y-1.5">
+      <!-- 1. Dashboard -->
+      <a class="flex items-center gap-3.5 px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/50 transition-colors font-medium text-sm group" href="/dashboard">
+        <svg class="w-5 h-5 text-slate-400 group-hover:text-white stroke-[1.8]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <rect height="9" rx="1.5" width="7" x="3" y="3"></rect>
+          <rect height="5" rx="1.5" width="7" x="14" y="3"></rect>
+          <rect height="9" rx="1.5" width="7" x="14" y="12"></rect>
+          <rect height="5" rx="1.5" width="7" x="3" y="16"></rect>
+        </svg>
+        <span>Dashboard</span>
+      </a>
+      <!-- 2. Analytics -->
+      <a class="flex items-center gap-3.5 px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/50 transition-colors font-medium text-sm group" href="/analytics">
+        <svg class="w-5 h-5 text-slate-400 group-hover:text-white stroke-[1.8]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span>Analytics</span>
+      </a>
+      <!-- 3. Machines -->
+      <a class="flex items-center gap-3.5 px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/50 transition-colors font-medium text-sm group" href="/machines">
+        <svg class="w-5 h-5 text-slate-400 group-hover:text-white stroke-[1.8]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <rect height="7" rx="1" width="7" x="3" y="3"></rect>
+          <rect height="7" rx="1" width="7" x="14" y="3"></rect>
+          <rect height="7" rx="1" width="7" x="3" y="14"></rect>
+          <rect height="7" rx="1" width="7" x="14" y="14"></rect>
+        </svg>
+        <span>Machines</span>
+      </a>
+      <!-- 4. Alerts with badge -->
+      <a class="flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/50 transition-colors font-medium text-sm group" href="/alerts">
+        <div class="flex items-center gap-3.5">
+          <svg class="w-5 h-5 text-slate-400 group-hover:text-white stroke-[1.8]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <span>Alerts</span>
+        </div>
+        <span id="nav-alert-badge" class="w-5 h-5 bg-[#FF5722] text-white text-xs font-bold rounded-full flex items-center justify-center">3</span>
+      </a>
+      <!-- 5. Reports -->
+      <a class="flex items-center gap-3.5 px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/50 transition-colors font-medium text-sm group" href="/reports">
+        <svg class="w-5 h-5 text-slate-400 group-hover:text-white stroke-[1.8]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span>Reports</span>
+      </a>
+      <!-- 6. Maintenance (Active tab) -->
+      <a class="flex items-center gap-3.5 px-3 py-2.5 rounded-xl text-white bg-[#FF5722] font-semibold text-sm shadow-md transition-colors" href="/maintenance">
+        <svg class="w-5 h-5 text-white stroke-[2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span>Maintenance</span>
+      </a>
+      <!-- 7. Integrations -->
+      <a class="flex items-center gap-3.5 px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/50 transition-colors font-medium text-sm group" href="/integrations">
+        <svg class="w-5 h-5 text-slate-400 group-hover:text-white stroke-[1.8]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <circle cx="18" cy="5" r="3"></circle>
+          <circle cx="6" cy="12" r="3"></circle>
+          <circle cx="18" cy="19" r="3"></circle>
+          <line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line>
+          <line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line>
+        </svg>
+        <span>Integrations</span>
+      </a>
+      <!-- 8. Team Management -->
+      <a class="flex items-center gap-3.5 px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/50 transition-colors font-medium text-sm group" href="/team">
+        <svg class="w-5 h-5 text-slate-400 group-hover:text-white stroke-[1.8]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+        </svg>
+        <span>Team Management</span>
+      </a>
+      <!-- 9. Settings -->
+      <a class="flex items-center gap-3.5 px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/50 transition-colors font-medium text-sm group" href="/settings">
+        <svg class="w-5 h-5 text-slate-400 group-hover:text-white stroke-[1.8]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+        <span>Settings</span>
+      </a>
+    </nav>
+  </div>
+  <!-- Bottom Sidebar Section (AI Insights & System Status) -->
+  <div class="space-y-5 pt-6 border-t border-slate-800/60" data-purpose="sidebar-footer">
+    <div class="flex items-start gap-3">
+      <div class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+        <svg class="w-3.5 h-3.5 fill-current" viewbox="0 0 20 20">
+          <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 2c3.31 0 6 2.69 6 6 0 1.9-.9 3.6-2.3 4.7-.6.5-1.7 1.3-1.7 1.3-.4.3-1 .3-1.4 0 0 0-1.1-.8-1.7-1.3C7.5 13.6 6.6 11.9 6.6 10c0-3.31 2.69-6 3.4-6z"></path>
+        </svg>
+      </div>
+      <p class="text-xs text-slate-300 leading-snug">
+        AI-powered insights for a smarter tomorrow.
+      </p>
+    </div>
+    <div class="space-y-1.5">
+      <div class="flex items-center gap-2 text-xs font-semibold text-slate-300">
+        <svg class="w-4 h-4 text-emerald-400 stroke-[2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span>System Status</span>
+      </div>
+      <div class="flex items-center gap-2 pl-6">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-[11px] text-slate-400 font-medium">All Systems Operational</span>
+      </div>
+    </div>
+  </div>
+</aside>
+<!-- END: Sidebar -->
+
+<!-- BEGIN: Main Content Area -->
+<main class="flex-1 px-8 py-6 overflow-y-auto" data-purpose="dashboard-main-content">
+  <!-- Top Header Bar -->
+  <header class="flex items-center justify-between pb-6">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Maintenance</h1>
+      <p class="text-sm text-slate-500 mt-0.5 font-normal">Schedule, track, and complete machine maintenance work orders</p>
+    </div>
+    <!-- User Profile & Notifications -->
+    <div class="flex items-center gap-5">
+      <button aria-label="Notifications" onclick="Dryftq.openNotificationsDrawer()" class="text-slate-500 hover:text-slate-700 transition-colors relative" type="button" title="View Notifications">
+        <svg class="w-5 h-5 stroke-[2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </button>
+      <button aria-label="System Alerts" onclick="Dryftq.navigateTo('alerts')" class="text-slate-500 hover:text-slate-700 transition-colors relative" type="button" title="Active Alerts">
+        <svg class="w-5 h-5 stroke-[2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+      </button>
+      <div onclick="Dryftq.navigateTo('settings')" class="flex items-center gap-3 pl-2 border-l border-slate-200 cursor-pointer hover:opacity-90 transition-opacity" title="Settings & Profile">
+        <img id="user-avatar-maint" alt="User portrait" class="w-10 h-10 rounded-full object-cover shadow-sm ring-1 ring-slate-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsPsoATitE0-Q-aHvv-IaLP-Vp0fab5NWScjWC3cPIlRfEZN_qaVeOccMGvWuTPBD_FKGopi6n0uglVeJ0vIK5f4WzCfjTmF8c-0LY_R4XcP1a-SUab-L9yCAHfF-SH0zfEajTYE_-0s36FLCExp0qF19yZbMIYXkmdYEat9Gvq3gfvjA9Oxy6BGXikVDH3hX1S9C7s_A79LEa0eeTTKknZb_vnV76O970iRLfd-Sl-xRYlaCejK0J"/>
+        <div class="text-left">
+          <h2 id="user-name-maint" class="text-sm font-semibold text-slate-800 leading-tight">Aditya Kamil</h2>
+          <span id="user-dept-maint" class="text-xs text-slate-500 leading-tight block">Plant Operations</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Filter Buttons & New Maintenance Action -->
+  <div class="flex flex-wrap items-center justify-between gap-4 mt-3 mb-6">
+    <!-- State Filter Tabs -->
+    <div class="inline-flex items-center gap-2" id="maint-filter-tabs">
+      <button onclick="filterMaintStatus('Upcoming')" data-tab="Upcoming" class="px-5 py-2 rounded-full text-xs font-semibold bg-[#FF5722] text-white shadow-sm hover:bg-[#F4511E] transition-colors" type="button">
+        Upcoming (<span id="maint-count-upcoming">4</span>)
+      </button>
+      <button onclick="filterMaintStatus('In Progress')" data-tab="In Progress" class="px-5 py-2 rounded-full text-xs font-semibold bg-white text-slate-700 hover:bg-slate-50 transition-colors border border-slate-200/80 shadow-[0_1px_2px_rgba(0,0,0,0.03)]" type="button">
+        In Progress (<span id="maint-count-progress">1</span>)
+      </button>
+      <button onclick="filterMaintStatus('Completed')" data-tab="Completed" class="px-5 py-2 rounded-full text-xs font-semibold bg-white text-slate-700 hover:bg-slate-50 transition-colors border border-slate-200/80 shadow-[0_1px_2px_rgba(0,0,0,0.03)]" type="button">
+        Completed (<span id="maint-count-completed">28</span>)
+      </button>
+      <button onclick="filterMaintStatus('All')" data-tab="All" class="px-5 py-2 rounded-full text-xs font-semibold bg-white text-slate-700 hover:bg-slate-50 transition-colors border border-slate-200/80 shadow-[0_1px_2px_rgba(0,0,0,0.03)]" type="button">
+        All Tasks (<span id="maint-count-all">5</span>)
+      </button>
+    </div>
+    <!-- Action Button -->
+    <div class="flex items-center gap-3">
+      <button onclick="Dryftq.downloadReportCSV('Maintenance Report')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 transition-colors shadow-xs">
+        Export CSV
+      </button>
+      <button onclick="openNewMaintModal()" class="inline-flex items-center gap-2 px-5 py-2 rounded-xl text-xs font-semibold bg-[#FF5722] text-white shadow-sm hover:bg-[#F4511E] transition-colors" type="button">
+        <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span>New Maintenance</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- BEGIN: Maintenance Schedule Table -->
+  <div class="bg-white rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] border border-slate-200/80 overflow-hidden mb-6" data-purpose="maintenance-schedule-table">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="border-b border-slate-100 text-[12px] font-semibold text-slate-400">
+            <th class="py-4 px-6 font-semibold" scope="col">Task</th>
+            <th class="py-4 px-6 font-semibold" scope="col">Machine</th>
+            <th class="py-4 px-6 font-semibold" scope="col">Type</th>
+            <th class="py-4 px-6 font-semibold" scope="col">Priority</th>
+            <th class="py-4 px-6 font-semibold" scope="col">Due Date</th>
+            <th class="py-4 px-6 font-semibold" scope="col">Status</th>
+            <th class="py-4 px-6 font-semibold text-right" scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody id="maintenance-table-tbody" class="divide-y divide-slate-50 text-sm">
+          <!-- Dynamically populated -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- END: Maintenance Schedule Table -->
+
+  <!-- BEGIN: Key Performance Metric Cards -->
+  <section aria-label="Maintenance Metrics" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" data-purpose="metric-cards-grid">
+    <!-- Metric Card 1: MTBF -->
+    <article class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col justify-between hover:shadow-md transition-shadow">
+      <div>
+        <span class="text-xs font-bold text-slate-600 uppercase tracking-wide">MTBF</span>
+        <div class="text-3xl font-extrabold text-slate-900 mt-2">120 h</div>
+      </div>
+      <div class="mt-4 flex items-center text-xs font-semibold text-emerald-600">
+        <svg class="w-3.5 h-3.5 mr-1 stroke-[2.5]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span>15.2%</span>
+        <span class="text-slate-400 font-normal ml-1">vs last 30 days</span>
+      </div>
+    </article>
+    <!-- Metric Card 2: MTTR -->
+    <article class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col justify-between hover:shadow-md transition-shadow">
+      <div>
+        <span class="text-xs font-bold text-slate-600 uppercase tracking-wide">MTTR</span>
+        <div class="text-3xl font-extrabold text-slate-900 mt-2">2.4 h</div>
+      </div>
+      <div class="mt-4 flex items-center text-xs font-semibold text-emerald-600">
+        <svg class="w-3.5 h-3.5 mr-1 stroke-[2.5]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M19 14l-7 7m0 0l-7-7m7 7V3" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span>3.1%</span>
+        <span class="text-slate-400 font-normal ml-1">vs last 30 days</span>
+      </div>
+    </article>
+    <!-- Metric Card 3: Maintenance Cost -->
+    <article class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col justify-between hover:shadow-md transition-shadow">
+      <div>
+        <span class="text-xs font-bold text-slate-600 uppercase tracking-wide">Maintenance Cost</span>
+        <div class="text-3xl font-extrabold text-slate-900 mt-2">$12.4K</div>
+      </div>
+      <div class="mt-4 flex items-center text-xs font-semibold text-emerald-600">
+        <svg class="w-3.5 h-3.5 mr-1 stroke-[2.5]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M19 14l-7 7m0 0l-7-7m7 7V3" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span>8.2%</span>
+        <span class="text-slate-400 font-normal ml-1">vs last 30 days</span>
+      </div>
+    </article>
+    <!-- Metric Card 4: Compliance -->
+    <article class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col justify-between hover:shadow-md transition-shadow">
+      <div>
+        <span class="text-xs font-bold text-slate-600 uppercase tracking-wide">Compliance</span>
+        <div class="text-3xl font-extrabold text-slate-900 mt-2">96.3%</div>
+      </div>
+      <div class="mt-4 flex items-center text-xs font-semibold text-emerald-600">
+        <svg class="w-3.5 h-3.5 mr-1 stroke-[2.5]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span>4.1%</span>
+        <span class="text-slate-400 font-normal ml-1">vs last 30 days</span>
+      </div>
+    </article>
+  </section>
+  <!-- END: Key Performance Metric Cards -->
+</main>
+<!-- END: Main Content Area -->
+
+<!-- Task Details & Status Transition Modal -->
+<div id="maint-task-modal" class="dryftq-modal-backdrop">
+  <div class="dryftq-modal-content w-full max-w-lg p-7 bg-white rounded-2xl shadow-2xl space-y-5">
+    <div class="flex items-start justify-between border-b border-slate-100 pb-3">
+      <div>
+        <div class="flex items-center gap-2.5">
+          <h3 id="task-modal-title" class="text-xl font-bold text-slate-900">Oil Change</h3>
+          <span id="task-modal-priority-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-50 text-rose-600">High</span>
+        </div>
+        <p id="task-modal-meta" class="text-xs text-slate-500 mt-0.5">Machine: CNC-01 · Type: Preventive</p>
+      </div>
+      <button onclick="closeTaskModal()" class="text-slate-400 hover:text-slate-700 p-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round"></path></svg>
+      </button>
+    </div>
+
+    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-2 text-xs">
+      <div class="flex items-center justify-between">
+        <span class="font-semibold text-slate-500">Current Status:</span>
+        <span id="task-modal-status-badge" class="font-bold text-blue-600">Upcoming</span>
+      </div>
+      <div class="flex items-center justify-between">
+        <span class="font-semibold text-slate-500">Assigned Technician:</span>
+        <span id="task-modal-tech" class="font-bold text-slate-800">Priya Sharma</span>
+      </div>
+      <div class="flex items-center justify-between">
+        <span class="font-semibold text-slate-500">Target Due Date:</span>
+        <span id="task-modal-due" class="font-bold text-slate-800">Oct 18, 2025</span>
+      </div>
+      <div class="pt-2 border-t border-slate-200/60">
+        <span class="font-semibold text-slate-500 block mb-1">Procedure Notes:</span>
+        <p id="task-modal-notes" class="text-slate-700 leading-relaxed font-normal">Replace synthetic lubricant and flush filters.</p>
+      </div>
+    </div>
+
+    <!-- Status Transition Actions -->
+    <div class="space-y-3 pt-2">
+      <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Update Task Status</h4>
+      <div class="flex items-center gap-3" id="task-transition-buttons">
+        <!-- Injected depending on status -->
+      </div>
+    </div>
+
+    <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+      <button onclick="closeTaskModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- New Maintenance Order Modal -->
+<div id="new-maint-modal" class="dryftq-modal-backdrop">
+  <div class="dryftq-modal-content w-full max-w-lg p-7 bg-white rounded-2xl shadow-2xl space-y-5">
+    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+      <h3 class="text-lg font-bold text-slate-900">Create New Maintenance Task</h3>
+      <button onclick="closeNewMaintModal()" class="text-slate-400 hover:text-slate-700 p-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round"></path></svg>
+      </button>
+    </div>
+    <form onsubmit="handleCreateNewMaintenance(event)" class="space-y-4 text-xs">
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Task Title *</label>
+        <input required id="new-task-title" placeholder="e.g. Spindle Bearing Replacement" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#FF5722]"/>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Target Machine *</label>
+          <select id="new-task-machine" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800">
+            <!-- Machine options dynamically rendered -->
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Maintenance Type</label>
+          <select id="new-task-type" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800">
+            <option value="Preventive">Preventive</option>
+            <option value="Predictive">Predictive</option>
+            <option value="Corrective">Corrective</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Priority</label>
+          <select id="new-task-priority" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800">
+            <option value="High">High</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Assigned Technician</label>
+          <select id="new-task-tech" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800">
+            <option value="Priya Sharma">Priya Sharma</option>
+            <option value="Vikash Singh">Vikash Singh</option>
+            <option value="Aditya Kamil">Aditya Kamil</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Scheduled Due Date</label>
+        <input id="new-task-due" value="Tomorrow" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800"/>
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Scope & Instructions</label>
+        <textarea id="new-task-notes" rows="2" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800" placeholder="Specify steps, torque tolerances, and safety lockout..."></textarea>
+      </div>
+      <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+        <button type="button" onclick="closeNewMaintModal()" class="px-4 py-2 font-semibold text-slate-600 hover:bg-slate-100 rounded-lg">Cancel</button>
+        <button type="submit" class="px-5 py-2 font-bold bg-[#FF5722] hover:bg-[#F4511E] text-white rounded-lg shadow-sm">Create Work Order</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="../shared/dryftq-state.js"></script>
+<script>
+  let currentMaintStatus = 'Upcoming';
+  let activeTaskId = null;
+
+  function renderMaintenanceTable() {
+    const state = Dryftq.getState();
+    const tbody = document.getElementById('maintenance-table-tbody');
+
+    const upcomingCount = state.maintenanceTasks.filter(t => t.status === 'Upcoming').length;
+    const progressCount = state.maintenanceTasks.filter(t => t.status === 'In Progress').length;
+    const completedCount = state.maintenanceTasks.filter(t => t.status === 'Completed').length;
+
+    document.getElementById('maint-count-upcoming').textContent = upcomingCount;
+    document.getElementById('maint-count-progress').textContent = progressCount;
+    document.getElementById('maint-count-completed').textContent = completedCount + 27; // Baseline + completed
+    document.getElementById('maint-count-all').textContent = state.maintenanceTasks.length;
+
+    let filtered = state.maintenanceTasks.filter(t => {
+      if (currentMaintStatus !== 'All' && t.status !== currentMaintStatus) return false;
+      return true;
+    });
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" class="py-12 text-center text-slate-400">
+            <p class="font-semibold text-sm">No tasks currently under "${currentMaintStatus}".</p>
+            <button onclick="filterMaintStatus('All')" class="mt-2 text-xs text-[#FF5722] hover:underline font-bold">View All Tasks</button>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(t => {
+      let prioBadge = '';
+      if (t.priority === 'High') {
+        prioBadge = '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-600">High</span>';
+      } else if (t.priority === 'Medium') {
+        prioBadge = '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-600">Medium</span>';
+      } else {
+        prioBadge = '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600">Low</span>';
+      }
+
+      let statusBadge = '';
+      if (t.status === 'Upcoming') {
+        statusBadge = '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-600">Upcoming</span>';
+      } else if (t.status === 'In Progress') {
+        statusBadge = '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 animate-pulse">In Progress</span>';
+      } else {
+        statusBadge = '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">Completed</span>';
+      }
+
+      return `
+        <tr onclick="openTaskModal('${Dryftq.escapeHtml(t.id)}')" class="hover:bg-slate-50/80 transition-colors cursor-pointer group">
+          <td class="py-4 px-6 font-medium text-slate-800 group-hover:text-[#FF5722] transition-colors">${Dryftq.escapeHtml(t.task)}</td>
+          <td class="py-4 px-6 font-bold text-slate-900">${Dryftq.escapeHtml(t.machine)}</td>
+          <td class="py-4 px-6 text-slate-600 text-xs">${Dryftq.escapeHtml(t.type)}</td>
+          <td class="py-4 px-6">${prioBadge}</td>
+          <td class="py-4 px-6 text-slate-600 text-xs font-medium">${Dryftq.escapeHtml(t.dueDate)}</td>
+          <td class="py-4 px-6">${statusBadge}</td>
+          <td class="py-4 px-6 text-right">
+            <button onclick="event.stopPropagation(); openTaskModal('${Dryftq.escapeHtml(t.id)}')" class="text-xs font-bold text-[#FF5722] hover:underline">
+              Manage &rarr;
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function filterMaintStatus(status) {
+    currentMaintStatus = status;
+    const buttons = document.querySelectorAll('#maint-filter-tabs button');
+    buttons.forEach(btn => {
+      if (btn.getAttribute('data-tab') === status) {
+        btn.className = 'px-5 py-2 rounded-full text-xs font-semibold bg-[#FF5722] text-white shadow-sm hover:bg-[#F4511E] transition-colors';
+      } else {
+        btn.className = 'px-5 py-2 rounded-full text-xs font-semibold bg-white text-slate-700 hover:bg-slate-50 transition-colors border border-slate-200/80 shadow-[0_1px_2px_rgba(0,0,0,0.03)]';
+      }
+    });
+    renderMaintenanceTable();
+  }
+
+  function openTaskModal(taskId) {
+    const state = Dryftq.getState();
+    const task = state.maintenanceTasks.find(t => t.id === taskId);
+    if (!task) return;
+
+    activeTaskId = taskId;
+    document.getElementById('task-modal-title').textContent = task.task;
+    document.getElementById('task-modal-meta').textContent = `Machine: ${task.machine} · Type: ${task.type}`;
+    document.getElementById('task-modal-status-badge').textContent = task.status;
+    document.getElementById('task-modal-tech').textContent = task.technician;
+    document.getElementById('task-modal-due').textContent = task.dueDate;
+    document.getElementById('task-modal-notes').textContent = task.notes || 'Routine standard procedure.';
+
+    const prioBadge = document.getElementById('task-modal-priority-badge');
+    prioBadge.textContent = task.priority;
+    if (task.priority === 'High') {
+      prioBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-50 text-rose-600';
+    } else if (task.priority === 'Medium') {
+      prioBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-600';
+    } else {
+      prioBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600';
+    }
+
+    const transButtons = document.getElementById('task-transition-buttons');
+    if (task.status === 'Upcoming') {
+      transButtons.innerHTML = `
+        <button onclick="handleStatusTransition('In Progress')" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl shadow-sm transition-colors">
+          Start Task (In Progress)
+        </button>
+        <button onclick="handleStatusTransition('Completed')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-sm transition-colors">
+          Mark as Completed
+        </button>
+      `;
+    } else if (task.status === 'In Progress') {
+      transButtons.innerHTML = `
+        <button onclick="handleStatusTransition('Completed')" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-sm transition-colors flex items-center gap-2">
+          <span>Complete Work Order</span> &check;
+        </button>
+      `;
+    } else {
+      transButtons.innerHTML = `
+        <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600">
+          <span>&check;</span> Work Order Completed and Verified
+        </span>
+      `;
+    }
+
+    document.getElementById('maint-task-modal').classList.add('open');
+  }
+
+  function closeTaskModal() {
+    document.getElementById('maint-task-modal').classList.remove('open');
+  }
+
+  function handleStatusTransition(newStatus) {
+    if (!activeTaskId) return;
+    Dryftq.updateMaintenanceStatus(activeTaskId, newStatus);
+    closeTaskModal();
+    renderMaintenanceTable();
+  }
+
+  function openNewMaintModal(prefillMachine = null) {
+    const state = Dryftq.getState();
+    const select = document.getElementById('new-task-machine');
+    select.innerHTML = state.machines.map(m => `
+      <option value="${Dryftq.escapeHtml(m.id)}" ${prefillMachine === m.id ? 'selected' : ''}>${Dryftq.escapeHtml(m.id)} (${Dryftq.escapeHtml(m.name)})</option>
+    `).join('');
+
+    document.getElementById('new-maint-modal').classList.add('open');
+  }
+
+  function closeNewMaintModal() {
+    document.getElementById('new-maint-modal').classList.remove('open');
+  }
+
+  function handleCreateNewMaintenance(e) {
+    e.preventDefault();
+    const title = document.getElementById('new-task-title').value;
+    const mach = document.getElementById('new-task-machine').value;
+    const type = document.getElementById('new-task-type').value;
+    const prio = document.getElementById('new-task-priority').value;
+    const tech = document.getElementById('new-task-tech').value;
+    const due = document.getElementById('new-task-due').value;
+    const notes = document.getElementById('new-task-notes').value;
+
+    Dryftq.createMaintenanceTask({
+      task: title,
+      machine: mach,
+      type: type,
+      priority: prio,
+      technician: tech,
+      dueDate: due,
+      notes: notes
+    });
+
+    closeNewMaintModal();
+    renderMaintenanceTable();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    Dryftq.setupNavigation('maintenance');
+    renderMaintenanceTable();
+
+    // Query parameters
+    const params = Dryftq.getQueryParams();
+    if (params.newForMachine) {
+      openNewMaintModal(params.newForMachine);
+    }
+    if (params.taskId) {
+      openTaskModal(params.taskId);
+    }
+
+    // Profile sync
+    const state = Dryftq.getState();
+    if (state.user) {
+      const uName = document.getElementById('user-name-maint');
+      const uDept = document.getElementById('user-dept-maint');
+      const uAv = document.getElementById('user-avatar-maint');
+      if (uName) uName.textContent = state.user.name;
+      if (uDept) uDept.textContent = state.user.department;
+      if (uAv && state.user.avatar) uAv.src = state.user.avatar;
+    }
+
+    // Modal click dismiss
+    document.getElementById('maint-task-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'maint-task-modal') closeTaskModal();
+    });
+    document.getElementById('new-maint-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'new-maint-modal') closeNewMaintModal();
+    });
+
+    window.addEventListener('dryftq:state-change', () => {
+      renderMaintenanceTable();
+    });
+  });
+</script>
+</body>
+</html>
