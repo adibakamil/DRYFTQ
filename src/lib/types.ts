@@ -20,7 +20,8 @@ export interface Settings {
   language: string;
   timezone: string;
   dateFormat: string;
-  theme: 'light' | 'dark';
+  /** `system` is offered by the settings UI; nothing in the app reads it yet. */
+  theme: 'light' | 'dark' | 'system';
   units: 'metric' | 'imperial';
   autoRefresh: boolean;
   refreshInterval: number; // seconds

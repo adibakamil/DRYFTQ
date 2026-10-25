@@ -9,7 +9,6 @@ import {
   UNIT_OPTIONS,
   type SelectOption,
   type SettingsDraft,
-  type ThemeChoice,
 } from './shared';
 
 /* ------------------------------------------------------------------ */
@@ -105,7 +104,7 @@ export function SettingsFormCard({ draft, onDraft, onSubmit }: SettingsFormCardP
             label="Theme"
             value={draft.theme}
             options={THEME_OPTIONS}
-            onChange={(theme) => onDraft({ theme: theme as ThemeChoice })}
+            onChange={(theme) => onDraft({ theme })}
           />
           <SelectRow
             id="select-units"
