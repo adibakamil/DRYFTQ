@@ -22,6 +22,20 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // GitHub Pages SPA restore — pairs with 404.html. If we arrived at a
+      // clean route via the 404 fallback, the path is encoded in the query
+      // string as ?/dashboard; decode it back to a real URL before the router
+      // (the module script below) reads location.pathname.
+      (function (l) {
+        if (l.search[1] === '/') {
+          var decoded = l.search.slice(1).split('&').map(function (s) {
+            return s.replace(/~and~/g, '&');
+          }).join('?');
+          window.history.replaceState(null, null, l.pathname.slice(0, -1) + decoded);
+        }
+      })(window.location);
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -1,0 +1,5 @@
+# SPA fallback — every clean-URL route serves index.html.
+# /index.html 200 tells the host it is an SPA, so /dashboard, /analytics, …
+# resolve instead of 404ing.
+/index.html 200
+/*    /index.html   200
