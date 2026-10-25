@@ -7,15 +7,14 @@ import react from '@vitejs/plugin-react';
 // server exposed, so old bookmarks keep working (see src/app/routes.tsx).
 export default defineConfig({
   plugins: [react()],
-  // Emit *relative* asset URLs (`./assets/…`) instead of root-absolute
-  // (`/assets/…`). The nine console modules are served from clean URLs
-  // (`/dashboard`, `/analytics`, …) and several static hosts rewrite
-  // document-relative URLs for those routes while leaving root-absolute
-  // ones pointing at the wrong depth — which 404s the stylesheet and leaves
-  // the console painted on a bare `#031B30` background. Relative paths
-  // resolve correctly at any route depth on any host, and work when the
-  // bundle is opened from a sub-path or the filesystem.
-  base: './',
+  // Emit *root-absolute* asset URLs (`/assets/…`). The nine console modules
+  // are served from clean URLs (`/dashboard`, `/analytics`, …) and static
+  // hosts rewrite those routes to index.html. Root-absolute asset paths
+  // resolve identically from the landing route and every rewritten console
+  // route, so the stylesheet can never 404 and leave the console painted on a
+  // bare `#031B30` background. (A relative `./` base is unsafe here: on a
+  // rewritten route it can resolve against `/dashboard/assets/…`.)
+  base: '/',
   server: {
     port: 5173,
     strictPort: false,
