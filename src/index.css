@@ -658,6 +658,10 @@ body.console-light .console-scope :focus-visible {
 body.console-light .thin-scroll::-webkit-scrollbar-thumb {
   background: rgb(15 23 42 / 0.25);
 }
+/* …but inside the dark sidebar the thumb must stay light. */
+body.console-light .console-sidebar .thin-scroll::-webkit-scrollbar-thumb {
+  background: rgb(255 255 255 / 0.18);
+}
 
 /* ---- PROTECTIONS: solid accents keep white text ---- */
 /* `:not(…/)` keeps tinted variants (bg-emerald-500/15, bg-[#FF3D0A]/15 …)
