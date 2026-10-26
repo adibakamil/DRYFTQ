@@ -1,5 +1,5 @@
 ﻿import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from '../store/context';
 import { Icon } from '../components/Icon';
 import { computeOee, cx } from '../lib/utils';
@@ -184,7 +184,7 @@ export default function DashboardPage() {
             <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">Dashboard</h2>
             <p className="text-xs font-medium text-slate-400 sm:text-sm">Overview of your plant operations</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-end gap-2">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-300">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
               Live Telemetry Streaming
@@ -199,6 +199,14 @@ export default function DashboardPage() {
             >
               <Icon name="bolt" className={refreshing ? 'h-5 w-5 animate-spin' : 'h-5 w-5'} />
             </button>
+            <Link
+              to="/"
+              title="Go to the DRYFTQ landing page"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-50"
+            >
+              View Landing Page
+              <Icon name="arrow" className="h-3.5 w-3.5" />
+            </Link>
           </div>
         </div>
       </section>
