@@ -494,3 +494,290 @@
     transform: none;
   }
 }
+
+/* ============ LIGHT CONSOLE THEME ============ */
+/*
+ * The nine plant-operations modules ship a dark console palette (hard-coded
+ * surfaces, slate text, white-on-dark overlays across every page). This layer
+ * remaps that palette to white whenever `body.console-light` is set — the
+ * AppShell toggles the class on mount, and because the scope lives on <body>,
+ * dialogs and toasts that portal to document.body are themed too.
+ *
+ * Rules use `!important` on purpose: they must win over Tailwind utilities
+ * (including the `!`-marked ones some dialogs pass in). Accent fills — solid
+ * orange/emerald/red/amber/blue/gradient banners — are protected below and
+ * keep their white text; everything else becomes ink on white.
+ *
+ * Keep the order: translucent-white fills first, solid hex surfaces after
+ * (so a solid surface wins over a hover utility resting on it), then text
+ * flips, then the protections (which win on specificity).
+ */
+
+body.console-light {
+  background: #f4f7fb;
+}
+body.console-light .console-scope {
+  /* Legacy reference: <main> in the original dashboard is bg-[#f4f7fb]. */
+  background-color: #f4f7fb !important;
+  color: #334155 !important;
+}
+
+/* ---- translucent white fills → light gray chrome ---- */
+body.console-light [class*='bg-white/5'] {
+  background-color: #f8fafc !important;
+}
+body.console-light [class*='bg-white/10'] {
+  background-color: #f1f5f9 !important;
+}
+body.console-light [class*='bg-white/20'] {
+  background-color: #e2e8f0 !important;
+}
+/* Arbitrary opacities: bg-white/[0.03] … bg-white/[0.07] */
+body.console-light [class*='bg-white/['] {
+  background-color: #f8fafc !important;
+}
+
+/* ---- solid dark surfaces → white / light panels ---- */
+body.console-light [class*='bg-[#031B30]'],
+body.console-light [class*='bg-[#031b30]'],
+body.console-light [class*='bg-[#04223c]'],
+body.console-light [class*='bg-[#071629]'],
+body.console-light [class*='bg-[#07243e]'],
+body.console-light [class*='bg-gray-950'] {
+  background-color: #fff !important;
+}
+body.console-light [class*='bg-emerald-950'] {
+  background-color: #ecfdf5 !important;
+}
+body.console-light [class*='bg-red-950'] {
+  background-color: #fef2f2 !important;
+}
+body.console-light [class*='bg-amber-950'] {
+  background-color: #fffbeb !important;
+}
+body.console-light [class*='bg-blue-950'] {
+  background-color: #eff6ff !important;
+}
+
+/* ---- dark borders → light hairlines ---- */
+body.console-light [class*='border-[#0d3459]'],
+body.console-light [class*='border-white/5'],
+body.console-light [class*='border-white/10'],
+body.console-light [class*='border-white/15'],
+body.console-light [class*='border-white/20'],
+body.console-light [class*='border-white/30'] {
+  border-color: #e2e8f0 !important;
+}
+
+/* ---- console component classes ---- */
+body.console-light .console-card,
+body.console-light .console-card-solid {
+  background-color: #fff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: var(--shadow-card) !important;
+}
+body.console-light .console-label {
+  color: #64748b !important;
+}
+body.console-light .kpi-value {
+  color: #12161b !important;
+}
+
+/* ---- SVG chart chrome (inline stroke/fill attributes, not classes) ---- */
+body.console-light [stroke='#0d3459'] {
+  stroke: #e2e8f0 !important;
+}
+body.console-light [fill='#94a3b8'] {
+  /* Axis labels: #94a3b8 is a dark-card color (2.6:1 on white). */
+  fill: #475569 !important;
+}
+
+/* ---- dialog close affordance on a white panel ---- */
+body.console-light [class*='modal-close'] {
+  color: #64748b !important;
+}
+body.console-light [class*='modal-close']:hover {
+  color: #0f172a !important;
+  background-color: rgb(15 23 42 / 0.06) !important;
+}
+
+/* ---- text: dark-surface colors → ink and AA-safe hues on white ---- */
+body.console-light [class*='text-white'] {
+  color: #12161b !important;
+}
+body.console-light [class*='text-slate-200'] {
+  color: #334155 !important;
+}
+body.console-light [class*='text-slate-300'] {
+  color: #475569 !important;
+}
+body.console-light [class*='text-slate-400'] {
+  color: #64748b !important;
+}
+body.console-light [class*='text-orange-1'],
+body.console-light [class*='text-orange-2'],
+body.console-light [class*='text-orange-3'],
+body.console-light [class*='text-orange-4'],
+body.console-light [class*='text-[#FF3D0A]'],
+body.console-light [class*='text-[#ff4d15]'],
+body.console-light [class*='text-[#FF4D15]'],
+body.console-light [class*='text-[#FF4D26]'],
+body.console-light [class*='text-[#16A66A]'] {
+  color: #cc4310 !important;
+}
+body.console-light [class*='text-emerald-1'],
+body.console-light [class*='text-emerald-3'],
+body.console-light [class*='text-emerald-4'] {
+  color: #047857 !important;
+}
+body.console-light [class*='text-red-1'],
+body.console-light [class*='text-red-2'],
+body.console-light [class*='text-red-3'],
+body.console-light [class*='text-red-4'] {
+  color: #dc2626 !important;
+}
+body.console-light [class*='text-amber-1'],
+body.console-light [class*='text-amber-3'],
+body.console-light [class*='text-amber-4'] {
+  color: #b45309 !important;
+}
+body.console-light [class*='text-blue-1'],
+body.console-light [class*='text-blue-3'],
+body.console-light [class*='text-blue-4'] {
+  color: #1d4ed8 !important;
+}
+body.console-light [class*='text-rose-3'],
+body.console-light [class*='text-rose-4'] {
+  color: #be123c !important;
+}
+
+/* ---- focus + scrollbars on light surfaces ---- */
+body.console-light .console-scope :focus-visible {
+  outline-color: #cc4310 !important;
+}
+body.console-light .thin-scroll::-webkit-scrollbar-thumb {
+  background: rgb(15 23 42 / 0.25);
+}
+
+/* ---- PROTECTIONS: solid accents keep white text ---- */
+/* `:not(…/)` keeps tinted variants (bg-emerald-500/15, bg-[#FF3D0A]/15 …)
+   out, so only genuinely solid fills are protected. */
+body.console-light [class*='bg-[#FF3D0A]']:not([class*='bg-[#FF3D0A]/']) [class*='text-white'],
+body.console-light [class*='bg-[#FF3D0A]']:not([class*='bg-[#FF3D0A]/'])[class*='text-white'],
+body.console-light [class*='bg-[#e03405]'] [class*='text-white'],
+body.console-light [class*='bg-[#e03405]'][class*='text-white'],
+body.console-light [class*='bg-[#f95721]'] [class*='text-white'],
+body.console-light [class*='bg-[#f95721]'][class*='text-white'],
+body.console-light [class*='bg-[#ff4d15]'] [class*='text-white'],
+body.console-light [class*='bg-[#ff4d15]'][class*='text-white'],
+body.console-light [class*='bg-[#FF4D15]'] [class*='text-white'],
+body.console-light [class*='bg-[#1e78f6]'] [class*='text-white'],
+body.console-light [class*='bg-[#16A66A]'] [class*='text-white'],
+body.console-light [class*='bg-[#FF5A1F]'] [class*='text-white'],
+body.console-light [class*='bg-emerald-400']:not([class*='bg-emerald-400/']) [class*='text-white'],
+body.console-light [class*='bg-emerald-500']:not([class*='bg-emerald-500/']) [class*='text-white'],
+body.console-light [class*='bg-emerald-500']:not([class*='bg-emerald-500/'])[class*='text-white'],
+body.console-light [class*='bg-emerald-600']:not([class*='bg-emerald-600/']) [class*='text-white'],
+body.console-light [class*='bg-emerald-600']:not([class*='bg-emerald-600/'])[class*='text-white'],
+body.console-light [class*='bg-emerald-700']:not([class*='bg-emerald-700/']) [class*='text-white'],
+body.console-light [class*='bg-red-500']:not([class*='bg-red-500/']) [class*='text-white'],
+body.console-light [class*='bg-red-500']:not([class*='bg-red-500/'])[class*='text-white'],
+body.console-light [class*='bg-amber-400']:not([class*='bg-amber-400/']) [class*='text-white'],
+body.console-light [class*='bg-amber-500']:not([class*='bg-amber-500/']) [class*='text-white'],
+body.console-light [class*='bg-amber-500']:not([class*='bg-amber-500/'])[class*='text-white'],
+body.console-light [class*='bg-amber-600']:not([class*='bg-amber-600/']) [class*='text-white'],
+body.console-light [class*='bg-blue-500']:not([class*='bg-blue-500/']) [class*='text-white'],
+body.console-light [class*='bg-blue-500']:not([class*='bg-blue-500/'])[class*='text-white'],
+body.console-light [class*='bg-blue-600']:not([class*='bg-blue-600/']) [class*='text-white'],
+body.console-light [class*='bg-orange-500']:not([class*='bg-orange-500/']) [class*='text-white'],
+body.console-light [class*='bg-slate-500']:not([class*='bg-slate-500/']) [class*='text-white'] {
+  color: #fff !important;
+}
+
+/* ---- PROTECTIONS: the Dashboard orange gradient banner ---- */
+body.console-light [class*='from-[#ff4d15]'][class*='text-white'],
+body.console-light [class*='from-[#ff4d15]'] [class*='text-white'] {
+  color: #fff !important;
+}
+body.console-light [class*='from-[#ff4d15]'] [class*='text-orange-1'] {
+  color: #ffedd5 !important;
+}
+body.console-light [class*='from-[#ff4d15]'] [class*='text-orange-2'] {
+  color: #fed7aa !important;
+}
+body.console-light [class*='from-[#ff4d15]'] [class*='bg-white/2'] {
+  background-color: rgb(255 255 255 / 0.2) !important;
+}
+body.console-light [class*='from-[#ff4d15]'] [class*='border-white'] {
+  border-color: rgb(255 255 255 / 0.3) !important;
+}
+
+/* ---- hover states (higher specificity: class + :hover) ---- */
+body.console-light [class*='hover:bg-white/5']:hover {
+  background-color: #eef2f7 !important;
+}
+body.console-light [class*='hover:bg-white/10']:hover {
+  background-color: #e2e8f0 !important;
+}
+body.console-light [class*='hover:bg-white/20']:hover {
+  background-color: #cbd5e1 !important;
+}
+/* `hover:text-white` was a brighten-on-hover affordance on dark cards; on the
+   light content area the hover must darken instead (white-on-white would be
+   invisible). The sidebar overrides this back to white below. */
+body.console-light [class*='hover:text-white']:hover {
+  color: #12161b !important;
+}
+
+/* ============ SIDEBAR STAYS DARK NAVY ============
+ * The original design keeps a dark navy sidebar next to the light content
+ * area, so everything inside `.console-sidebar` (AppShell marks the desktop
+ * aside and the mobile drawer) is restored to the dark console palette after
+ * the light remap. Higher specificity (.console-sidebar …) wins over the
+ * generic rules above. */
+body.console-light .console-sidebar {
+  background-color: #04223c !important;
+  border-color: #0d3459 !important;
+}
+body.console-light .console-sidebar [class*='border-[#0d3459]'] {
+  border-color: #0d3459 !important;
+}
+body.console-light .console-sidebar [class*='border-white'] {
+  border-color: rgb(255 255 255 / 0.1) !important;
+}
+body.console-light .console-sidebar [class*='text-white'] {
+  color: #fff !important;
+}
+body.console-light .console-sidebar [class*='text-slate-200'] {
+  color: #e2e8f0 !important;
+}
+body.console-light .console-sidebar [class*='text-slate-300'] {
+  color: #cbd5e1 !important;
+}
+body.console-light .console-sidebar [class*='text-slate-400'] {
+  color: #94a3b8 !important;
+}
+body.console-light .console-sidebar [class*='text-slate-500'] {
+  color: #64748b !important;
+}
+body.console-light .console-sidebar [class*='bg-white/5'] {
+  background-color: rgb(255 255 255 / 0.05) !important;
+}
+body.console-light .console-sidebar [class*='bg-white/10'] {
+  background-color: rgb(255 255 255 / 0.1) !important;
+}
+body.console-light .console-sidebar [class*='hover:bg-white/5']:hover {
+  background-color: rgb(255 255 255 / 0.06) !important;
+}
+body.console-light .console-sidebar [class*='hover:bg-white/10']:hover {
+  background-color: rgb(255 255 255 / 0.1) !important;
+}
+body.console-light .console-sidebar [class*='hover:text-white']:hover {
+  color: #fff !important;
+}
+body.console-light .console-sidebar .console-label {
+  color: #94a3b8 !important;
+}
+body.console-light .console-sidebar :focus-visible {
+  outline-color: #fff !important;
+}

@@ -170,6 +170,15 @@ export function AppShell() {
     return () => document.removeEventListener('pointerdown', onPointerDown);
   }, []);
 
+  // The console modules render a white palette: `body.console-light` activates
+  // the remap layer in index.css that turns the dark console surfaces into
+  // light ones. It lives on <body> (not the wrapper div) so dialogs and toasts
+  // that portal directly to document.body are themed as well.
+  useEffect(() => {
+    document.body.classList.add('console-light');
+    return () => document.body.classList.remove('console-light');
+  }, []);
+
   const pick = (result: SearchResult) => {
     setQuery('');
     navigate(result.path);
@@ -232,8 +241,9 @@ export function AppShell() {
 
   return (
     <div className="console-scope min-h-screen bg-brand-console text-slate-200">
-      {/* Desktop sidebar */}
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 border-r border-[#0d3459] bg-[#04223c] lg:block">
+      {/* Desktop sidebar (`.console-sidebar` keeps it dark navy — the light
+          remap layer in index.css excludes it) */}
+      <aside className="console-sidebar fixed inset-y-0 left-0 z-40 hidden w-64 border-r border-[#0d3459] bg-[#04223c] lg:block">
         {sidebar}
       </aside>
 
@@ -241,7 +251,7 @@ export function AppShell() {
       {navOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-black/60" onClick={() => setNavOpen(false)} aria-hidden />
-          <div className="absolute inset-y-0 left-0 w-72 border-r border-[#0d3459] bg-[#04223c] animate-fade-in">{sidebar}</div>
+          <div className="console-sidebar absolute inset-y-0 left-0 w-72 border-r border-[#0d3459] bg-[#04223c] animate-fade-in">{sidebar}</div>
         </div>
       )}
 

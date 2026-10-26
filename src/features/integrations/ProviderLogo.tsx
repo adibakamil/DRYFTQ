@@ -9,9 +9,9 @@ const LOGOS: Record<string, ReactNode> = {
   aws: (
     <svg className="h-10 w-auto" fill="none" viewBox="0 0 100 60" aria-hidden="true">
       <path
-        /* Wordmark lightened from the legacy #14283D — the dark navy was
-           invisible on the #07243E console card (WCAG contrast ≈ 1.1:1). */
-        fill="#E8EDF2"
+        /* AWS dark wordmark for the light console card (their standard
+           light-background lockup); the orange smile stays #FF9900. */
+        fill="#232F3E"
         d="M26.2 31.6c-.7.5-1.7.8-2.9.8-3.2 0-4.6-2-4.6-5 0-3.3 1.9-5.4 4.8-5.4 1.2 0 2 .3 2.7.8v8.8zm5.7-14.7h-5.4v2.9c-1.3-2-3.6-3.4-6.4-3.4-5.8 0-9.8 4.5-9.8 11.2 0 6.6 3.8 11 9.8 11 2.8 0 5.1-1.3 6.4-3.3v2.8h5.4V16.9zm13.1 21.6l-5.6-21.6h5.8l3.1 14.6 3.4-14.6h5.1l3.4 14.7 3.2-14.7h5.6L57.7 38.5h-5.6l-3.3-13.8-3.3 13.8h-1.4z"
       />
       <path
