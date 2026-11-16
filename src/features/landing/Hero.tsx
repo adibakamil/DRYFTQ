@@ -8,9 +8,11 @@ export interface HeroProps {
 }
 
 /**
- * Hero — "Prevent the Unexpected". `Explore Platform` is a real React Router
- * link to the console (`/dashboard`), never a modal; `Watch Demo` opens the
- * video dialog.
+ * Hero — "Build Smarter. Create Better." (layout taken from the Android app's
+ * home screen: oversized wordmark, compact headline, two CTAs). `Get Started`
+ * is a real React Router link into the console (`/dashboard`); `Learn More`
+ * anchors to the About section; the demo video stays reachable from the muted
+ * link.
  */
 export function Hero({ onWatchDemo }: HeroProps) {
   return (
@@ -37,20 +39,19 @@ export function Hero({ onWatchDemo }: HeroProps) {
             decoding="async"
           />
           <h1 className="hero-title hero-in" id="hero-title">
-            <span className="text-brand" aria-hidden="true">#</span> Prevent the Unexpected<span className="text-brand">.</span>
+            Build Smarter. Create Better.
           </h1>
-          <p className="lead hero-in max-w-[34rem]">
-            DRYFTQ combines machine data, human insights and quantum intelligence to detect subtle process drift
-            early—reducing downtime, waste and quality loss.
-          </p>
           <div className="hero-actions hero-in">
             <Link className="btn btn-primary btn-lg" to="/dashboard" title="Open the DRYFTQ dashboard platform">
-              Explore Platform <Icon name="arrow" className="icon-arrow" />
+              Get Started <Icon name="arrow" className="icon-arrow" />
             </Link>
-            <button className="btn btn-outline btn-lg" type="button" aria-haspopup="dialog" onClick={onWatchDemo}>
-              <Icon name="play" /> Watch Demo <Icon name="arrow" className="icon-arrow text-gray-500" />
-            </button>
+            <a className="btn btn-outline btn-lg" href="#about">
+              Learn More
+            </a>
           </div>
+          <button className="hero-demo hero-in" type="button" aria-haspopup="dialog" onClick={onWatchDemo}>
+            <Icon name="play" /> Watch the 90-second demo
+          </button>
         </div>
       </div>
     </section>

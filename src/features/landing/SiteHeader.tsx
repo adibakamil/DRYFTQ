@@ -74,12 +74,12 @@ export function SiteHeader({ currentSection, onLogin, onGetStarted }: SiteHeader
   return (
     <header className="sticky top-0 z-40 border-b border-gray-200/80 bg-white/95 backdrop-blur" id="siteHeader">
       <div className="container-x flex items-center justify-between gap-6" style={{ height: 'var(--nav-h)' }}>
-        <a href="#hero" className="text-2xl font-black tracking-tight text-brand-ink" aria-label="DRYFTQ — home">
+        <a href="#hero" className="text-4xl font-black tracking-tight text-brand-ink" aria-label="DRYFTQ — home">
           DRYFTQ
         </a>
 
         <nav className="hidden lg:block" aria-label="Primary">
-          <ul className="flex items-center gap-6 xl:gap-9" id="primaryNav">
+          <ul className="flex items-center gap-6 xl:gap-12" id="primaryNav">
             {NAV_ITEMS.map((item) => (
               <li key={item.href}>
                 <a

@@ -6,7 +6,7 @@
 :root {
   --nav-h: 72px;
   --gutter: clamp(1rem, 4vw, 2rem);
-  --container: 1200px;
+  --container: 1400px;
   --section-y: clamp(4rem, 8vw, 6.5rem);
   --radius-card: 14px;
   --radius-pill: 999px;
@@ -250,13 +250,14 @@
     mask-image: linear-gradient(to right, transparent 0, #000 14%);
   }
   .hero-wordmark {
-    width: clamp(220px, 60vw, 400px);
+    width: clamp(220px, 62vw, 760px);
+    max-width: 100%;
     height: auto;
   }
   .hero-title {
     @apply font-extrabold tracking-tight;
-    font-size: clamp(1.75rem, 1rem + 2.1vw, 2.625rem);
-    line-height: 1.1;
+    font-size: clamp(1.5rem, 1.1rem + 1.1vw, 1.875rem);
+    line-height: 1.15;
   }
   .hero-actions {
     @apply flex flex-wrap items-center justify-center gap-3;
@@ -266,6 +267,18 @@
   .hero-actions .btn {
     flex: 1 1 13rem;
     max-width: 18rem;
+  }
+  .hero-demo {
+    @apply inline-flex items-center gap-2 text-sm font-semibold text-gray-500;
+    padding: 0.25rem 0;
+    transition: color 0.2s;
+  }
+  .hero-demo .icon {
+    width: 0.8em;
+    height: 0.8em;
+  }
+  .hero-demo:hover {
+    @apply text-brand-action;
   }
   @media (min-width: 640px) {
     .hero-actions .btn {
@@ -277,22 +290,35 @@
     .hero-grid {
       grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
       gap: clamp(1.5rem, 4vw, 4rem);
-      min-height: clamp(520px, calc(100svh - var(--nav-h) - 72px), 680px);
+      align-items: start;
+      min-height: clamp(560px, calc(100svh - var(--nav-h) - 32px), 780px);
       padding-top: 0;
     }
     .hero-copy {
       order: 2;
       align-items: flex-start;
       text-align: left;
-      padding-block: 2rem;
+      gap: 2.25rem;
+      padding-block: 6.25rem 2rem;
     }
     .hero-art {
       order: 1;
       justify-self: start;
-      width: min(100%, 560px);
+      width: 115%;
+      margin-left: clamp(-60px, -4vw, 0px);
     }
     .hero-actions {
       justify-content: flex-start;
+      gap: 2.75rem;
+      margin-top: 0.5rem;
+    }
+    .hero-actions .btn {
+      padding-inline: 2.5rem;
+    }
+    .hero-title,
+    .hero-actions,
+    .hero-demo {
+      padding-left: clamp(0px, 7vw, 110px);
     }
   }
 
