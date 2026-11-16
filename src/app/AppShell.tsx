@@ -254,7 +254,7 @@ export function AppShell() {
     <div className="console-scope min-h-screen bg-brand-console text-slate-200">
       {/* Desktop sidebar (`.console-sidebar` keeps it dark navy — the light
           remap layer in index.css excludes it) */}
-      <aside className="console-sidebar fixed inset-y-0 left-0 z-40 hidden w-64 border-r border-[#0d3459] bg-[#04223c] lg:block">
+      <aside className="console-sidebar fixed inset-y-0 left-0 z-40 hidden w-64 border-r border-[#1b3147] bg-[#0F2133] lg:block">
         {sidebar}
       </aside>
 
@@ -262,7 +262,7 @@ export function AppShell() {
       {navOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-black/60" onClick={() => setNavOpen(false)} aria-hidden />
-          <div className="console-sidebar absolute inset-y-0 left-0 w-72 border-r border-[#0d3459] bg-[#04223c] animate-fade-in">{sidebar}</div>
+          <div className="console-sidebar absolute inset-y-0 left-0 w-72 border-r border-[#1b3147] bg-[#0F2133] animate-fade-in">{sidebar}</div>
         </div>
       )}
 

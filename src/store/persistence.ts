@@ -3,10 +3,11 @@ import { DEFAULT_STATE } from './defaultState';
 
 /**
  * Persistence for the plant state.
- * The key and the merge rules are inherited from the legacy engine so any
- * state an operator already saved in `localStorage` keeps working.
+ * The key is bumped whenever the demo seed gains new assets (v3 seeds the
+ * digital-twin machines) so returning operators see the new plant rather than
+ * a stale snapshot; deliberate edits inside a session still persist under it.
  */
-export const STORAGE_KEY = 'dryftq_plant_operations_v2';
+export const STORAGE_KEY = 'dryftq_plant_operations_v3';
 export const STATE_CHANGE_EVENT = 'dryftq:state-change';
 
 const LEGACY_USER_NAME = 'Aditya Kamil';

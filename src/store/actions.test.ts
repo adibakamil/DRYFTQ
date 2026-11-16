@@ -114,7 +114,7 @@ describe('machine management', () => {
   it('rejects a missing id', () => {
     const result = actions.addMachine(seed(), {});
     expect(result.notice?.type).toBe('error');
-    expect(result.state.machines).toHaveLength(10);
+    expect(result.state.machines).toHaveLength(DEFAULT_STATE.machines.length);
   });
 
   it('rejects duplicate ids case-insensitively', () => {
@@ -194,6 +194,6 @@ describe('profile, settings and reset', () => {
     const result = actions.resetToDefaults();
     expect(result.state.machines).toHaveLength(DEFAULT_STATE.machines.length);
     expect(result.state.machines.some((m) => m.id === 'X-1')).toBe(false);
-    expect(dirty.machines).toHaveLength(11);
+    expect(dirty.machines).toHaveLength(DEFAULT_STATE.machines.length + 1);
   });
 });

@@ -550,11 +550,11 @@
  */
 
 body.console-light {
-  background: #f4f7fb;
+  background: #f6f8fa;
 }
 body.console-light .console-scope {
-  /* Legacy reference: <main> in the original dashboard is bg-[#f4f7fb]. */
-  background-color: #f4f7fb !important;
+  /* Console canvas: soft gray behind the white KPI / twin cards. */
+  background-color: #f6f8fa !important;
   color: #334155 !important;
 }
 
@@ -776,8 +776,8 @@ body.console-light [class*='hover:text-white']:hover {
  * the light remap. Higher specificity (.console-sidebar …) wins over the
  * generic rules above. */
 body.console-light .console-sidebar {
-  background-color: #04223c !important;
-  border-color: #0d3459 !important;
+  background-color: #0f2133 !important;
+  border-color: #1b3147 !important;
 }
 body.console-light .console-sidebar [class*='border-[#0d3459]'] {
   border-color: #0d3459 !important;
@@ -821,3 +821,982 @@ body.console-light .console-sidebar .console-label {
 body.console-light .console-sidebar :focus-visible {
   outline-color: #fff !important;
 }
+
+/* ============ PLANT OVERVIEW · KPI + DIGITAL TWIN ============ */
+
+/* ---------- KPI summary cards ---------- */
+.kpi-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 1.05rem 1.15rem 0.95rem;
+  border-radius: 16px;
+  border: 1px solid #e6ecf3;
+  background: #fff;
+  box-shadow:
+    0 1px 2px rgb(15 23 42 / 0.04),
+    0 18px 30px -26px rgb(15 23 42 / 0.5);
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+.kpi-card:hover {
+  border-color: #d8e2ec;
+  box-shadow:
+    0 2px 4px rgb(15 23 42 / 0.05),
+    0 22px 36px -26px rgb(15 23 42 / 0.55);
+  transform: translateY(-1px);
+}
+.kpi-card--green {
+  border-color: #cdeedd;
+  background: linear-gradient(180deg, #f5fdf8 0%, #ffffff 58%);
+}
+.kpi-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.kpi-card__label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #64748b;
+}
+.kpi-card__body {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+.kpi-card__value {
+  font-size: 1.72rem;
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  color: #0f2133;
+  font-variant-numeric: tabular-nums;
+}
+.kpi-card__sub {
+  margin-top: 0.35rem;
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: #16a34a;
+  white-space: nowrap;
+}
+.kpi-spark {
+  flex: none;
+  margin-bottom: 2px;
+  overflow: visible;
+}
+.kpi-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.kpi-pill--green {
+  background: #eafaf1;
+  color: #15803d;
+  border: 1px solid #cbefdc;
+}
+.kpi-pill--blue {
+  background: #eaf2ff;
+  color: #1d4ed8;
+  border: 1px solid #d7e5ff;
+}
+.kpi-pill__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.kpi-pill__up {
+  font-size: 0.48rem;
+  line-height: 1;
+}
+
+/* ---------- Digital twin card ---------- */
+.twin-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.twin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #e8edf3;
+  background: #fff;
+}
+.twin-toolbar__title {
+  margin: 0 0.25rem 0 0;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #0f2133;
+  white-space: nowrap;
+}
+.twin-toolbar__spacer {
+  flex: 1 1 auto;
+}
+
+.twin-select {
+  appearance: none;
+  height: 34px;
+  padding: 0 1.9rem 0 0.7rem;
+  border-radius: 9px;
+  border: 1px solid #dfe7ef;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.6rem center;
+  color: #38506a;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 0.16s ease,
+    box-shadow 0.16s ease;
+}
+.twin-select:hover {
+  border-color: #c8d5e2;
+}
+.twin-select:focus-visible {
+  outline: none;
+  border-color: #93b4f5;
+  box-shadow: 0 0 0 3px rgb(59 130 246 / 0.15);
+}
+
+.twin-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  height: 34px;
+  padding: 0 0.75rem;
+  border-radius: 9px;
+  border: 1px solid #dfe7ef;
+  background: #fff;
+  color: #3b5169;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease,
+    color 0.16s ease;
+}
+.twin-btn:hover {
+  background: #f4f8fc;
+  border-color: #c8d5e2;
+}
+.twin-btn--icon {
+  width: 34px;
+  padding: 0;
+}
+.twin-btn.is-on {
+  background: #e9f1ff;
+  border-color: #bcd4ff;
+  color: #1d4ed8;
+}
+.twin-btn svg {
+  flex: none;
+}
+
+.twin-switch-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding-left: 0.15rem;
+}
+.twin-switch-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
+}
+.twin-switch {
+  position: relative;
+  width: 38px;
+  height: 21px;
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: #cbd5e1;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.twin-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgb(15 23 42 / 0.35);
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.twin-switch[aria-checked='true'] {
+  background: #1e78f6;
+}
+.twin-switch[aria-checked='true']::after {
+  transform: translateX(17px);
+}
+.twin-switch:focus-visible {
+  outline: 2px solid #1e78f6;
+  outline-offset: 2px;
+}
+
+/* ---------- map viewport ---------- */
+.twin-viewport {
+  position: relative;
+  overflow: hidden;
+  background: #edf2f7;
+  /* Fits the twin card above the fold on laptop viewports, grows on tall
+     monitors, and stays usable on short screens. */
+  height: clamp(420px, calc(100vh - 392px), 640px);
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+.twin-viewport.is-dragging {
+  cursor: grabbing;
+}
+.twin-layer {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.twin-viewport.is-dragging .twin-layer {
+  transition: none;
+}
+.twin-map {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  pointer-events: none;
+}
+.twin-overlays {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.4s ease;
+}
+.twin-overlays.is-off {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- machine hotspots ---------- */
+.twin-marker {
+  position: absolute;
+  width: 0;
+  height: 0;
+  z-index: 4;
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+.twin-marker.is-muted {
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.twin-ring {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 108px;
+  height: 108px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.twin-ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--twin-glow) 0%, transparent 68%);
+}
+.twin-ring::after {
+  content: '';
+  position: absolute;
+  inset: 26%;
+  border-radius: 50%;
+  border: 1.5px solid var(--twin-line);
+  box-shadow:
+    0 0 18px var(--twin-glow),
+    inset 0 0 14px var(--twin-glow);
+  animation: twinPulse 2.6s ease-in-out infinite;
+}
+.twin-ring__wave {
+  position: absolute;
+  inset: 26%;
+  border-radius: 50%;
+  border: 1px solid var(--twin-line);
+  animation: twinWave 2.9s ease-out infinite;
+}
+.twin-ring--critical {
+  --twin-glow: rgb(248 113 113 / 0.5);
+  --twin-line: rgb(248 113 113 / 0.95);
+}
+.twin-ring--warning {
+  --twin-glow: rgb(251 146 60 / 0.45);
+  --twin-line: rgb(251 146 60 / 0.9);
+}
+.twin-ring--healthy {
+  --twin-glow: rgb(74 222 128 / 0.45);
+  --twin-line: rgb(74 222 128 / 0.9);
+}
+.twin-ring--cyan {
+  --twin-glow: rgb(45 212 191 / 0.5);
+  --twin-line: rgb(45 212 191 / 0.92);
+}
+
+@keyframes twinPulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+@keyframes twinWave {
+  0% {
+    opacity: 0.65;
+    transform: scale(0.85);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(1.9);
+  }
+}
+
+.twin-dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 11px;
+  height: 11px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.92);
+  box-shadow:
+    0 0 0 4px rgb(255 255 255 / 0.18),
+    0 0 16px rgb(255 255 255 / 0.65);
+  pointer-events: none;
+}
+
+.twin-tag {
+  position: absolute;
+  left: 0;
+  bottom: 22px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  max-width: 220px;
+  padding: 0.28rem 0.3rem 0.28rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.16);
+  background: rgb(15 20 28 / 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 14px 30px rgb(6 12 20 / 0.35);
+  color: #f8fafc;
+  font-size: 0.71rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+.twin-tag:hover {
+  transform: translateX(-50%) translateY(-2px);
+  border-color: rgb(255 255 255 / 0.4);
+  box-shadow: 0 18px 34px rgb(6 12 20 / 0.42);
+}
+.twin-tag.is-active {
+  border-color: rgb(255 255 255 / 0.55);
+  box-shadow:
+    0 0 0 3px rgb(255 255 255 / 0.16),
+    0 18px 36px rgb(6 12 20 / 0.45);
+}
+.twin-tag__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.twin-tag__value {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 19px;
+  padding: 0 0.4rem;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22);
+}
+.twin-tag__value--critical {
+  background: #ef4444;
+}
+.twin-tag__value--warning {
+  background: #f97316;
+}
+.twin-tag__value--healthy {
+  background: #16a34a;
+}
+.twin-tag__value--cyan {
+  background: #0d9488;
+}
+.twin-tag--connect::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 1px);
+  width: 1px;
+  height: 20px;
+  background: linear-gradient(to bottom, rgb(255 255 255 / 0.6), rgb(255 255 255 / 0));
+}
+
+.twin-card-marker {
+  position: absolute;
+  left: 0;
+  bottom: 28px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  width: 156px;
+  padding: 0.55rem 0.65rem 0.5rem;
+  border-radius: 12px;
+  border: 1px solid rgb(248 113 113 / 0.5);
+  background: rgba(20, 20, 25, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 18px 40px rgb(4 8 14 / 0.5);
+  color: #f8fafc;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+.twin-card-marker:hover {
+  transform: translateX(-50%) translateY(-2px);
+  border-color: rgb(248 113 113 / 0.8);
+}
+.twin-card-marker.is-active {
+  border-color: rgb(248 113 113 / 0.95);
+  box-shadow:
+    0 0 0 3px rgb(248 113 113 / 0.18),
+    0 18px 40px rgb(4 8 14 / 0.55);
+}
+.twin-card-marker__title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+.twin-card-marker__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+.twin-card-marker__value {
+  color: #f87171;
+  font-size: 1.18rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.twin-card-marker__flag {
+  color: #fca5a5;
+  font-size: 0.52rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.twin-card-marker__hint {
+  color: #94a3b8;
+  font-size: 0.55rem;
+  font-weight: 500;
+}
+
+/* ---------- floating map controls ---------- */
+.twin-float {
+  position: absolute;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.28rem;
+  border-radius: 11px;
+  border: 1px solid rgb(226 232 240 / 0.9);
+  background: rgb(255 255 255 / 0.9);
+  box-shadow: 0 16px 36px rgb(15 23 42 / 0.14);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.twin-float--top {
+  top: 0.75rem;
+  right: 0.75rem;
+}
+.twin-float--bottom {
+  bottom: 0.75rem;
+  right: 0.75rem;
+  flex-direction: column;
+}
+.twin-float__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #3b5169;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+.twin-float__btn:hover {
+  background: #edf2f8;
+}
+.twin-float__btn.is-active {
+  background: #e7f0ff;
+  color: #1d4ed8;
+}
+.twin-float__divider {
+  width: 18px;
+  height: 1px;
+  background: #e2e8f0;
+}
+.twin-menu-wrap {
+  position: relative;
+}
+.twin-float__select {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  height: 30px;
+  padding: 0 0.45rem;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #3b5169;
+  font-size: 0.68rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.twin-float__select:hover,
+.twin-float__select.is-open {
+  background: #edf2f8;
+}
+.twin-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.45rem);
+  z-index: 20;
+  min-width: 172px;
+  padding: 0.3rem;
+  border-radius: 11px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  box-shadow: 0 22px 44px rgb(15 23 42 / 0.18);
+  animation: twinMenuIn 0.16s ease both;
+}
+.twin-menu button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.42rem 0.5rem;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #334155;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+.twin-menu button:hover {
+  background: #f1f5f9;
+}
+.twin-menu button span {
+  color: #94a3b8;
+  font-size: 0.62rem;
+  font-weight: 600;
+}
+@keyframes twinMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+/* ---------- telemetry drawer ---------- */
+.twin-drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 14;
+  display: flex;
+  flex-direction: column;
+  width: min(370px, 90%);
+  border-left: 1px solid rgb(255 255 255 / 0.12);
+  background: rgb(9 15 23 / 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: -28px 0 56px rgb(2 6 12 / 0.4);
+  color: #e2e8f0;
+  transform: translateX(101%);
+  transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.twin-drawer.is-open {
+  transform: translateX(0);
+}
+.twin-drawer__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1.1rem 0.9rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+}
+.twin-drawer__eyebrow {
+  margin: 0 0 0.3rem;
+  color: #7b8ea4;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.twin-drawer__title {
+  margin: 0;
+  color: #f8fafc;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.twin-drawer__meta {
+  margin: 0.15rem 0 0;
+  color: #8fa2b7;
+  font-size: 0.66rem;
+  font-weight: 500;
+}
+.twin-drawer__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 8px;
+  background: rgb(255 255 255 / 0.04);
+  color: #cbd5e1;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+.twin-drawer__close:hover {
+  background: rgb(255 255 255 / 0.1);
+  color: #fff;
+}
+.twin-drawer__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+  padding: 1rem 1.1rem 1.2rem;
+}
+.twin-health {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+.twin-gauge-wrap {
+  position: relative;
+  flex: none;
+  width: 88px;
+  height: 88px;
+}
+.twin-gauge {
+  width: 88px;
+  height: 88px;
+}
+.twin-gauge__track {
+  fill: none;
+  stroke: rgb(255 255 255 / 0.09);
+  stroke-width: 6;
+}
+.twin-gauge__value {
+  fill: none;
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.6s ease;
+}
+.twin-gauge__label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.twin-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+.twin-status--critical {
+  background: rgb(248 113 113 / 0.16);
+  color: #fca5a5;
+  box-shadow: inset 0 0 0 1px rgb(248 113 113 / 0.32);
+}
+.twin-status--warning {
+  background: rgb(251 146 60 / 0.16);
+  color: #fdba74;
+  box-shadow: inset 0 0 0 1px rgb(251 146 60 / 0.32);
+}
+.twin-status--healthy {
+  background: rgb(74 222 128 / 0.14);
+  color: #86efac;
+  box-shadow: inset 0 0 0 1px rgb(74 222 128 / 0.3);
+}
+.twin-status--cyan {
+  background: rgb(45 212 191 / 0.14);
+  color: #5eead4;
+  box-shadow: inset 0 0 0 1px rgb(45 212 191 / 0.3);
+}
+.twin-health__caption {
+  margin: 0.45rem 0 0;
+  color: #8fa2b7;
+  font-size: 0.62rem;
+  line-height: 1.45;
+}
+.twin-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+.twin-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.55rem 0.6rem;
+  border-radius: 10px;
+  border: 1px solid rgb(255 255 255 / 0.07);
+  background: rgb(255 255 255 / 0.04);
+}
+.twin-metric__label {
+  color: #8fa2b7;
+  font-size: 0.54rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.twin-metric__value {
+  color: #f1f5f9;
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.twin-drawer__subhead {
+  margin: 0 0 0.35rem;
+  color: #8fa2b7;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.twin-note {
+  margin: 0;
+  color: #b3c2d3;
+  font-size: 0.7rem;
+  line-height: 1.55;
+}
+.twin-drawer__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  padding: 0.85rem 1.1rem 1rem;
+  border-top: 1px solid rgb(255 255 255 / 0.08);
+}
+.twin-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  height: 34px;
+  border-radius: 9px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease;
+}
+.twin-action--ghost {
+  border: 1px solid rgb(255 255 255 / 0.14);
+  background: rgb(255 255 255 / 0.05);
+  color: #e2e8f0;
+}
+.twin-action--ghost:hover {
+  background: rgb(255 255 255 / 0.1);
+}
+.twin-action--primary {
+  border: 1px solid transparent;
+  background: #1e78f6;
+  color: #fff;
+}
+.twin-action--primary:hover {
+  background: #1668dc;
+}
+
+/* ---------- full screen ---------- */
+.twin-card:fullscreen,
+.twin-card.is-pseudo-full {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  margin: 0 !important;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+.twin-card.is-pseudo-full {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+}
+.twin-card:fullscreen .twin-viewport,
+.twin-card.is-pseudo-full .twin-viewport {
+  flex: 1 1 auto;
+  height: auto;
+  aspect-ratio: auto;
+  max-height: none;
+  min-height: 0;
+}
+body.twin-fs-lock {
+  overflow: hidden;
+}
+
+/* ---------- small screens ---------- */
+@media (max-width: 639px) {
+  .twin-toolbar {
+    padding: 0.7rem 0.75rem;
+    gap: 0.4rem;
+  }
+  .twin-toolbar__title {
+    width: 100%;
+    font-size: 0.86rem;
+  }
+  .twin-toolbar__spacer {
+    display: none;
+  }
+  .twin-select {
+    flex: 1 1 40%;
+    min-width: 0;
+  }
+  .twin-btn__label {
+    display: none;
+  }
+  .twin-viewport {
+    height: 460px;
+  }
+  .twin-tag {
+    bottom: var(--twin-lift-m, 16px);
+    max-width: 150px;
+    padding: 0.22rem 0.25rem 0.22rem 0.5rem;
+    font-size: 0.62rem;
+  }
+  .twin-tag--stem::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: 1px;
+    height: calc(var(--twin-lift-m, 16px) - 12px);
+    background: linear-gradient(to bottom, rgb(255 255 255 / 0.5), rgb(255 255 255 / 0.04));
+  }
+  .twin-tag__value {
+    min-width: 27px;
+    height: 17px;
+    font-size: 0.58rem;
+  }
+  .twin-card-marker {
+    width: 124px;
+    bottom: var(--twin-lift-m, 20px);
+    padding: 0.45rem 0.5rem 0.4rem;
+  }
+  .twin-card-marker__title {
+    font-size: 0.62rem;
+  }
+  .twin-card-marker__value {
+    font-size: 1rem;
+  }
+  .twin-ring {
+    width: 78px;
+    height: 78px;
+  }
+  .twin-float--top {
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+  .twin-float--bottom {
+    bottom: 0.5rem;
+    right: 0.5rem;
+  }
+  .twin-float__btn {
+    width: 27px;
+    height: 27px;
+  }
+}
+
