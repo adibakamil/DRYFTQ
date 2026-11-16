@@ -5,19 +5,19 @@ const CAPABILITIES: Array<{ icon: IconName; title: string; body: string; itemCla
     icon: 'clock',
     title: 'Real-time Monitoring',
     body: 'Track machines, processes and KPIs in real time with minimal latency.',
-    itemClass: 'reveal py-8 first:pt-0 md:px-8 md:py-2 md:first:pl-0 md:last:pr-0',
+    itemClass: 'reveal py-6 first:pt-0 md:px-8 md:py-2 md:first:pl-0 md:last:pr-0',
   },
   {
     icon: 'shield',
     title: 'Quality Assurance',
     body: 'Detect defects and process variations early to maintain consistent quality.',
-    itemClass: 'reveal py-8 md:px-8 md:py-2',
+    itemClass: 'reveal py-6 md:px-8 md:py-2',
   },
   {
     icon: 'trend',
     title: 'Predictive Operations',
     body: 'Reduce unplanned downtime and optimize performance with AI-driven predictions.',
-    itemClass: 'reveal py-8 last:pb-0 md:px-8 md:py-2 md:first:pl-0 md:last:pr-0',
+    itemClass: 'reveal py-6 last:pb-0 md:px-8 md:py-2 md:first:pl-0 md:last:pr-0',
   },
 ];
 

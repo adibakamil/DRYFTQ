@@ -13,7 +13,7 @@ export function IndustryStrip() {
   return (
     <section className="border-y border-gray-200 bg-white" aria-label="Industries served">
       <div
-        className="container-x flex flex-col items-center gap-3 py-5 lg:flex-row lg:justify-between lg:gap-8"
+        className="container-x flex flex-col items-center gap-3 py-4 lg:flex-row lg:justify-between lg:gap-8"
         style={{ minHeight: '72px' }}
       >
         <p className="text-xs font-bold uppercase tracking-wider text-gray-600 lg:border-r lg:border-gray-300 lg:pr-8">

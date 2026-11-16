@@ -11,7 +11,7 @@ export function CtaBand({ onTalkToTeam }: CtaBandProps) {
       className="on-brand relative bg-brand-action text-white"
       id="contact"
       aria-labelledby="cta-h"
-      style={{ paddingBlock: 'clamp(3.5rem,7vw,5rem)' }}
+      style={{ paddingBlock: 'clamp(2.5rem,4.5vw,3.5rem)' }}
     >
       <div className="container-x reveal text-center">
         <h2 className="h2 !text-white" id="cta-h">

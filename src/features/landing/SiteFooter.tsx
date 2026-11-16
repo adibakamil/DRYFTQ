@@ -44,7 +44,7 @@ export function SiteFooter() {
 
   return (
     <footer className="border-t border-gray-200 bg-white" id="contact-footer">
-      <div className="container-x pb-8 pt-14 md:pt-16">
+      <div className="container-x pb-8 pt-10 md:pt-12">
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-5">
           <div className="col-span-2">
             <span className="block text-xl font-black tracking-tight">DRYFTQ</span>
@@ -76,7 +76,7 @@ export function SiteFooter() {
             </nav>
           ))}
         </div>
-        <div className="mt-12 flex flex-col items-center justify-between gap-2 border-t border-gray-100 pt-6 text-xs text-gray-600 sm:flex-row">
+        <div className="mt-8 flex flex-col items-center justify-between gap-2 border-t border-gray-100 pt-6 text-xs text-gray-600 sm:flex-row">
           <p>© {year} DRYFTQ. All rights reserved.</p>
           <p className="font-medium">Smarter insights. Stronger industry.</p>
         </div>
