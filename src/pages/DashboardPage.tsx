@@ -4,6 +4,7 @@ import { useStore } from '../store/context';
 import { Icon } from '../components/Icon';
 import { computeOee, cx } from '../lib/utils';
 import PerformanceOverview from '../features/dashboard/PerformanceOverview';
+import QuantumDriftCore from '../features/dashboard/QuantumDriftCore';
 import type { RecentEvent } from '../lib/types';
 
 /* ------------------------------------------------------------------ */
@@ -145,22 +146,19 @@ export default function DashboardPage() {
     [],
   );
 
-  const activeAlerts = useMemo(() => state.alerts.filter((a) => a.status === 'Active'), [state.alerts]);
+  // Live KPI roll-ups driving the status cards.
+  const runningCount = state.machines.filter((m) => m.status === 'Running').length;
+  const runningRatio = state.machines.length ? runningCount / state.machines.length : 1;
+  const machineHealthOk = runningRatio >= 0.7;
 
-  // KPI 1: Machine Health — ported from legacy `updateDashboardData()`.
-  const healthValue = useMemo(() => {
-    if (state.machines.length === 0) return '88.7%';
-    const healthyCount = state.machines.filter((m) => m.status === 'Running').length;
-    const healthPercent = Math.round((healthyCount / state.machines.length) * 100);
-    return `${healthPercent}.0%`;
-  }, [state.machines]);
+  const activeAlertCount = state.alerts.filter((a) => a.status === 'Active').length;
+  const anomalyStable = activeAlertCount <= 3;
 
-  // Overall OEE proxy across the plant (legacy card default: 85.6%).
-  const oeeValue = useMemo(() => {
-    if (state.machines.length === 0) return '85.6%';
-    const total = state.machines.reduce((sum, m) => sum + computeOee(m), 0);
-    return `${Math.round((total / state.machines.length) * 10) / 10}%`;
-  }, [state.machines]);
+  const plantOee = state.machines.length
+    ? Math.round((state.machines.reduce((sum, m) => sum + computeOee(m), 0) / state.machines.length) * 10) / 10
+    : 0;
+  // Demo plant baseline sits near 55% — flag efficiency only below 50%.
+  const efficiencyOk = plantOee >= 50;
 
   const triggerTelemetryRefresh = () => {
     if (refreshing) return;
@@ -181,11 +179,11 @@ export default function DashboardPage() {
       <section className="space-y-1" data-purpose="page-title-banner">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">Dashboard</h2>
-            <p className="text-xs font-medium text-slate-400 sm:text-sm">Overview of your plant operations</p>
+            <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">Process Overview</h2>
+            <p className="text-xs font-medium text-slate-400 sm:text-sm">Live Edge Telemetry &middot; Plant 4</p>
           </div>
           <div className="flex flex-wrap items-center justify-end gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-300">
+            <span className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-300">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
               Live Telemetry Streaming
             </span>
@@ -201,64 +199,87 @@ export default function DashboardPage() {
             </button>
             <Link
               to="/"
-              title="Go to the DRYFTQ landing page"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-50"
+              title="Open the DRYFTQ landing page"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#FF3D0A] px-3.5 py-2.5 text-xs font-bold text-white shadow-sm shadow-orange-500/25 transition-colors hover:bg-[#e03405] sm:w-auto"
             >
-              View Landing Page
-              <Icon name="arrow" className="h-3.5 w-3.5" />
+              <Icon name="grid" className="h-4 w-4" />
+              Landing Page
+              <Icon name="arrow" className="h-4 w-4" />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* KPI Cards Grid */}
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4" data-purpose="kpi-metrics-row">
-        {/* Card 1: Machine Health */}
-        <KpiCard label="Machine Health" hint="Click to view all machines" onGo={() => navigate('/machines')}>
-          <span className="mt-2 block space-y-1">
-            <span className="block text-xs font-bold text-emerald-400">Healthy</span>
-            <span className="block text-3xl font-extrabold tracking-tight text-white">{healthValue}</span>
-          </span>
-        </KpiCard>
+      {/* QUANTUM-DRIFT™ CORE — the updated hero telemetry card */}
+      <QuantumDriftCore />
 
-        {/* Card 2: Anomaly Detection */}
-        <KpiCard label="Anomaly Detection" hint="Click to review active anomalies" onGo={() => navigate('/alerts?status=Active')}>
-          <span className="mt-2 block space-y-1">
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400">
-              <span className="h-0 w-0 border-b-[6px] border-l-[4px] border-r-[4px] border-b-emerald-400 border-l-transparent border-r-transparent" />
-              Active
+      {/* KPI Cards Grid — 3 status cards, then 2 summary cards (matches the app layout) */}
+      <section className="space-y-4 sm:space-y-5" data-purpose="kpi-metrics-row">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5">
+          {/* Card 1: Machine Health */}
+          <KpiCard
+            label="Machine Health"
+            hint={`Click to view all machines — ${runningCount}/${state.machines.length} running`}
+            onGo={() => navigate('/machines')}
+          >
+            <span className="mt-3 flex items-center gap-2">
+              <span className={cx('h-2 w-2 rounded-full', machineHealthOk ? 'bg-emerald-400' : 'bg-amber-400')} />
+              <span className="text-lg font-extrabold tracking-tight text-white">{machineHealthOk ? 'Healthy' : 'Attention'}</span>
             </span>
-            <span className="block text-3xl font-extrabold tracking-tight text-white">{activeAlerts.length}</span>
-          </span>
-        </KpiCard>
+          </KpiCard>
 
-        {/* Card 3: Process Stability */}
-        <KpiCard
-          label="Process Stability"
-          hint="Click to view analytics quality & stability"
-          onGo={() => navigate('/analytics?tab=Quality')}
-        >
-          <span className="mt-2 block space-y-1">
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400">
+          {/* Card 2: Anomaly Detection */}
+          <KpiCard
+            label="Anomaly Detection"
+            hint={`Click to review active anomalies — ${activeAlertCount} active`}
+            onGo={() => navigate('/alerts?status=Active')}
+          >
+            <span className="mt-3 flex items-center gap-2">
+              <span className="h-0 w-0 border-b-[6px] border-l-[4px] border-r-[4px] border-b-emerald-400 border-l-transparent border-r-transparent" />
+              <span className="text-lg font-extrabold tracking-tight text-white">{activeAlertCount > 0 ? 'Active' : 'Clear'}</span>
+            </span>
+          </KpiCard>
+
+          {/* Card 3: Process Stability */}
+          <KpiCard
+            label="Process Stability"
+            hint="Click to view analytics quality & stability"
+            onGo={() => navigate('/analytics?tab=Quality')}
+          >
+            <span className="mt-3 flex items-center gap-2">
               <span className="flex h-2 w-2 items-center justify-center rounded-full border-2 border-emerald-400">
                 <span className="h-1 w-1 rounded-full bg-emerald-400" />
               </span>
-              Stable
+              <span className="text-lg font-extrabold tracking-tight text-white">Stable</span>
             </span>
-            <span className="block text-3xl font-extrabold tracking-tight text-white">92.3%</span>
-          </span>
-        </KpiCard>
+          </KpiCard>
+        </div>
 
-        {/* Card 4: Overall OEE */}
-        <KpiCard label="Overall OEE" hint="Click to view OEE analytics" onGo={() => navigate('/analytics?tab=OEE')}>
-          <span className="mt-2 block space-y-1">
-            <span className="block text-3xl font-extrabold tracking-tight text-white">{oeeValue}</span>
-            <span className="flex items-center gap-1 text-xs font-semibold text-emerald-400">
-              <span>&uarr; 2.1%</span>
-              <span className="font-normal text-slate-400">vs last 7 days</span>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
+          {/* Card 4: Anomaly Stability */}
+          <KpiCard
+            label="Anomaly Stability"
+            hint={`Click to review anomaly trends — ${activeAlertCount} active alert${activeAlertCount === 1 ? '' : 's'}`}
+            onGo={() => navigate('/alerts')}
+          >
+            <span className="mt-3 flex items-center gap-2">
+              <span className={cx('h-2 w-2 rounded-full', anomalyStable ? 'bg-emerald-400' : 'bg-amber-400')} />
+              <span className="text-lg font-extrabold tracking-tight text-white">{anomalyStable ? 'Stable' : 'Review'}</span>
             </span>
-          </span>
-        </KpiCard>
+          </KpiCard>
+
+          {/* Card 5: Overall Efficiency */}
+          <KpiCard
+            label="Overall Efficiency"
+            hint={`Click to view OEE analytics — plant OEE ${plantOee}%`}
+            onGo={() => navigate('/analytics?tab=OEE')}
+          >
+            <span className="mt-3 flex items-center gap-2">
+              <span className={cx('h-2 w-2 rounded-full', efficiencyOk ? 'bg-emerald-400' : 'bg-amber-400')} />
+              <span className="text-lg font-extrabold tracking-tight text-white">{efficiencyOk ? 'Stable' : 'Attention'}</span>
+            </span>
+          </KpiCard>
+        </div>
       </section>
 
       {/* Performance Overview (chart + vibration sub-metrics) */}

@@ -230,6 +230,17 @@ export function AppShell() {
       </nav>
 
       <div className="border-t border-[#0d3459] px-5 py-4">
+        <Link
+          to="/"
+          title="Open the DRYFTQ landing page"
+          className="mb-4 flex items-center justify-between gap-2 rounded-lg border border-[#0d3459] bg-white/5 px-3 py-2 text-xs font-semibold text-slate-200 transition-colors hover:bg-white/10 hover:text-white"
+        >
+          <span className="flex items-center gap-2">
+            <Icon name="grid" className="h-4 w-4" />
+            Visit Website
+          </span>
+          <Icon name="arrow" className="h-3.5 w-3.5" />
+        </Link>
         <p className="flex items-center gap-2 font-mono text-[11px] text-slate-400">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" aria-hidden />
           Telemetry: Active
