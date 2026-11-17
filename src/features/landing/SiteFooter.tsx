@@ -1,11 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Icon, type IconName } from '../../components/Icon';
-
-const SOCIALS: Array<{ icon: IconName; label: string }> = [
-  { icon: 'linkedin', label: 'DRYFTQ on LinkedIn' },
-  { icon: 'x', label: 'DRYFTQ on X' },
-  { icon: 'youtube', label: 'DRYFTQ on YouTube' },
-];
 
 const COLUMNS: Array<{ title: string; links: Array<{ label: string; href: string }> }> = [
   {
@@ -51,15 +44,6 @@ export function SiteFooter() {
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-gray-600">
               The industrial AI and quantum intelligence platform for smarter, more resilient manufacturing.
             </p>
-            <ul className="mt-5 flex items-center gap-3">
-              {SOCIALS.map((social) => (
-                <li key={social.label}>
-                  <a className="social" href="#" aria-label={social.label}>
-                    <Icon name={social.icon} className="icon-fill h-4 w-4" />
-                  </a>
-                </li>
-              ))}
-            </ul>
           </div>
           {COLUMNS.map((column) => (
             <nav key={column.title} aria-label={column.title}>

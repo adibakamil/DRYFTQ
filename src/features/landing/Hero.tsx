@@ -8,11 +8,10 @@ export interface HeroProps {
 }
 
 /**
- * Hero — "Build Smarter. Create Better." (layout taken from the Android app's
- * home screen: oversized wordmark, compact headline, two CTAs). `Get Started`
- * is a real React Router link into the console (`/dashboard`); `Learn More`
- * anchors to the About section; the demo video stays reachable from the muted
- * link.
+ * Hero — "Prevent the Unexpected". The oversized wordmark sits above the
+ * promise line and the supporting copy; `Explore Platform` is a real React
+ * Router link into the console (`/dashboard`), `Watch Demo` opens the video
+ * dialog.
  */
 export function Hero({ onWatchDemo }: HeroProps) {
   return (
@@ -39,19 +38,21 @@ export function Hero({ onWatchDemo }: HeroProps) {
             decoding="async"
           />
           <h1 className="hero-title hero-in" id="hero-title">
-            Build Smarter. Create Better.
+            <span className="text-brand" aria-hidden="true">#</span> Prevent the Unexpected
+            <span className="text-brand">.</span>
           </h1>
+          <p className="lead hero-lead hero-in max-w-[34rem]">
+            DRYFTQ combines machine data, human insights and quantum intelligence to detect subtle process drift
+            early—reducing downtime, waste and quality loss.
+          </p>
           <div className="hero-actions hero-in">
             <Link className="btn btn-primary btn-lg" to="/dashboard" title="Open the DRYFTQ dashboard platform">
-              Get Started <Icon name="arrow" className="icon-arrow" />
+              Explore Platform <Icon name="arrow" className="icon-arrow" />
             </Link>
-            <a className="btn btn-outline btn-lg" href="#about">
-              Learn More
-            </a>
+            <button className="btn btn-outline btn-lg" type="button" aria-haspopup="dialog" onClick={onWatchDemo}>
+              <Icon name="play" /> Watch Demo <Icon name="arrow" className="icon-arrow text-gray-500" />
+            </button>
           </div>
-          <button className="hero-demo hero-in" type="button" aria-haspopup="dialog" onClick={onWatchDemo}>
-            <Icon name="play" /> Watch the 90-second demo
-          </button>
         </div>
       </div>
     </section>

@@ -256,7 +256,7 @@
   }
   .hero-title {
     @apply font-extrabold tracking-tight;
-    font-size: clamp(1.5rem, 1.1rem + 1.1vw, 1.875rem);
+    font-size: clamp(1.75rem, 1rem + 2.1vw, 2.625rem);
     line-height: 1.15;
   }
   .hero-actions {
@@ -267,18 +267,6 @@
   .hero-actions .btn {
     flex: 1 1 13rem;
     max-width: 18rem;
-  }
-  .hero-demo {
-    @apply inline-flex items-center gap-2 text-sm font-semibold text-gray-500;
-    padding: 0.25rem 0;
-    transition: color 0.2s;
-  }
-  .hero-demo .icon {
-    width: 0.8em;
-    height: 0.8em;
-  }
-  .hero-demo:hover {
-    @apply text-brand-action;
   }
   @media (min-width: 640px) {
     .hero-actions .btn {
@@ -326,8 +314,8 @@
       padding-inline: 2.5rem;
     }
     .hero-title,
-    .hero-actions,
-    .hero-demo {
+    .hero-lead,
+    .hero-actions {
       padding-left: clamp(0px, 7vw, 110px);
     }
   }
@@ -414,20 +402,6 @@
   }
 
   /* ---------- Footer ---------- */
-  .social {
-    @apply inline-flex items-center justify-center rounded-full border border-gray-300 text-gray-600;
-    width: 2.75rem;
-    height: 2.75rem;
-    transition:
-      color 0.2s,
-      border-color 0.2s,
-      background-color 0.2s;
-  }
-  .social:hover {
-    color: var(--orange-action);
-    border-color: var(--orange-action);
-    background: #fff4ed;
-  }
   .foot-link {
     @apply text-gray-600;
     transition: color 0.2s;
