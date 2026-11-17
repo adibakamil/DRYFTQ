@@ -2,6 +2,8 @@
 import { useStore } from '../store/context';
 import { cx } from '../lib/utils';
 import DigitalTwin from '../features/dashboard/DigitalTwin';
+import PerformanceOverview from '../features/dashboard/PerformanceOverview';
+import QuantumDriftCore from '../features/dashboard/QuantumDriftCore';
 
 /* ------------------------------------------------------------------ */
 /* Sparkline                                                           */
@@ -126,8 +128,8 @@ const SPARKS = {
 
 /**
  * Plant overview: the four headline KPIs over the interactive floor digital
- * twin. Everything below the KPI row lives in `DigitalTwin` so the map,
- * hotspot telemetry drawer and zoom/pan state stay in one place.
+ * twin, followed by the QUANTUM-DRIFT CORE telemetry card and the previous
+ * performance chart (temperature / vibration) restored beneath it.
  */
 export default function DashboardPage() {
   const { state } = useStore();
@@ -172,6 +174,10 @@ export default function DashboardPage() {
       </section>
 
       <DigitalTwin />
+
+      <QuantumDriftCore />
+
+      <PerformanceOverview />
     </div>
   );
 }
