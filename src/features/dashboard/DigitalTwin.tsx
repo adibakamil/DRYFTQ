@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import factoryFloor from '../../../assets/img/factory-floor.jpg';
 import { useStore } from '../../store/context';
 import { cx } from '../../lib/utils';
 import { ACCENT_COLOR, TWIN_MACHINES, type TwinMachine } from './twinData';
@@ -419,9 +418,13 @@ export default function DigitalTwin() {
           style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})` }}
         >
           <img
-            src={factoryFloor}
+            src="/factory-floor.webp"
             alt="Isometric 3D floor plan of the DRYFTQ plant"
             className="twin-map"
+            width={1024}
+            height={819}
+            fetchPriority="high"
+            decoding="async"
             draggable={false}
           />
 

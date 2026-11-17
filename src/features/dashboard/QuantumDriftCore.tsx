@@ -14,6 +14,9 @@ import { Icon } from '../../components/Icon';
 const RING_RADIUS = 84;
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 const STABILITY = 99.84;
+const TELEMETRY_VIDEO = '/videos/telemetry-gauge-alpha.webm';
+const TELEMETRY_FALLBACK = '/videos/DashboardVideo.mp4';
+const TELEMETRY_POSTER = '/videos/telemetry-gauge-poster.webp';
 
 const MINI_STATS = [
   { label: 'Spindle Vibration', value: '2.3 m/s' },
@@ -25,6 +28,38 @@ export default function QuantumDriftCore() {
   const { notify } = useStore();
   const [sweeping, setSweeping] = useState(false);
   const timer = useRef<number | null>(null);
+  const gaugeRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoVisible, setVideoVisible] = useState(false);
+
+  // The clip is a few MB: only request it when the gauge approaches the
+  // viewport, and pause it as soon as it scrolls away.
+  useEffect(() => {
+    const node = gaugeRef.current;
+    if (!node) return;
+    if (!('IntersectionObserver' in window)) {
+      setVideoVisible(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([entry]) => setVideoVisible(Boolean(entry && entry.intersectionRatio >= 0.15)),
+      { rootMargin: '0px', threshold: [0, 0.15, 0.5] },
+    );
+    io.observe(node);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (videoVisible && !reduceMotion) {
+      if (!video.currentSrc) video.load();
+      void video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  }, [videoVisible]);
 
   useEffect(
     () => () => {
@@ -99,10 +134,31 @@ export default function QuantumDriftCore() {
         {/* Gauge + headline metrics */}
         <div className="grid items-center gap-6 lg:grid-cols-[220px_minmax(0,1fr)]">
           <div className="flex flex-col items-center">
-            <div className="relative grid h-[176px] w-[176px] place-items-center">
+            <div ref={gaugeRef} className="relative grid h-[176px] w-[176px] place-items-center">
+              {/* Live telemetry loop, clipped inside the gauge ring. */}
+              <div className="qdc-video-clip" aria-hidden="true">
+                <video
+                  ref={videoRef}
+                  poster={TELEMETRY_POSTER}
+                  muted
+                  loop
+                  playsInline
+                  autoPlay={videoVisible}
+                  preload="none"
+                  disablePictureInPicture
+                  tabIndex={-1}
+                >
+                  {videoVisible && (
+                    <>
+                      <source src={TELEMETRY_VIDEO} type="video/webm" />
+                      <source src={TELEMETRY_FALLBACK} type="video/mp4" />
+                    </>
+                  )}
+                </video>
+              </div>
               <div
                 aria-hidden="true"
-                className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgba(249,83,9,0.28),rgba(249,83,9,0.06)_48%,transparent_72%)]"
+                className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgba(249,83,9,0.14),rgba(249,83,9,0.04)_48%,transparent_72%)]"
               />
               <svg viewBox="0 0 200 200" className="relative h-full w-full -rotate-90" aria-hidden="true">
                 <defs>
@@ -126,7 +182,7 @@ export default function QuantumDriftCore() {
               </svg>
               <div
                 aria-hidden="true"
-                className="absolute h-16 w-16 animate-pulse rounded-full bg-[radial-gradient(circle,rgba(255,163,102,0.55),rgba(249,83,9,0.12)_55%,transparent_72%)]"
+                className="absolute h-16 w-16 animate-pulse rounded-full bg-[radial-gradient(circle,rgba(255,163,102,0.3),rgba(249,83,9,0.08)_55%,transparent_72%)]"
               />
               <span className="absolute text-[15px] font-extrabold tracking-tight text-[#f3f7fd]">
                 {STABILITY.toFixed(2)}%

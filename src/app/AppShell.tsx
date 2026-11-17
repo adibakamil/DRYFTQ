@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { MODULE_ROUTES, findRoute } from './routes';
+import { prefetchRoute } from './prefetch';
 import { useStore } from '../store/context';
 import { cx } from '../lib/utils';
 import { Icon, type IconName } from '../components/Icon';
@@ -200,6 +201,8 @@ export function AppShell() {
             <li key={item.key}>
               <NavLink
                 to={item.path}
+                onPointerEnter={() => prefetchRoute(item.path)}
+                onFocus={() => prefetchRoute(item.path)}
                 className={({ isActive }) =>
                   cx(
                     'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition',

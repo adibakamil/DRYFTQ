@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Icon } from '../../components/Icon';
 import robotUrl from '../../../assets/img/robot.webp';
 import wordmarkUrl from '../../../assets/img/wordmark.webp';
+import { prefetchRoute } from '../../app/prefetch';
 
 export interface HeroProps {
   onWatchDemo: () => void;
@@ -46,7 +47,13 @@ export function Hero({ onWatchDemo }: HeroProps) {
             early—reducing downtime, waste and quality loss.
           </p>
           <div className="hero-actions hero-in">
-            <Link className="btn btn-primary btn-lg" to="/dashboard" title="Open the DRYFTQ dashboard platform">
+            <Link
+              className="btn btn-primary btn-lg"
+              to="/dashboard"
+              title="Open the DRYFTQ dashboard platform"
+              onPointerEnter={() => prefetchRoute('/dashboard')}
+              onFocus={() => prefetchRoute('/dashboard')}
+            >
               Explore Platform <Icon name="arrow" className="icon-arrow" />
             </Link>
             <button className="btn btn-outline btn-lg" type="button" aria-haspopup="dialog" onClick={onWatchDemo}>

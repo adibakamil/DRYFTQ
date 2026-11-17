@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } fro
 import type { PlantState } from '../lib/types';
 import * as actions from './actions';
 import type { ActionResult, Notice } from './actions';
-import { StoreContext, type StoreActions, type StoreContextValue, type ToastItem } from './context';
+import { StoreContext, ToastListContext, type StoreActions, type StoreContextValue, type ToastItem } from './context';
 import { loadState, saveState } from './persistence';
 
 const TOAST_DURATION_MS = 4500;
@@ -86,9 +86,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo<StoreContextValue>(
-    () => ({ state, actions: actionsApi, toasts, notify, dismissToast }),
-    [state, actionsApi, toasts, notify, dismissToast],
+    () => ({ state, actions: actionsApi, notify, dismissToast }),
+    [state, actionsApi, notify, dismissToast],
   );
 
-  return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
+  const toastList = useMemo(() => ({ toasts, dismissToast }), [toasts, dismissToast]);
+
+  return (
+    <StoreContext.Provider value={value}>
+      <ToastListContext.Provider value={toastList}>{children}</ToastListContext.Provider>
+    </StoreContext.Provider>
+  );
 }

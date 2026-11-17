@@ -39,12 +39,18 @@ export interface ToastItem extends Notice {
 export interface StoreContextValue {
   state: PlantState;
   actions: StoreActions;
-  toasts: ToastItem[];
   notify(notice: Notice): void;
   dismissToast(id: number): void;
 }
 
+export interface ToastListValue {
+  toasts: ToastItem[];
+  dismissToast(id: number): void;
+}
+
 export const StoreContext = createContext<StoreContextValue | null>(null);
+/** Only the toast stack subscribes here, so notifications never re-render the app. */
+export const ToastListContext = createContext<ToastListValue | null>(null);
 
 /** Full store (state + actions + toasts). Throws outside `StoreProvider`. */
 export function useStore(): StoreContextValue {
@@ -63,8 +69,15 @@ export function useActions(): StoreActions {
   return useStore().actions;
 }
 
-/** Toast helpers for imperative feedback (validation errors, confirmations). */
-export function useToasts(): Pick<StoreContextValue, 'toasts' | 'notify' | 'dismissToast'> {
-  const { toasts, notify, dismissToast } = useStore();
-  return useMemo(() => ({ toasts, notify, dismissToast }), [toasts, notify, dismissToast]);
+/** Stable imperative toast helpers (no subscription to the toast list). */
+export function useToasts(): Pick<StoreContextValue, 'notify' | 'dismissToast'> {
+  const { notify, dismissToast } = useStore();
+  return useMemo(() => ({ notify, dismissToast }), [notify, dismissToast]);
+}
+
+/** The live toast list — used only by `ToastHost`. */
+export function useToastList(): ToastListValue {
+  const ctx = useContext(ToastListContext);
+  if (!ctx) throw new Error('useToastList must be used inside <StoreProvider>');
+  return ctx;
 }

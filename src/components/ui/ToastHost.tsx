@@ -1,5 +1,5 @@
 import { cx } from '../../lib/utils';
-import { useToasts } from '../../store/context';
+import { useToastList } from '../../store/context';
 import { Icon, type IconName } from '../Icon';
 import type { ToastType } from '../../lib/types';
 
@@ -22,7 +22,7 @@ const TONE: Record<ToastType, string> = {
  * Screen-reader friendly (`role="status"` + polite live region).
  */
 export function ToastHost() {
-  const { toasts, dismissToast } = useToasts();
+  const { toasts, dismissToast } = useToastList();
 
   return (
     <div

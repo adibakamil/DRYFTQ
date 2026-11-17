@@ -4,8 +4,9 @@ import { StoreProvider } from './store/StoreProvider';
 import { ToastHost } from './components/ui';
 import { AppShell } from './app/AppShell';
 import { NotFound } from './components/NotFound';
-
-const LandingPage = lazy(() => import('./features/landing/LandingPage'));
+// The marketing site is the default route: keep it in the entry chunk so the
+// first visit never shows the lazy-route spinner or waits on a second module.
+import LandingPage from './features/landing/LandingPage';
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'));
 const MachinesPage = lazy(() => import('./pages/MachinesPage'));

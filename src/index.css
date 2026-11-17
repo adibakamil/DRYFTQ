@@ -2,6 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============ SELF-HOSTED FONTS ============
+   Inter (variable, latin) and JetBrains Mono 500 (latin) are served from
+   /public/fonts so first paint never waits on fonts.googleapis.com. The Inter
+   file is preloaded in index.html; both use font-display: swap. */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url('/fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-500-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 /* ============ DESIGN TOKENS ============ */
 :root {
   --nav-h: 72px;
@@ -1772,5 +1795,24 @@ body.twin-fs-lock {
     width: 27px;
     height: 27px;
   }
+}
+
+/* ============ QUANTUM CORE · LIVE TELEMETRY VIDEO ============
+   The gauge clip has a transparent background (VP9 alpha WebM), so only the
+   glowing instrument shows inside the ring — the card is the backdrop. */
+.qdc-video-clip {
+  position: absolute;
+  inset: 13px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: transparent;
+  pointer-events: none;
+}
+.qdc-video-clip video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
 }
 
